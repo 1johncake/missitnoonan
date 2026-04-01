@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wedghoods 2026 — Palm Springs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #1e1f24;
+      --bg-card:  #2e3038;
+      --carolina: #4B9CD3;
+      --gold:     #c9a84c;
+      --white:    #f4f8fc;
+      --muted:    #888fa0;
+      --rule:     rgba(75,156,211,0.2);
+    }
+    html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--white); overflow: hidden; }
+    .top-stripe {
+      position: fixed; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(to right, transparent, var(--carolina) 25%, #7dbfe8 50%, var(--carolina) 75%, transparent);
+      z-index: 20;
+    }
+    .back {
+      position: fixed; top: 1.4rem; left: 2rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(75,156,211,0.5); text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .back:hover { color: var(--carolina); }
+
+    .page {
+      height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 2rem; text-align: center;
+    }
+
+    .eyebrow {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--carolina); margin-bottom: 0.9rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.2s;
+    }
+
+    .headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 7vw, 4.5rem); font-weight: 700;
+      color: var(--white); line-height: 1.05; letter-spacing: -0.02em;
+      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.35s;
+      margin-bottom: 0.3rem;
+    }
+    .headline em { font-style: italic; color: var(--carolina); }
+
+    .subhead {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      color: var(--gold); opacity: 0;
+      animation: fadeUp 0.7s ease forwards; animation-delay: 0.45s;
+      margin-bottom: 1.8rem;
+    }
+
+    .divider {
+      width: 40px; height: 1px;
+      background: linear-gradient(to right, transparent, var(--carolina), transparent);
+      margin: 0 auto 1.6rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.55s;
+    }
+
+    .details {
+      display: flex; align-items: center; gap: 1.5rem;
+      margin-bottom: 1.8rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.65s;
+    }
+    .detail-item {
+      text-align: center;
+    }
+    .detail-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--muted); display: block; margin-bottom: 0.2rem;
+    }
+    .detail-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; color: var(--white);
+    }
+    .detail-rule {
+      width: 1px; height: 30px; background: rgba(255,255,255,0.1);
+    }
+
+    .desc {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.7;
+      max-width: 380px; margin: 0 auto 2rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.75s;
+    }
+
+    /* Progress bar — 85% done */
+    .progress-wrap {
+      width: 280px; margin: 0 auto 0.6rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.85s;
+    }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.5rem;
+    }
+    .progress-track {
+      width: 100%; height: 4px;
+      background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0;
+      background: linear-gradient(to right, var(--carolina-mid, #2b7ab8), var(--carolina));
+      border-radius: 2px;
+      animation: fillBar 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
+      animation-delay: 1s;
+    }
+    @keyframes fillBar { from{width:0} to{width:85%} }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      background: rgba(75,156,211,0.08); border: 1px solid rgba(75,156,211,0.2);
+      color: var(--carolina); border-radius: 20px; padding: 0.4rem 1rem;
+      margin-top: 1.2rem;
+      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.95s;
+    }
+    .pill-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--carolina); animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+    .footer-line {
+      position: fixed; bottom: 1.5rem; left: 0; right: 0;
+      text-align: center;
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(255,255,255,0.12);
+      opacity: 0; animation: fadeIn 1s ease forwards; animation-delay: 1.2s;
+    }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @media (max-width: 480px) { html, body { overflow: auto; } .details { flex-wrap: wrap; justify-content: center; } }
+  </style>
+</head>
+<body>
+  <div class="top-stripe"></div>
+  <a href="/" class="back">← missitnoonan.com</a>
+
+  <div class="page">
+    <span class="eyebrow">Wedghoods 2026 · Palm Springs</span>
+    <h1 class="headline">Almost <em>there.</em></h1>
+    <p class="subhead">Apr 30 – May 3, 2026</p>
+    <div class="divider"></div>
+
+    <div class="details">
+      <div class="detail-item">
+        <span class="detail-label">Players</span>
+        <span class="detail-val">8</span>
+      </div>
+      <div class="detail-rule"></div>
+      <div class="detail-item">
+        <span class="detail-label">Destination</span>
+        <span class="detail-val">Palm Springs</span>
+      </div>
+      <div class="detail-rule"></div>
+      <div class="detail-item">
+        <span class="detail-label">Days</span>
+        <span class="detail-val">4</span>
+      </div>
+    </div>
+
+    <p class="desc">The hub is being finalized. Pairings, formats, standings, and the full Wedghoods experience incoming. Check back shortly.</p>
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Page progress</span>
+        <span>85%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+
+    <span class="pill"><div class="pill-dot"></div> Finishing up</span>
+  </div>
+
+  <div class="footer-line">© 2026 missitnoonan.com</div>
+</body>
+</html>

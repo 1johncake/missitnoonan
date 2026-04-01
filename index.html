@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Miss it, Noonan.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #1e1f24;
+      --bg-card:      #2e3038;
+      --bg-other:     #26272d;
+      --carolina:     #4B9CD3;
+      --carolina-mid: #2b7ab8;
+      --carolina-dim: rgba(75,156,211,0.18);
+      --carolina-border: rgba(75,156,211,0.22);
+      --white:        #f4f8fc;
+      --muted:        #888fa0;
+      --subtle:       rgba(255,255,255,0.06);
+      --rule:         rgba(75,156,211,0.2);
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      overflow: hidden;
+    }
+
+    /* === BACKGROUND TEXTURE === */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Carolina top stripe */
+    .top-stripe {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(to right,
+        transparent 0%,
+        var(--carolina) 25%,
+        #7dbfe8 50%,
+        var(--carolina) 75%,
+        transparent 100%);
+      z-index: 20;
+    }
+
+    /* === PAGE LAYOUT === */
+    .page {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 0 2.8rem;
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    /* === HEADER === */
+    header {
+      padding: 1.6rem 0 1.2rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--rule);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+      animation-delay: 0.1s;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+    .logo em { font-style: italic; color: var(--carolina); }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .header-domain {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(75,156,211,0.6);
+    }
+
+    /* === CARDS AREA === */
+    .cards-area {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1.8rem 0 1.2rem;
+      gap: 0.9rem;
+    }
+
+    .section-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(75,156,211,0.7);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+      animation-delay: 0.25s;
+    }
+
+    /* === MAIN GRID: featured pair + apps row === */
+    .cards-grid {
+      display: grid;
+      grid-template-rows: auto auto;
+      gap: 0.85rem;
+    }
+
+    /* Top row — two featured cards side by side */
+    .cards-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    /* Bottom row — apps/other */
+    .cards-bottom {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    /* === FEATURED CARD === */
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--carolina-border);
+      padding: 1.7rem 1.8rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .project-card:hover {
+      background: #353740;
+      border-color: rgba(75,156,211,0.45);
+      transform: translateY(-3px);
+    }
+
+    /* Top accent line on hover */
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--carolina), transparent);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .project-card:hover::before { opacity: 1; }
+
+    /* Carolina glow in card corner */
+    .project-card::after {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(75,156,211,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .project-card:hover .card-arrow { transform: translate(3px, -3px); }
+
+    /* Large decorative letter */
+    .card-deco {
+      position: absolute;
+      bottom: -0.8rem; right: 0.6rem;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 6rem;
+      line-height: 1;
+      color: rgba(75,156,211,0.05);
+      pointer-events: none;
+      user-select: none;
+      transition: color 0.2s ease;
+    }
+    .project-card:hover .card-deco { color: rgba(75,156,211,0.09); }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-tag {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--carolina);
+      display: block;
+    }
+
+    /* Badge — top right of card */
+    .card-badge {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .badge-live {
+      color: #6dcc8a;
+      background: rgba(58,138,82,0.15);
+      border: 1px solid rgba(58,138,82,0.3);
+    }
+
+    .badge-soon {
+      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.55rem;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.3rem;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: auto;
+    }
+
+    /* CTA buttons inside cards */
+    .card-btns {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: var(--carolina);
+      color: var(--bg);
+      border: none;
+      border-radius: 4px;
+      padding: 0.38rem 0.8rem;
+      text-decoration: none;
+      font-weight: 700;
+      transition: background 0.15s ease;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #5faee0; }
+
+    .btn-ghost {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: transparent;
+      color: var(--carolina);
+      border: 1px solid var(--carolina-border);
+      border-radius: 4px;
+      padding: 0.38rem 0.8rem;
+      text-decoration: none;
+      transition: border-color 0.15s ease, color 0.15s ease;
+      cursor: pointer;
+    }
+    .btn-ghost:hover { border-color: var(--carolina); color: #7dbfe8; }
+
+    /* === OTHER THINGS CARD === */
+    .other-card {
+      background: var(--bg-other);
+      border-radius: 10px;
+      border: 1px solid var(--subtle);
+      padding: 1.2rem 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      transition: border-color 0.2s ease;
+    }
+    .other-card:hover { border-color: rgba(75,156,211,0.2); }
+
+    .other-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(244,248,252,0.6);
+      white-space: nowrap;
+      min-width: 80px;
+    }
+
+    .other-rule {
+      width: 1px;
+      height: 28px;
+      background: rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    .other-links {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .other-link {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      color: rgba(244,248,252,0.75);
+      text-decoration: none;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 0.35rem 0.8rem;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+    .other-link:hover {
+      background: var(--carolina-dim);
+      border-color: var(--carolina-border);
+      color: var(--white);
+    }
+
+    .other-link-soon {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      color: rgba(244,248,252,0.25);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 6px;
+      padding: 0.35rem 0.8rem;
+      cursor: default;
+      white-space: nowrap;
+    }
+
+    .other-add {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: rgba(75,156,211,0.3);
+      padding-left: 0.4rem;
+    }
+
+    /* === FOOTER === */
+    footer {
+      padding: 0.9rem 0 1.2rem;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards;
+      animation-delay: 0.8s;
+    }
+
+    .footer-left {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      color: rgba(75,156,211,0.55);
+    }
+
+    .footer-right {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* === ANIMATIONS === */
+    .project-card:nth-child(1) { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.35s; }
+    .project-card:nth-child(2) { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.48s; }
+    .other-card               { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.60s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 700px) {
+      html, body { overflow: auto; }
+      .page { padding: 0 1.3rem; }
+      .cards-top { grid-template-columns: 1fr; }
+      .other-card { flex-wrap: wrap; gap: 0.8rem; }
+      .header-smails { display: none; }
+      footer { flex-direction: column; gap: 0.4rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-stripe"></div>
+
+  <div class="page">
+
+    <!-- HEADER -->
+    <header>
+      <a href="/" class="logo">Miss it, <em>Noonan.</em></a>
+      <div class="header-meta">
+        <span class="header-domain">missitnoonan.com</span>
+      </div>
+    </header>
+
+    <!-- CARDS -->
+    <div class="cards-area">
+      <span class="section-label">Projects</span>
+
+      <div class="cards-grid">
+
+        <!-- TOP ROW — two featured cards -->
+        <div class="cards-top">
+
+          <!-- Masters Pool -->
+          <div class="project-card">
+            <div class="card-deco">M</div>
+            <div class="card-header">
+              <span class="card-tag">Majors · 2026</span>
+              <span class="card-badge badge-soon">Soon</span>
+            </div>
+            <h2 class="card-title">Masters Pool</h2>
+            <p class="card-desc">Pick your players, track Augusta, settle the scores.</p>
+            <div class="card-footer">
+              <div class="card-btns">
+                <a href="/masters-signup.html" class="btn-primary">Sign up</a>
+                <a href="/masters2026.html" class="btn-ghost">Scoreboard</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Palm Springs / Wedghood -->
+          <div class="project-card">
+            <div class="card-deco">W</div>
+            <div class="card-header">
+              <span class="card-tag">Annual Trip · 2026</span>
+              <span class="card-badge badge-live">● Live</span>
+            </div>
+            <h2 class="card-title">Wedghoods</h2>
+            <p class="card-desc">Apr 30 – May 3. Pairings, formats, Race to Seattle leaderboard, and the full Wedghood experience.</p>
+            <div class="card-footer">
+              <div class="card-btns">
+                <a href="/wedghood2026.html" class="btn-primary">Trip hub</a>
+                <a href="/wedghood2026.html#standings" class="btn-ghost">Standings</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- BOTTOM ROW — other things -->
+        <div class="other-card">
+          <span class="other-label">Other things</span>
+          <div class="other-rule"></div>
+          <div class="other-links">
+            <a href="/zoo-game.html" class="other-link">Zoo Game</a>
+            <!--
+              Add more links here as they go live:
+              <a href="/rules.html" class="other-link">Rules Cheat Sheet</a>
+              <a href="/sg-tracker.html" class="other-link">SG Tracker</a>
+              Use .other-link-soon for things not ready yet:
+              <span class="other-link-soon">Handicap Calc</span>
+            -->
+            <span class="other-add">+ more soon</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <span class="footer-left">"Well... we're waiting."</span>
+      <span class="footer-right">© 2026 missitnoonan.com</span>
+    </footer>
+
+  </div>
+
+  <script>
+    // Prevent any scroll jank on load
+    document.documentElement.style.scrollBehavior = 'auto';
+  </script>
+
+</body>
+</html>
