@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Zoo Game Tracker - Track animal penalties in your golf game">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Zoo Game">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a5c2a">
+    <title>Zoo Game Tracker</title>
+
+    <style>
+        /* ── Variables ──────────────────────────────────── */
+        :root {
+            /* Brand green — header only */
+            --green-dark:   #1a5c2a;
+            --green-mid:    #2d8c47;
+
+            /* Slate — table chrome & buttons */
+            --slate-dark:   #1e293b;
+            --slate-mid:    #334155;
+            --slate-light:  #e2e8f0;
+
+            /* Amber — assigned cells & active dots */
+            --amber-dark:   #b45309;
+            --amber-mid:    #d97706;
+            --amber-light:  #fef3c7;
+            --amber-border: #f59e0b;
+
+            /* Blue — current hole dot */
+            --blue-dark:    #1d4ed8;
+            --blue-mid:     #3b82f6;
+
+            /* Neutrals */
+            --text:         #1a1a1a;
+            --text-muted:   #64748b;
+            --bg:           #f4f6f8;
+            --card:         #ffffff;
+            --border:       #e2e8f0;
+            --shadow:       rgba(0,0,0,0.07);
+
+            --radius:       10px;
+            --radius-sm:    6px;
+            --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --text:         #f0f0f0;
+            --text-muted:   #94a3b8;
+            --bg:           #0f172a;
+            --card:         #1e293b;
+            --border:       #334155;
+            --shadow:       rgba(0,0,0,0.4);
+            --slate-light:  #1e293b;
+            --amber-light:  #2d1f06;
+        }
+
+        /* ── Reset ──────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        button:disabled { opacity: 0.38; cursor: not-allowed; }
+
+        /* ── Header ─────────────────────────────────────── */
+        .header {
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+            padding: 0 14px;
+            padding-top: env(safe-area-inset-top);
+            height: calc(56px + env(safe-area-inset-top));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 80;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+
+        .header-brand { display: flex; align-items: center; gap: 10px; }
+        .header-brand img { height: 36px; width: auto; display: block; flex-shrink: 0; }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+        .brand-title { font-size: 1.05rem; font-weight: 800; color: white; }
+        .brand-sub   { font-size: 0.6rem; font-weight: 500; color: rgba(255,255,255,0.65); letter-spacing: 0.09em; text-transform: uppercase; }
+
+        .header-actions { display: flex; align-items: center; gap: 4px; }
+
+        .summary-pill {
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 6px 13px;
+            font-size: 0.78rem; font-weight: 600;
+            color: white; margin-right: 2px;
+            transition: background 0.15s;
+        }
+        .summary-pill:hover { background: rgba(255,255,255,0.28); }
+
+        .icon-btn {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; color: white;
+            transition: background 0.15s;
+        }
+        .icon-btn:hover { background: rgba(255,255,255,0.2); }
+
+        /* ── Main ───────────────────────────────────────── */
+        .main { max-width: 680px; margin: 0 auto; padding: 14px 12px; }
+
+        /* ── Hole Nav Card ──────────────────────────────── */
+        .hole-nav-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 14px 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px var(--shadow);
+        }
+
+        .hole-nav {
+            display: flex; align-items: center;
+            justify-content: space-between; gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .hole-arrow {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--slate-mid); color: white;
+            font-size: 1.3rem;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+            transition: background 0.15s, transform 0.1s;
+        }
+        .hole-arrow:hover { background: var(--slate-dark); }
+        .hole-arrow:active { transform: scale(0.91); }
+        .hole-arrow:disabled { background: var(--border); box-shadow: none; }
+
+        .hole-center { flex: 1; text-align: center; }
+
+        .hole-label {
+            font-size: 0.6rem; font-weight: 700;
+            letter-spacing: 0.13em; text-transform: uppercase;
+            color: var(--text-muted); display: block; margin-bottom: 1px;
+        }
+
+        .hole-number {
+            font-size: 2.8rem; font-weight: 800;
+            color: var(--slate-dark); line-height: 1; display: block;
+        }
+        [data-theme="dark"] .hole-number { color: #e2e8f0; }
+
+        /* ── Hole Dots 9×2 ──────────────────────────────── */
+        .hole-dots {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 5px;
+        }
+
+        .hole-dot {
+            aspect-ratio: 1; min-height: 32px;
+            border-radius: var(--radius-sm);
+            border: 2px solid var(--border);
+            background: transparent;
+            font-size: 0.68rem; font-weight: 700;
+            color: var(--text-muted);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hole-dot.has-data {
+            background: var(--amber-light);
+            border-color: var(--amber-border);
+            color: var(--amber-dark);
+        }
+        [data-theme="dark"] .hole-dot.has-data { color: #fbbf24; }
+
+        .hole-dot.current {
+            background: var(--blue-mid);
+            border-color: var(--blue-dark);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 1px 5px rgba(59,130,246,0.4);
+        }
+
+        /* ── Grid Card ──────────────────────────────────── */
+        .grid-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 1px 4px var(--shadow);
+            margin-bottom: 12px;
+        }
+
+        .grid-table { width: 100%; border-collapse: collapse; }
+
+        /* Slate column header — not green */
+        .grid-table thead tr { background: var(--slate-dark); }
+
+        .th-animal {
+            padding: 10px 10px;
+            text-align: left;
+            font-size: 0.62rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: rgba(255,255,255,0.6); width: 34%;
+        }
+
+        .th-player {
+            padding: 8px 4px; text-align: center;
+            color: white; cursor: pointer;
+            transition: background 0.15s;
+        }
+        .th-player:hover { background: rgba(255,255,255,0.1); }
+
+        .player-name-display {
+            display: block; font-size: 0.78rem; font-weight: 700;
+            max-width: 72px;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            margin: 0 auto;
+        }
+
+        .edit-hint { display: block; font-size: 0.52rem; opacity: 0.5; margin-top: 2px; font-weight: 400; }
+
+        /* Animal rows */
+        .animal-row:nth-child(even) td { background: rgba(0,0,0,0.016); }
+        [data-theme="dark"] .animal-row:nth-child(even) td { background: rgba(255,255,255,0.025); }
+        .animal-row td { border-bottom: 1px solid var(--border); }
+        .animal-row:last-child td { border-bottom: none; }
+
+        .td-animal { padding: 0 8px 0 10px; height: 52px; vertical-align: middle; cursor: help; }
+        .animal-label { display: flex; align-items: center; gap: 5px; }
+        .animal-emoji { font-size: 1.05rem; flex-shrink: 0; }
+        .animal-name-text { font-size: 0.8rem; font-weight: 500; color: var(--text); }
+
+        .td-cell { text-align: center; padding: 4px 3px; height: 52px; vertical-align: middle; }
+
+        /* Amber assigned cells */
+        .cell-btn {
+            width: 100%; height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            border: 2px solid var(--border);
+            background: transparent; color: var(--text-muted);
+            transition: all 0.15s; gap: 1px;
+        }
+        .cell-btn:active { transform: scale(0.91); }
+        .cell-btn:hover { border-color: var(--amber-border); background: var(--amber-light); }
+
+        .cell-btn.owner {
+            background: var(--amber-mid);
+            border-color: var(--amber-dark);
+            color: white;
+        }
+        .cell-btn.owner:hover { background: var(--amber-dark); }
+
+        .cell-check { font-size: 1rem; line-height: 1; }
+        .cell-hole  { font-size: 0.58rem; line-height: 1; opacity: 0.85; font-weight: 600; }
+
+        /* Totals row — slate tint */
+        .totals-row td { padding: 10px 10px; background: var(--slate-light); }
+        [data-theme="dark"] .totals-row td { background: rgba(51,65,85,0.4); }
+
+        .td-total-label {
+            font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.07em;
+            color: var(--slate-mid); vertical-align: middle;
+        }
+        [data-theme="dark"] .td-total-label { color: #94a3b8; }
+
+        .td-total-val {
+            text-align: center; font-size: 1.2rem; font-weight: 800;
+            color: var(--slate-dark); vertical-align: middle;
+        }
+        [data-theme="dark"] .td-total-val { color: #e2e8f0; }
+
+        /* ── Buttons ────────────────────────────────────── */
+        .btn {
+            flex: 1; padding: 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem; font-weight: 600;
+            font-family: var(--font);
+            transition: all 0.15s; cursor: pointer;
+        }
+        .btn-primary { background: var(--slate-mid); color: white; border: none; }
+        .btn-primary:hover { background: var(--slate-dark); }
+        .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+        .btn-ghost:hover { background: var(--bg); }
+
+        /* ── Setup Screen ───────────────────────────────── */
+        .setup-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 24px 20px;
+            box-shadow: 0 1px 4px var(--shadow);
+        }
+        .setup-card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+        .setup-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 22px; }
+        .setup-label { font-size: 0.82rem; font-weight: 600; margin-bottom: 10px; display: block; }
+
+        .player-count-row { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+
+        .count-btn {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--bg); border: 2px solid var(--border);
+            font-size: 1.2rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text); transition: all 0.15s;
+        }
+        .count-btn:hover { border-color: var(--slate-mid); color: var(--slate-mid); }
+
+        .count-display {
+            font-size: 1.6rem; font-weight: 800;
+            color: var(--slate-dark); min-width: 32px; text-align: center;
+        }
+        [data-theme="dark"] .count-display { color: #e2e8f0; }
+
+        /* ── Name Edit Sheet ────────────────────────────── */
+        .overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 200;
+            display: flex; align-items: flex-end; justify-content: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.22s, visibility 0.22s;
+        }
+        .overlay.open { opacity: 1; visibility: visible; }
+
+        .sheet {
+            background: var(--card);
+            border-radius: var(--radius) var(--radius) 0 0;
+            width: 100%; max-width: 500px;
+            padding: 22px 20px;
+            padding-bottom: calc(22px + env(safe-area-inset-bottom));
+            transform: translateY(16px); transition: transform 0.22s;
+        }
+        .overlay.open .sheet { transform: translateY(0); }
+        .sheet h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; }
+
+        .sheet input[type="text"] {
+            width: 100%; padding: 12px 14px;
+            border: 2px solid var(--border); border-radius: var(--radius-sm);
+            font-size: 1rem; font-family: var(--font);
+            background: var(--bg); color: var(--text);
+            margin-bottom: 14px; outline: none;
+        }
+        .sheet input[type="text"]:focus { border-color: var(--blue-mid); }
+        .sheet-actions { display: flex; gap: 10px; }
+
+        /* ── Help Drawer ────────────────────────────────── */
+        .drawer {
+            position: fixed; inset: 0 0 0 auto;
+            width: min(360px, 100vw);
+            background: var(--card);
+            box-shadow: -4px 0 24px rgba(0,0,0,0.18);
+            z-index: 300;
+            display: flex; flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.28s ease;
+        }
+        .drawer.open { transform: translateX(0); }
+
+        .drawer-head {
+            background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+            color: white; padding: 16px;
+            padding-top: calc(16px + env(safe-area-inset-top));
+            display: flex; justify-content: space-between; align-items: center;
+            flex-shrink: 0;
+        }
+        .drawer-head h2 { font-size: 1.05rem; font-weight: 700; color: white; }
+
+        .drawer-body { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
+        .drawer-body h3 { font-size: 0.88rem; font-weight: 700; color: var(--slate-dark); margin: 18px 0 8px; }
+        [data-theme="dark"] .drawer-body h3 { color: #e2e8f0; }
+        .drawer-body h3:first-child { margin-top: 0; }
+        .drawer-body p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+        .drawer-body ol { padding-left: 18px; margin: 6px 0; }
+        .drawer-body li { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 3px; }
+
+        .animal-def { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+        .animal-def:last-child { border-bottom: none; }
+        .animal-def-emoji { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
+        .animal-def-text strong { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); }
+        .animal-def-text span { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* ── Summary Modal ──────────────────────────────── */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55); z-index: 400;
+            display: flex; align-items: center; justify-content: center;
+            padding: 16px;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.22s, visibility 0.22s;
+        }
+        .modal-overlay.open { opacity: 1; visibility: visible; }
+
+        .modal {
+            background: var(--card); border-radius: var(--radius);
+            width: 100%; max-width: 520px; max-height: 88vh;
+            display: flex; flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+            transform: scale(0.96); transition: transform 0.22s;
+        }
+        .modal-overlay.open .modal { transform: scale(1); }
+
+        .modal-head {
+            background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+            color: white; padding: 15px 20px;
+            border-radius: var(--radius) var(--radius) 0 0;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-shrink: 0;
+        }
+        .modal-head h2 { font-size: 1.05rem; font-weight: 700; color: white; }
+
+        .modal-body { flex: 1; overflow-y: auto; padding: 18px 20px; -webkit-overflow-scrolling: touch; }
+
+        .modal-foot {
+            padding: 12px 20px; border-top: 1px solid var(--border);
+            display: flex; gap: 10px; flex-shrink: 0;
+        }
+
+        /* Summary internals */
+        .sum-player-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 10px; margin-bottom: 6px;
+        }
+
+        .sum-player-card {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 12px; text-align: center;
+        }
+        .spc-name { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .spc-count { font-size: 2.2rem; font-weight: 800; color: var(--slate-dark); line-height: 1; }
+        [data-theme="dark"] .spc-count { color: #e2e8f0; }
+        .spc-label { font-size: 0.62rem; color: var(--text-muted); margin-top: 2px; }
+
+        .spc-animals { margin-top: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+        .spc-tag {
+            background: var(--amber-light); color: var(--amber-dark);
+            border: 1px solid var(--amber-border);
+            border-radius: 12px; padding: 2px 8px;
+            font-size: 0.7rem; font-weight: 500;
+        }
+        [data-theme="dark"] .spc-tag { color: #fbbf24; border-color: #d97706; }
+        .spc-none { font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; font-style: italic; }
+
+        /* Collapsible history */
+        .history-toggle {
+            width: 100%;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 0;
+            border-top: 1px solid var(--border);
+            margin-top: 16px;
+            font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.09em;
+            color: var(--text-muted);
+            cursor: pointer; background: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: color 0.15s;
+        }
+        .history-toggle:hover { color: var(--text); }
+
+        .chevron { font-size: 0.85rem; display: inline-block; transition: transform 0.22s; }
+        .history-toggle.open .chevron { transform: rotate(180deg); }
+
+        .history-body { display: none; padding-bottom: 4px; }
+        .history-body.open { display: block; }
+
+        .history-list { list-style: none; }
+        .history-item {
+            display: flex; align-items: baseline; gap: 8px;
+            padding: 6px 0; border-bottom: 1px solid var(--border);
+            font-size: 0.82rem;
+        }
+        .history-item:last-child { border-bottom: none; }
+        .hi-hole { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); width: 38px; flex-shrink: 0; }
+        .hi-text { color: var(--text); line-height: 1.4; }
+        .hi-clear { color: var(--text-muted); font-style: italic; }
+
+        /* ── Toast ──────────────────────────────────────── */
+        .toast {
+            position: fixed;
+            bottom: calc(18px + env(safe-area-inset-bottom));
+            left: 50%; transform: translateX(-50%) translateY(8px);
+            background: #1e293b; color: white;
+            padding: 8px 18px; border-radius: 20px;
+            font-size: 0.82rem; font-weight: 500;
+            opacity: 0; transition: opacity 0.22s, transform 0.22s;
+            pointer-events: none; z-index: 500; white-space: nowrap;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ── Responsive ─────────────────────────────────── */
+        @media (max-width: 380px) {
+            .hole-dot { font-size: 0.62rem; min-height: 28px; }
+            .hole-number { font-size: 2.3rem; }
+            .cell-btn { height: 40px; }
+            .td-animal { padding: 0 4px 0 6px; }
+            .animal-name-text { font-size: 0.74rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════ HEADER ══════════════════════════════════════════ -->
+<header class="header" role="banner">
+    <div class="header-brand">
+        <img src="https://res.cloudinary.com/dqe6xjwoe/image/upload/v1753074898/zoogametracker_header_nz0xgs-1_hdz04i_e_background_removal_f_png_ddh5h7.png"
+             alt="" aria-hidden="true" height="36">
+        <div class="brand-text">
+            <span class="brand-title">Zoo Game</span>
+            <span class="brand-sub">Animal Tracker</span>
+        </div>
+    </div>
+    <div class="header-actions">
+        <button class="summary-pill" id="summary-btn">Summary</button>
+        <button class="icon-btn" id="dark-toggle" aria-label="Toggle dark mode">🌙</button>
+        <button class="icon-btn" id="help-btn" aria-label="Help">ℹ️</button>
+    </div>
+</header>
+
+<!-- ══════ MAIN ════════════════════════════════════════════ -->
+<main class="main" role="main" id="main-content"></main>
+
+<!-- ══════ HELP DRAWER ════════════════════════════════════ -->
+<div class="drawer" id="help-drawer" role="dialog" aria-modal="true" aria-label="How to Play" aria-hidden="true">
+    <div class="drawer-head">
+        <h2>How to Play</h2>
+        <button class="icon-btn" id="close-help" aria-label="Close">✕</button>
+    </div>
+    <div class="drawer-body" id="help-body"></div>
+</div>
+
+<!-- ══════ NAME EDIT SHEET ════════════════════════════════ -->
+<div class="overlay" id="name-overlay" role="dialog" aria-modal="true" aria-label="Edit player name" aria-hidden="true">
+    <div class="sheet">
+        <h3 id="name-sheet-title">Edit Player Name</h3>
+        <input type="text" id="name-input" maxlength="20"
+               autocomplete="off" autocorrect="off" spellcheck="false" placeholder="Enter name…">
+        <div class="sheet-actions">
+            <button class="btn btn-ghost" id="name-cancel">Cancel</button>
+            <button class="btn btn-primary" id="name-save">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ SUMMARY MODAL ══════════════════════════════════ -->
+<div class="modal-overlay" id="summary-overlay" role="dialog" aria-modal="true" aria-label="Game Summary" aria-hidden="true">
+    <div class="modal">
+        <div class="modal-head">
+            <h2>🏌️ Game Summary</h2>
+            <button class="icon-btn" id="close-summary" aria-label="Close">✕</button>
+        </div>
+        <div class="modal-body" id="summary-body"></div>
+        <div class="modal-foot">
+            <button class="btn btn-ghost" id="new-game-btn">New Game</button>
+            <button class="btn btn-primary" id="copy-btn">Copy Results</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast" aria-live="polite"></div>
+
+<!-- ══════ SCRIPT ══════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── Animal definitions ───────────────────────────────────── */
+const ANIMALS = [
+    { id: 'snake',     emoji: '🐍', name: 'Snake',     desc: 'Player three putts' },
+    { id: 'cobra',     emoji: '🐉', name: 'Cobra',     desc: 'Player four putts' },
+    { id: 'dolphin',   emoji: '🐬', name: 'Dolphin',   desc: 'Player loses ball in water' },
+    { id: 'camel',     emoji: '🐪', name: 'Camel',     desc: 'Player hits ball into a bunker' },
+    { id: 'armadillo', emoji: '🦔', name: 'Armadillo', desc: 'Player hits ball that hits the cart path' },
+    { id: 'woodpecker',emoji: '🦜', name: 'Woodpecker',desc: 'Player hits ball that hits a tree' },
+    { id: 'turtle',    emoji: '🐢', name: 'Turtle',    desc: "Player's drive does not pass the forward tees" },
+    { id: 'lonewolf',  emoji: '🐺', name: 'Lone Wolf', desc: "Player's drive lands in an adjacent fairway" },
+    { id: 'rhino',     emoji: '🦏', name: 'Rhino',     desc: 'Player loses ball (not in water)' },
+    { id: 'crane',     emoji: '🦩', name: 'Crane',     desc: 'Player hits a piece of construction equipment' },
+    { id: 'monkey',    emoji: '🐒', name: 'Monkey',    desc: 'Player hits ball off a fence' },
+    { id: 'robot',     emoji: '🤖', name: 'Robot',     desc: 'Player hits something metal (sprinkler box, sign, etc.)' }
+];
+
+const STORAGE_KEY = 'zooGame_v5';
+
+/* ── State ────────────────────────────────────────────────── */
+const state = {
+    screen:         'setup',
+    currentHole:    1,
+    playerCount:    4,
+    players:        [],
+    darkMode:       false,
+    ownership:      {},   // { animalId: { playerId, holeAcquired } }
+    history:        [],   // [{ animalId, playerId, hole, action, prevPlayerId }]
+    _editingPlayer: null,
+
+    playerName(id) {
+        return (this.players.find(p => p.id === id) || {}).name || `Player ${id}`;
+    },
+    totalHeld(playerId) {
+        return Object.values(this.ownership).filter(o => o.playerId === playerId).length;
+    },
+    holesWithActivity() {
+        const s = new Set();
+        this.history.forEach(h => { if (h.action === 'assign') s.add(h.hole); });
+        return s;
+    },
+    animalsHeldBy(playerId) {
+        return ANIMALS.filter(a => this.ownership[a.id]?.playerId === playerId);
+    },
+
+    save() {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                currentHole: this.currentHole,
+                players:     this.players,
+                darkMode:    this.darkMode,
+                ownership:   this.ownership,
+                history:     this.history,
+                savedAt:     Date.now()
+            }));
+        } catch(e) { console.warn('Save failed', e); }
+    },
+
+    load() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return false;
+            const d = JSON.parse(raw);
+            if (Array.isArray(d.players) && d.players.length > 0) {
+                this.players     = d.players;
+                this.playerCount = d.players.length;
+                this.currentHole = d.currentHole || 1;
+                this.darkMode    = !!d.darkMode;
+                this.ownership   = d.ownership   || {};
+                this.history     = d.history     || [];
+                this.screen      = 'game';
+                return true;
+            }
+        } catch(e) { console.warn('Load failed', e); }
+        return false;
+    },
+
+    freshPlayers(count) {
+        this.players     = Array.from({ length: count }, (_, i) => ({ id: i + 1, name: `Player ${i + 1}` }));
+        this.ownership   = {};
+        this.history     = [];
+        this.currentHole = 1;
+    }
+};
+
+/* ── DOM refs ─────────────────────────────────────────────── */
+const mainEl         = document.getElementById('main-content');
+const helpDrawer     = document.getElementById('help-drawer');
+const helpBody       = document.getElementById('help-body');
+const nameOverlay    = document.getElementById('name-overlay');
+const nameInput      = document.getElementById('name-input');
+const nameTitle      = document.getElementById('name-sheet-title');
+const summaryOverlay = document.getElementById('summary-overlay');
+const summaryBody    = document.getElementById('summary-body');
+const toastEl        = document.getElementById('toast');
+let toastTimer = null;
+
+/* ── Utilities ────────────────────────────────────────────── */
+function vibrate(ms) { try { navigator.vibrate?.(ms); } catch(_) {} }
+
+function showToast(msg, dur = 1800) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), dur);
+}
+
+function esc(s) {
+    return String(s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function applyTheme() {
+    document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : '');
+    document.getElementById('dark-toggle').textContent = state.darkMode ? '☀️' : '🌙';
+}
+
+/* ── Render ───────────────────────────────────────────────── */
+function render() {
+    state.screen === 'setup' ? renderSetup() : renderGame();
+}
+
+/* ── Setup ────────────────────────────────────────────────── */
+function renderSetup() {
+    mainEl.innerHTML = `
+        <div class="setup-card">
+            <h2>🦁 Start a New Round</h2>
+            <p>Set the number of players, then tap Begin. Rename players from the board.</p>
+            <span class="setup-label">Number of Players</span>
+            <div class="player-count-row">
+                <button class="count-btn" id="dec-btn" ${state.playerCount <= 2 ? 'disabled' : ''}>−</button>
+                <span class="count-display" id="count-disp">${state.playerCount}</span>
+                <button class="count-btn" id="inc-btn" ${state.playerCount >= 4 ? 'disabled' : ''}>+</button>
+            </div>
+            <button class="btn btn-primary" id="begin-btn" style="width:100%;padding:14px;font-size:0.95rem">Begin Round</button>
+        </div>`;
+
+    document.getElementById('dec-btn').addEventListener('click', () => {
+        if (state.playerCount > 2) {
+            state.playerCount--;
+            document.getElementById('count-disp').textContent = state.playerCount;
+            document.getElementById('dec-btn').disabled = state.playerCount <= 2;
+            document.getElementById('inc-btn').disabled = false;
+        }
+    });
+    document.getElementById('inc-btn').addEventListener('click', () => {
+        if (state.playerCount < 4) {
+            state.playerCount++;
+            document.getElementById('count-disp').textContent = state.playerCount;
+            document.getElementById('inc-btn').disabled = state.playerCount >= 4;
+            document.getElementById('dec-btn').disabled = false;
+        }
+    });
+    document.getElementById('begin-btn').addEventListener('click', () => {
+        state.freshPlayers(state.playerCount);
+        state.screen = 'game';
+        state.save();
+        render();
+    });
+}
+
+/* ── Game ─────────────────────────────────────────────────── */
+function renderGame() {
+    const { currentHole, players, ownership } = state;
+    const activeHoles = state.holesWithActivity();
+
+    let dotsHtml = '';
+    for (let h = 1; h <= 18; h++) {
+        const cls = h === currentHole ? 'hole-dot current'
+                  : activeHoles.has(h) ? 'hole-dot has-data'
+                  : 'hole-dot';
+        dotsHtml += `<button class="${cls}" data-hole="${h}" aria-label="Hole ${h}">${h}</button>`;
+    }
+
+    let thPlayers = '';
+    players.forEach(p => {
+        thPlayers += `
+            <th class="th-player" data-pid="${p.id}" title="Tap to rename">
+                <span class="player-name-display">${esc(p.name)}</span>
+                <span class="edit-hint">✏️ rename</span>
+            </th>`;
+    });
+
+    let rowsHtml = '';
+    ANIMALS.forEach(animal => {
+        const own = ownership[animal.id];
+        let cells = '';
+        players.forEach(p => {
+            const isOwner = own && own.playerId === p.id;
+            cells += `
+                <td class="td-cell">
+                    <button class="cell-btn${isOwner ? ' owner' : ''}"
+                        data-animal="${animal.id}" data-pid="${p.id}"
+                        aria-label="${esc(animal.name)} — ${esc(p.name)}"
+                        aria-pressed="${isOwner}">
+                        ${isOwner ? `<span class="cell-check">✓</span><span class="cell-hole">H${own.holeAcquired}</span>` : ''}
+                    </button>
+                </td>`;
+        });
+
+        rowsHtml += `
+            <tr class="animal-row">
+                <td class="td-animal" title="${esc(animal.desc)}">
+                    <div class="animal-label">
+                        <span class="animal-emoji">${animal.emoji}</span>
+                        <span class="animal-name-text">${animal.name}</span>
+                    </div>
+                </td>
+                ${cells}
+            </tr>`;
+    });
+
+    let totalCells = '';
+    players.forEach(p => {
+        totalCells += `<td class="td-total-val">${state.totalHeld(p.id)}</td>`;
+    });
+
+    mainEl.innerHTML = `
+        <div class="hole-nav-card">
+            <div class="hole-nav">
+                <button class="hole-arrow" id="prev-hole" aria-label="Previous hole"
+                    ${currentHole === 1 ? 'disabled' : ''}>&#8592;</button>
+                <div class="hole-center">
+                    <span class="hole-label">Hole</span>
+                    <span class="hole-number">${currentHole}</span>
+                </div>
+                <button class="hole-arrow" id="next-hole" aria-label="Next hole"
+                    ${currentHole === 18 ? 'disabled' : ''}>&#8594;</button>
+            </div>
+            <div class="hole-dots">${dotsHtml}</div>
+        </div>
+        <div class="grid-card">
+            <table class="grid-table" role="grid">
+                <thead>
+                    <tr><th class="th-animal">Animal</th>${thPlayers}</tr>
+                </thead>
+                <tbody>
+                    ${rowsHtml}
+                    <tr class="totals-row">
+                        <td class="td-total-label">Current Hold</td>
+                        ${totalCells}
+                    </tr>
+                </tbody>
+            </table>
+        </div>`;
+
+    document.getElementById('prev-hole').addEventListener('click', () => changeHole(currentHole - 1));
+    document.getElementById('next-hole').addEventListener('click', () => changeHole(currentHole + 1));
+    document.querySelector('.hole-dots').addEventListener('click', e => {
+        const dot = e.target.closest('[data-hole]');
+        if (dot) changeHole(parseInt(dot.dataset.hole, 10));
+    });
+    document.querySelectorAll('.th-player').forEach(th => {
+        th.addEventListener('click', () => openNameEditor(parseInt(th.dataset.pid, 10)));
+    });
+}
+
+/* ── Hole nav ─────────────────────────────────────────────── */
+function changeHole(h) {
+    if (h < 1 || h > 18) return;
+    state.currentHole = h;
+    state.save();
+    render();
+}
+
+/* ── Animal toggle — single listener, no stacking ────────── */
+function handleCellClick(e) {
+    const btn = e.target.closest('.cell-btn');
+    if (!btn) return;
+    const animalId = btn.dataset.animal;
+    const playerId = parseInt(btn.dataset.pid, 10);
+    if (!animalId || !playerId) return;
+
+    const animal  = ANIMALS.find(a => a.id === animalId);
+    const player  = state.players.find(p => p.id === playerId);
+    if (!animal || !player) return; // guard against stale data
+
+    const current = state.ownership[animalId];
+
+    if (current && current.playerId === playerId) {
+        delete state.ownership[animalId];
+        state.history.push({ animalId, playerId, hole: state.currentHole, action: 'clear', prevPlayerId: null });
+        vibrate(40);
+        showToast(`${animal.emoji} ${animal.name} cleared`);
+    } else {
+        const prevPlayerId = current ? current.playerId : null;
+        state.ownership[animalId] = { playerId, holeAcquired: state.currentHole };
+        state.history.push({ animalId, playerId, hole: state.currentHole, action: 'assign', prevPlayerId });
+        vibrate([20, 30, 20]);
+        showToast(prevPlayerId
+            ? `${animal.emoji} stolen by ${player.name}!`
+            : `${animal.emoji} ${animal.name} → ${player.name}`);
+    }
+
+    state.save();
+    render();
+}
+
+/* ── Name editor ──────────────────────────────────────────── */
+function openNameEditor(playerId) {
+    const player = state.players.find(p => p.id === playerId);
+    if (!player) return;
+    state._editingPlayer = playerId;
+    nameTitle.textContent = `Rename Player ${playerId}`;
+    nameInput.value = player.name.startsWith('Player ') ? '' : player.name;
+    nameInput.placeholder = player.name;
+    nameOverlay.classList.add('open');
+    nameOverlay.setAttribute('aria-hidden', 'false');
+    setTimeout(() => { nameInput.focus(); nameInput.select(); }, 60);
+}
+
+function closeNameEditor() {
+    nameOverlay.classList.remove('open');
+    nameOverlay.setAttribute('aria-hidden', 'true');
+    state._editingPlayer = null;
+}
+
+function saveName() {
+    const player = state.players.find(p => p.id === state._editingPlayer);
+    if (player) {
+        const val = nameInput.value.trim();
+        if (val) player.name = val;
+        state.save();
+    }
+    closeNameEditor();
+    render();
+}
+
+/* ── Summary ──────────────────────────────────────────────── */
+function openSummary() {
+    const { players, history } = state;
+
+    let cards = '';
+    players.forEach(p => {
+        const held = state.animalsHeldBy(p.id);
+        const tags = held.length > 0
+            ? `<div class="spc-animals">${held.map(a => `<span class="spc-tag">${a.emoji} ${esc(a.name)}</span>`).join('')}</div>`
+            : `<div class="spc-none">Clean round ✓</div>`;
+        cards += `
+            <div class="sum-player-card">
+                <div class="spc-name">${esc(p.name)}</div>
+                <div class="spc-count">${state.totalHeld(p.id)}</div>
+                <div class="spc-label">held now</div>
+                ${tags}
+            </div>`;
+    });
+
+    let histItems = '';
+    if (history.length === 0) {
+        histItems = '<p style="font-size:0.83rem;color:var(--text-muted);padding:8px 0">No activity yet.</p>';
+    } else {
+        histItems = '<ul class="history-list">';
+        history.forEach(h => {
+            const animal = ANIMALS.find(a => a.id === h.animalId);
+            if (!animal) return; // skip entries from old animal lists
+            const name   = esc(state.playerName(h.playerId));
+            let text;
+            if (h.action === 'clear') {
+                text = `<span class="hi-clear">${animal.emoji} ${esc(animal.name)} cleared</span>`;
+            } else if (h.prevPlayerId) {
+                text = `${animal.emoji} <strong>${esc(state.playerName(h.prevPlayerId))}</strong> → <strong>${name}</strong> (${esc(animal.name)})`;
+            } else {
+                text = `${animal.emoji} <strong>${name}</strong> picks up ${esc(animal.name)}`;
+            }
+            histItems += `<li class="history-item"><span class="hi-hole">H${h.hole}</span><span class="hi-text">${text}</span></li>`;
+        });
+        histItems += '</ul>';
+    }
+
+    summaryBody.innerHTML = `
+        <div class="sum-player-grid">${cards}</div>
+        <button class="history-toggle" id="history-toggle">
+            Round History <span class="chevron">▾</span>
+        </button>
+        <div class="history-body" id="history-body">${histItems}</div>`;
+
+    document.getElementById('history-toggle').addEventListener('click', function() {
+        const body = document.getElementById('history-body');
+        const open = body.classList.toggle('open');
+        this.classList.toggle('open', open);
+    });
+
+    summaryOverlay.classList.add('open');
+    summaryOverlay.setAttribute('aria-hidden', 'false');
+}
+
+function closeSummary() {
+    summaryOverlay.classList.remove('open');
+    summaryOverlay.setAttribute('aria-hidden', 'true');
+}
+
+/* ── Copy text — text-message format, no hole numbers ─────── */
+function generateCopyText() {
+    let lines = ['🏌️ Zoo Game'];
+    state.players.forEach(p => {
+        const held = state.animalsHeldBy(p.id);
+        lines.push(held.length > 0
+            ? `${p.name} (${held.length}): ${held.map(a => a.emoji + ' ' + a.name).join(', ')}`
+            : `${p.name}: Clean! 🎉`);
+    });
+    return lines.join('\n');
+}
+
+/* ── Help ─────────────────────────────────────────────────── */
+function renderHelp() {
+    let defs = '';
+    ANIMALS.forEach(a => {
+        defs += `
+            <div class="animal-def">
+                <span class="animal-def-emoji">${a.emoji}</span>
+                <div class="animal-def-text">
+                    <strong>${a.name}</strong>
+                    <span>${esc(a.desc)}</span>
+                </div>
+            </div>`;
+    });
+    helpBody.innerHTML = `
+        <h3>How It Works</h3>
+        <p>Each animal is a penalty owned by one player at a time. Animals carry forward — if you pick up a Snake on hole 1, you hold it until someone else three-putts on a later hole and takes it from you.</p>
+        <h3>Playing</h3>
+        <ol>
+            <li>Use <strong>← →</strong> (or swipe) to move between holes.</li>
+            <li>Make sure you're on the right hole <em>before</em> assigning an animal — it records when they changed hands.</li>
+            <li>Tap a player's cell to give them that animal. If someone else held it, they lose it.</li>
+            <li>Tap the cell of the player who <em>already holds</em> an animal to clear it (undo a mistake).</li>
+            <li>Tap any player's column header to rename them.</li>
+        </ol>
+        <h3>Animals</h3>${defs}`;
+}
+
+function openHelp()  { helpDrawer.classList.add('open');    helpDrawer.setAttribute('aria-hidden','false'); }
+function closeHelp() { helpDrawer.classList.remove('open'); helpDrawer.setAttribute('aria-hidden','true');  }
+
+/* ── Init ─────────────────────────────────────────────────── */
+function init() {
+    if (!state.load()) { state.screen = 'setup'; state.playerCount = 4; }
+    applyTheme();
+    renderHelp();
+    render();
+    setupGlobalListeners();
+}
+
+function setupGlobalListeners() {
+    /* Animal cells — attached once here, never in render() */
+    mainEl.addEventListener('click', handleCellClick);
+
+    document.getElementById('dark-toggle').addEventListener('click', () => {
+        state.darkMode = !state.darkMode;
+        applyTheme();
+        state.save();
+    });
+
+    document.getElementById('help-btn').addEventListener('click', openHelp);
+    document.getElementById('close-help').addEventListener('click', closeHelp);
+
+    document.getElementById('summary-btn').addEventListener('click', openSummary);
+    document.getElementById('close-summary').addEventListener('click', closeSummary);
+
+    document.getElementById('copy-btn').addEventListener('click', async () => {
+        const text = generateCopyText();
+        try {
+            await navigator.clipboard.writeText(text);
+            showToast('📋 Copied — ready to paste!');
+        } catch(e) {
+            /* Fallback for browsers that block clipboard API */
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;width:1px;height:1px';
+            document.body.appendChild(ta);
+            ta.focus(); ta.select();
+            try { document.execCommand('copy'); showToast('📋 Copied — ready to paste!'); }
+            catch(_) { showToast('Could not copy automatically'); }
+            document.body.removeChild(ta);
+        }
+    });
+
+    document.getElementById('new-game-btn').addEventListener('click', () => {
+        if (!confirm('Start a new game? All data will be cleared.')) return;
+        closeSummary();
+        try { localStorage.removeItem(STORAGE_KEY); } catch(_) {}
+        state.ownership   = {};
+        state.history     = [];
+        state.players     = [];
+        state.screen      = 'setup';
+        state.playerCount = 4;
+        render();
+    });
+
+    document.getElementById('name-save').addEventListener('click', saveName);
+    document.getElementById('name-cancel').addEventListener('click', closeNameEditor);
+    nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') saveName(); });
+
+    nameOverlay.addEventListener('click', e => { if (e.target === nameOverlay) closeNameEditor(); });
+    summaryOverlay.addEventListener('click', e => { if (e.target === summaryOverlay) closeSummary(); });
+
+    document.addEventListener('keydown', e => {
+        if (e.key !== 'Escape') return;
+        if (nameOverlay.classList.contains('open'))         closeNameEditor();
+        else if (summaryOverlay.classList.contains('open')) closeSummary();
+        else if (helpDrawer.classList.contains('open'))     closeHelp();
+    });
+
+    /* Persistence */
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') state.save();
+    });
+    window.addEventListener('pagehide',     () => state.save(), { capture: true });
+    window.addEventListener('beforeunload', () => state.save());
+
+    /* Swipe to change holes */
+    let touchStartX = 0;
+    mainEl.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    mainEl.addEventListener('touchend', e => {
+        if (state.screen !== 'game') return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 55) changeHole(state.currentHole + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
