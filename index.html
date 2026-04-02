@@ -62,10 +62,11 @@
       z-index: 1;
       height: 100vh;
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto 1fr auto auto;
       padding: 0 2.8rem;
       max-width: 1060px;
       margin: 0 auto;
+      gap: 0;
     }
 
     /* === HEADER === */
@@ -241,6 +242,152 @@
       color: var(--muted);
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* === MASTERS COUNTDOWN === */
+    .card-countdown {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .cd-item {
+      text-align: center;
+    }
+
+    .cd-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--white);
+      display: block;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 5px;
+      padding: 0.15rem 0.45rem;
+      min-width: 38px;
+      line-height: 1.3;
+    }
+
+    .cd-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.46rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    .cd-sep {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: rgba(201,168,76,0.4);
+      padding-bottom: 0.8rem;
+      align-self: flex-start;
+      margin-top: 0.2rem;
+    }
+
+    .cd-label-main {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.56rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(201,168,76,0.7);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    /* === TICKER === */
+    .ticker-wrap {
+      overflow: hidden;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(75,156,211,0.12);
+      border-radius: 8px;
+      padding: 0.6rem 0;
+      position: relative;
+      opacity: 0;
+      animation: fadeUp 0.65s ease forwards;
+      animation-delay: 0.72s;
+      margin-bottom: 0.7rem;
+    }
+
+    /* fade edges */
+    .ticker-wrap::before,
+    .ticker-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 60px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .ticker-wrap::before {
+      left: 0;
+      background: linear-gradient(to right, #1e1f24, transparent);
+    }
+    .ticker-wrap::after {
+      right: 0;
+      background: linear-gradient(to left, #1e1f24, transparent);
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      width: max-content;
+      animation: tickerScroll 30s linear infinite;
+    }
+
+    .ticker-track:hover { animation-play-state: paused; }
+
+    @keyframes tickerScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0 2rem;
+      white-space: nowrap;
+      border-right: 1px solid rgba(75,156,211,0.1);
+    }
+
+    .ticker-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--carolina);
+      opacity: 0.7;
+    }
+
+    .ticker-value {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .ticker-score {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .ticker-score.up   { color: #6dcc8a; }
+    .ticker-score.down { color: #e06c75; }
+    .ticker-score.even { color: var(--muted); }
+
+    .ticker-loading {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 2rem;
     }
 
     .card-title {
@@ -461,9 +608,31 @@
             </div>
             <h2 class="card-title">Masters Pool</h2>
             <p class="card-desc">Pick your players, track Augusta, settle the scores.</p>
+            <span class="cd-label-main" id="cd-label-main">Augusta opens in</span>
+            <div class="card-countdown" id="masters-countdown">
+              <div class="cd-item">
+                <span class="cd-val" id="cd-days">--</span>
+                <span class="cd-label">Days</span>
+              </div>
+              <span class="cd-sep">:</span>
+              <div class="cd-item">
+                <span class="cd-val" id="cd-hours">--</span>
+                <span class="cd-label">Hrs</span>
+              </div>
+              <span class="cd-sep">:</span>
+              <div class="cd-item">
+                <span class="cd-val" id="cd-mins">--</span>
+                <span class="cd-label">Min</span>
+              </div>
+              <span class="cd-sep">:</span>
+              <div class="cd-item">
+                <span class="cd-val" id="cd-secs">--</span>
+                <span class="cd-label">Sec</span>
+              </div>
+            </div>
             <div class="card-footer">
               <div class="card-btns">
-                <a href="/masters2026.html" class="btn-primary">Sign up</a>
+                <a href="/masters-signup.html" class="btn-primary">Sign up</a>
                 <a href="/masters2026.html" class="btn-ghost">Scoreboard</a>
               </div>
             </div>
@@ -474,7 +643,7 @@
             <div class="card-deco">W</div>
             <div class="card-header">
               <span class="card-tag">Annual Trip · 2026</span>
-              <span class="card-badge badge-live">● Live</span>
+              <span class="card-badge badge-soon">Soon</span>
             </div>
             <h2 class="card-title">Wedghoods</h2>
             <p class="card-desc">Apr 30 – May 3. Pairings, formats, Race to Seattle leaderboard, and the full Wedghood experience.</p>
@@ -508,6 +677,13 @@
       </div>
     </div>
 
+    <!-- TICKER -->
+    <div class="ticker-wrap" id="ticker-wrap">
+      <div class="ticker-track" id="ticker-track">
+        <span class="ticker-loading" id="ticker-loading">Loading pool data...</span>
+      </div>
+    </div>
+
     <!-- FOOTER -->
     <footer>
       <span class="footer-left">"Well... we're waiting."</span>
@@ -517,8 +693,177 @@
   </div>
 
   <script>
-    // Prevent any scroll jank on load
-    document.documentElement.style.scrollBehavior = 'auto';
+    // ===================== COUNTDOWN =====================
+    // Masters Tournament starts April 9 2026 at 8am ET
+    const mastersStart = new Date('2026-04-09T08:00:00-04:00');
+    const mastersEnd   = new Date('2026-04-13T18:00:00-04:00');
+
+    function updateCountdown() {
+      const now  = new Date();
+      const diff = mastersStart - now;
+
+      if (now >= mastersEnd) {
+        document.getElementById('masters-countdown').style.display = 'none';
+        document.getElementById('cd-label-main').textContent = 'Tournament complete';
+        return;
+      }
+
+      if (diff <= 0) {
+        document.getElementById('masters-countdown').style.display = 'none';
+        document.getElementById('cd-label-main').textContent = '⛳ Underway at Augusta';
+        return;
+      }
+
+      const days  = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins  = Math.floor((diff % 3600000)  / 60000);
+      const secs  = Math.floor((diff % 60000)    / 1000);
+
+      document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+      document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+      document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ===================== TICKER =====================
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTPh1Oj-8i_6-vti3rDeXkuQ_AJymnzmuzPvV24K4DaH8XtuFu2qKd3K0TnL70b7qbhcmJZGz9K6Rdw/pub?gid=1225176959&single=true&output=csv';
+
+    // Column indices (0-based):
+    // 0: Prior Place  1: Daily Place Change  2: Name
+    // 3: Rnd1  4: Rnd2  5: Rnd3  6: Rnd4
+    // 7: Total Cumulative Score  8: Current Place
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      return lines.slice(1).map(line => {
+        const cols = line.split(',').map(c => c.replace(/^"|"$/g,'').trim());
+        return {
+          priorPlace:  parseInt(cols[0]) || 0,
+          placeChange: parseInt(cols[1]) || 0,
+          name:        cols[2] || '—',
+          rnd1:        cols[3],
+          rnd2:        cols[4],
+          rnd3:        cols[5],
+          rnd4:        cols[6],
+          total:       cols[7],
+          currentPlace: parseInt(cols[8]) || 0
+        };
+      }).filter(r => r.name && r.name !== '—');
+    }
+
+    function currentRoundScore(row) {
+      // Return the most recently completed non-empty round score
+      const rounds = [row.rnd4, row.rnd3, row.rnd2, row.rnd1];
+      for (const r of rounds) {
+        const v = parseInt(r);
+        if (!isNaN(v) && v > 0) return v;
+      }
+      return null;
+    }
+
+    function scoreClass(val) {
+      if (!val && val !== 0) return 'even';
+      return val < 0 ? 'up' : val > 0 ? 'down' : 'even';
+    }
+
+    function fmtScore(val) {
+      if (val === null || val === undefined || val === '') return '—';
+      const n = parseInt(val);
+      if (isNaN(n)) return val;
+      if (n === 0) return 'E';
+      return n > 0 ? `+${n}` : `${n}`;
+    }
+
+    function buildTickerItems(rows) {
+      const items = [];
+
+      // Current leader — place 1
+      const leader = rows.find(r => r.currentPlace === 1);
+      if (leader) {
+        items.push({
+          label: '🏆 Leader',
+          name: leader.name,
+          score: fmtScore(leader.total),
+          cls: scoreClass(parseInt(leader.total))
+        });
+      }
+
+      // Biggest mover up — most negative place change
+      const moversUp = rows.filter(r => r.placeChange < 0).sort((a,b) => a.placeChange - b.placeChange);
+      if (moversUp.length) {
+        const m = moversUp[0];
+        items.push({
+          label: '📈 On the move',
+          name: m.name,
+          score: `↑${Math.abs(m.placeChange)}`,
+          cls: 'up'
+        });
+      }
+
+      // Biggest mover down — most positive place change
+      const moversDown = rows.filter(r => r.placeChange > 0).sort((a,b) => b.placeChange - a.placeChange);
+      if (moversDown.length) {
+        const m = moversDown[0];
+        items.push({
+          label: '📉 Sliding',
+          name: m.name,
+          score: `↓${m.placeChange}`,
+          cls: 'down'
+        });
+      }
+
+      // Worst round score — highest round score this round
+      const withRound = rows.map(r => ({ ...r, roundScore: currentRoundScore(r) })).filter(r => r.roundScore !== null);
+      if (withRound.length) {
+        const worst = withRound.sort((a,b) => b.roundScore - a.roundScore)[0];
+        items.push({
+          label: '😬 Rough day',
+          name: worst.name,
+          score: `${worst.roundScore}`,
+          cls: 'down'
+        });
+      }
+
+      return items;
+    }
+
+    function renderTicker(items) {
+      if (!items.length) {
+        document.getElementById('ticker-loading').textContent = 'Pool data loading soon...';
+        return;
+      }
+
+      const track = document.getElementById('ticker-track');
+
+      // Build items HTML — duplicate for seamless loop
+      const html = items.map(item => `
+        <span class="ticker-item">
+          <span class="ticker-label">${item.label}</span>
+          <span class="ticker-value">${item.name}</span>
+          <span class="ticker-score ${item.cls}">${item.score}</span>
+        </span>
+      `).join('');
+
+      track.innerHTML = html + html; // duplicate for infinite scroll
+    }
+
+    async function loadTicker() {
+      try {
+        const res  = await fetch(CSV_URL);
+        const text = await res.text();
+        const rows = parseCSV(text);
+        const items = buildTickerItems(rows);
+        renderTicker(items);
+      } catch(e) {
+        document.getElementById('ticker-loading').textContent = 'Pool data coming soon';
+      }
+    }
+
+    loadTicker();
+    setInterval(loadTicker, 120000); // refresh every 2 minutes
   </script>
 
 </body>
