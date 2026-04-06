@@ -447,14 +447,45 @@
         margin-bottom: 14px;
     }
 
+    .tiebreaker-input-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 4px;
+    }
+
     .tiebreaker-input {
-        max-width: 160px;
+        width: 140px;
         text-align: center;
         font-family: var(--font-m);
-        font-size: 1.3rem; font-weight: 700;
+        font-size: 1.6rem; font-weight: 700;
         letter-spacing: 0.08em;
         background: var(--bg-input);
         color: #1a2c1c;
+        padding: 14px 12px;
+    }
+
+    .tb-done-btn {
+        font-family: var(--font-m);
+        font-size: 0.78rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        background: var(--gold);
+        color: var(--bg);
+        border: none;
+        border-radius: var(--radius);
+        padding: 14px 20px;
+        cursor: pointer;
+        font-weight: 700;
+        white-space: nowrap;
+        transition: background 0.15s;
+        /* only show on mobile where keyboard dismiss is needed */
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .tb-done-btn { display: block; }
+        .tiebreaker-input { font-size: 1.4rem; width: 130px; }
     }
 
     /* ── Submit / action buttons ── */
@@ -742,9 +773,16 @@
                     <div class="tiebreaker-title">🏁 Tiebreaker</div>
                     <div class="tiebreaker-description">Enter your guess for the winner's four-round total score at Augusta.</div>
                     <div class="tiebreaker-hint">📐 Par 72 × 4 rounds = 288</div>
-                    <input type="number" id="tiebreaker" name="tiebreaker"
-                           class="form-group input tiebreaker-input"
-                           min="250" max="300" placeholder="e.g. 272" required />
+                    <div class="tiebreaker-input-row">
+                        <input type="number" id="tiebreaker" name="tiebreaker"
+                               class="form-group input tiebreaker-input"
+                               min="250" max="300" placeholder="e.g. 272"
+                               inputmode="numeric" pattern="[0-9]*"
+                               enterkeyhint="done"
+                               onblur="validateForm()"
+                               required />
+                        <button type="button" class="tb-done-btn" onclick="document.getElementById('tiebreaker').blur(); validateForm();">Done ✓</button>
+                    </div>
                     <div class="helper-text">Allowed range: 250–300</div>
                 </div>
 
