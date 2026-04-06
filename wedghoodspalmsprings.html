@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedghoods — Spring 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   WEDGHOOD 2026 — OFFICIAL TOURNAMENT SITE
+   Edit data in the DATA CONFIGURATION section below the CSS
+   ============================================================ */
+
+:root {
+  --green:       #2D6A4F;
+  --green-dark:  #1B4332;
+  --green-light: #52B788;
+  --gold:        #B5853A;
+  --gold-light:  #D4A84B;
+  --sand:        #F5ECD7;
+  --sand-dark:   #E8D5B0;
+  --cream:       #FAF6EE;
+  --ink:         #1A1A1A;
+  --mist:        #4a5a4d;
+  --white:       #FFFFFF;
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body:    'Montserrat', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ---- NAV ---- */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(27, 67, 50, 0.97);
+  backdrop-filter: blur(8px);
+  display: flex; flex-direction: column; align-items: center;
+  border-bottom: 1px solid rgba(181,133,58,0.3);
+}
+.nav-top {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0.55rem 2rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  white-space: nowrap;
+  padding-bottom: 0.45rem;
+}
+.nav-links {
+  display: flex; list-style: none;
+  width: 100%; justify-content: center;
+  padding: 0 0.5rem;
+}
+.nav-links a {
+  display: block;
+  padding: 0 0.75rem;
+  line-height: 34px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.90);
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--gold-light); }
+@media (max-width: 400px) {
+  .nav-links a { padding: 0 0.5rem; font-size: 0.55rem; letter-spacing: 0.08em; }
+}
+
+/* ---- HERO ---- */
+#hero {
+  min-height: 100vh;
+  background: linear-gradient(160deg, var(--green-dark) 0%, #243B2E 40%, #3D5C3A 70%, #5C7A50 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 76px 2rem 4rem;
+}
+.hero-texture {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(181,133,58,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(82,183,136,0.05) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.hero-ornament {
+  position: absolute;
+  width: 600px; height: 600px;
+  border: 1px solid rgba(181,133,58,0.12);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.hero-ornament::before {
+  content: '';
+  position: absolute; inset: 40px;
+  border: 1px solid rgba(181,133,58,0.08);
+  border-radius: 50%;
+}
+.hero-content {
+  position: relative; text-align: center;
+  animation: fadeUp 1s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 1.2rem;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 14vw, 10rem);
+  font-weight: 300;
+  color: var(--white);
+  letter-spacing: 0.06em;
+  line-height: 0.9;
+  margin-bottom: 0.3rem;
+}
+.hero-year {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 300;
+  color: var(--gold-light);
+  letter-spacing: 0.25em;
+  margin-bottom: 2rem;
+}
+.hero-divider {
+  width: 80px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 0 auto 2rem;
+}
+.hero-meta {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+.hero-dates {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: rgba(255,255,255,0.35);
+  font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 0.7; } }
+.hero-scroll::after {
+  content: '';
+  width: 1px; height: 36px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+}
+
+/* ---- SECTIONS ---- */
+section {
+  padding: 5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400;
+  color: var(--green-dark);
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+.section-rule {
+  width: 48px; height: 2px;
+  background: var(--gold);
+  margin-bottom: 2.5rem;
+}
+
+/* ---- STANDINGS SECTION ---- */
+#standings-section {
+  background: var(--green-dark);
+  max-width: 100%;
+  padding: 5rem 2rem;
+}
+#standings-section .inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+#standings-section .section-title { color: var(--white); }
+#standings-section .section-label { color: var(--gold-light); }
+#standings-section .section-rule { background: var(--gold-light); }
+
+.standings-meta {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin-bottom: 2rem; flex-wrap: wrap;
+}
+.last-updated {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase;
+}
+.refresh-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: transparent;
+  border: 1px solid rgba(181,133,58,0.5);
+  color: var(--gold-light);
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.refresh-btn:hover {
+  background: rgba(181,133,58,0.15);
+  border-color: var(--gold-light);
+}
+.refresh-btn svg { transition: transform 0.4s; }
+.refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.csv-notice {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-left: 3px solid var(--gold);
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  font-size: 0.7rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.55);
+}
+.csv-notice strong { color: var(--gold-light); }
+.csv-notice code {
+  background: rgba(255,255,255,0.08);
+  padding: 0.15em 0.5em;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  color: var(--green-light);
+}
+
+/* Leaderboard tables */
+.leaderboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+@media (max-width: 700px) { .leaderboard-grid { grid-template-columns: 1fr; } }
+
+.lb-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.lb-table { min-width: 420px; }
+@media (max-width: 600px) {
+  .lb-table th, .lb-table td { padding: 0.45rem 0.5rem; font-size: 0.7rem; }
+  .lb-table .rank { width: 1.5rem; font-size: 0.9rem; }
+}
+.lb-card-header {
+  background: rgba(181,133,58,0.15);
+  border-bottom: 1px solid rgba(181,133,58,0.2);
+  padding: 0.75rem 1rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.lb-table {
+  width: 100%; border-collapse: collapse;
+}
+.lb-table th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.95);
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.lb-table th:first-child,
+.lb-table th:nth-child(2) { text-align: left; }
+.lb-table td {
+  padding: 0.7rem 0.75rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.95);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  text-align: center;
+}
+.lb-table td:first-child,
+.lb-table td:nth-child(2) { text-align: left; }
+.lb-table tr:last-child td { border-bottom: none; }
+.lb-table tr:hover td { background: rgba(255,255,255,0.03); }
+.lb-table .rank {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.55);
+  width: 2rem;
+}
+.lb-table .rank-1 { color: var(--gold-light); }
+.lb-table .rank-2 { color: rgba(255,255,255,0.55); }
+.lb-table .rank-3 { color: #c4945a; }
+.lb-table .player-name { font-weight: 600; }
+.lb-table .units {
+  text-align: right;
+  font-weight: 600;
+  color: var(--green-light);
+}
+.lb-table .units-dim {
+  text-align: right;
+  color: rgba(255,255,255,0.35);
+}
+
+/* Day scores table */
+.day-scores-wrap { overflow-x: auto; margin-bottom: 1rem; }
+.day-scores {
+  width: 100%; border-collapse: collapse; min-width: 600px;
+}
+.day-scores th {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+}
+.day-scores th:first-child { text-align: left; }
+.day-scores td {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.75);
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.day-scores td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: var(--white);
+}
+.day-scores tr:hover td { background: rgba(255,255,255,0.03); }
+.score-win { color: var(--green-light); font-weight: 700; }
+.score-empty { color: rgba(255,255,255,0.18); }
+
+.loading-state, .error-state {
+  padding: 3rem;
+  text-align: center;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+.error-state { color: #e07070; }
+
+/* ---- TABS ---- */
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 2rem;
+  gap: 0;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255,255,255,0.75);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: rgba(255,255,255,0.7); }
+.tab-btn.active {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold-light);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ---- BIRDIE DRAW TRACKER ---- */
+.birdie-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 600px) { .birdie-grid { grid-template-columns: repeat(2,1fr); } }
+.birdie-card {
+  background: rgba(255,255,255,0.03);
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+.birdie-name {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.5rem;
+}
+.birdie-tickets {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--gold-light);
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+.birdie-tickets-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.birdie-breakdown {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.45);
+  margin-top: 0.4rem;
+}
+.birdie-breakdown span { color: var(--green-light); }
+
+/* ---- RESULTS LEDGER ---- */
+.results-day {
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.results-day-header {
+  background: rgba(181,133,58,0.12);
+  border-bottom: 1px solid rgba(181,133,58,0.15);
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+.results-day-header:hover { background: rgba(181,133,58,0.18); }
+.results-day-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.results-day-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--white);
+  font-weight: 400;
+}
+.results-day-units {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--green-light);
+}
+.results-day-chevron {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.3);
+  transition: transform 0.2s;
+}
+.results-day.open .results-day-chevron { transform: rotate(180deg); }
+.results-body {
+  display: none;
+}
+.results-day.open .results-body { display: block; }
+.results-table {
+  width: 100%; border-collapse: collapse;
+}
+.results-table th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+}
+.results-table td {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.92);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: middle;
+}
+.results-table tr:last-child td { border-bottom: none; }
+.results-table .award-col { color: rgba(255,255,255,0.75); font-size:0.7rem; }
+.results-table .winner-col { color: var(--white); font-weight: 600; }
+.results-table .units-col { color: var(--green-light); font-weight: 700; text-align:right; white-space:nowrap; }
+.results-table .halved { color: rgba(255,255,255,0.65); font-style: italic; font-size: 0.68rem; }
+.results-table .match-label {
+  display: inline-block;
+  background: rgba(45,106,79,0.3);
+  color: var(--green-light);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.5rem;
+  margin-right: 0.4rem;
+}
+
+/* ---- SCHEDULE SECTION ---- */
+#schedule {
+  border-top: 1px solid rgba(45,106,79,0.15);
+}
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(45,106,79,0.15);
+  border: 1px solid rgba(45,106,79,0.15);
+  margin-bottom: 2rem;
+}
+@media (max-width: 800px) {
+  .schedule-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .schedule-grid { grid-template-columns: 1fr; }
+}
+.day-card {
+  background: var(--cream);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.day-card:hover { background: var(--sand); }
+.day-card.active { background: var(--green-dark); }
+.day-num {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+.day-card.active .day-num { color: var(--gold-light); }
+.day-date {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--green-dark);
+  margin-bottom: 0.15rem;
+}
+.day-card.active .day-date { color: var(--white); }
+.day-course {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--mist);
+  margin-bottom: 1rem;
+}
+.day-card.active .day-course { color: rgba(255,255,255,0.55); }
+.day-matches {
+  display: flex; flex-direction: column; gap: 0.4rem;
+}
+.match-pill {
+  display: inline-block;
+  background: rgba(45,106,79,0.08);
+  border: 1px solid rgba(45,106,79,0.15);
+  color: var(--green);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+}
+.day-card.active .match-pill {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+}
+
+/* Match detail panel */
+.match-detail-panel {
+  background: var(--green-dark);
+  color: var(--white);
+  padding: 2.5rem;
+  display: none;
+  margin-bottom: 1rem;
+  animation: slideDown 0.3s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.match-detail-panel.visible { display: block; }
+.match-panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 700px) { .match-panel-grid { grid-template-columns: 1fr; } }
+.match-panel-col h4 {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(181,133,58,0.2);
+}
+.match-panel-col p {
+  font-size: 0.75rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.88);
+  margin-bottom: 0.4rem;
+}
+.match-panel-col strong { color: var(--white); }
+.pairing-row {
+  display: flex; gap: 0.5rem; align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+.pairing-label {
+  font-size: 0.55rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3);
+  min-width: 2.5rem;
+}
+.pairing-team {
+  font-size: 0.75rem;
+  color: var(--white);
+  font-weight: 500;
+}
+.payout-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.72rem;
+}
+.payout-row:last-child { border-bottom: none; }
+.payout-desc { color: rgba(255,255,255,0.88); }
+.payout-amt { color: var(--green-light); font-weight: 600; }
+
+/* ---- RULES SECTION ---- */
+#rules { background: var(--sand); max-width: 100%; padding: 5rem 2rem; }
+#rules .inner { max-width: 1100px; margin: 0 auto; }
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+@media (max-width: 700px) { .rules-grid { grid-template-columns: 1fr; } }
+.rule-card {
+  background: var(--white);
+  border-top: 3px solid var(--green);
+  padding: 1.75rem;
+}
+.rule-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  margin-bottom: 1rem;
+}
+.rule-card ul {
+  list-style: none; padding: 0;
+}
+.rule-card li {
+  font-size: 0.75rem;
+  line-height: 1.75;
+  color: #222;
+  padding: 0.3rem 0 0.3rem 1.1rem;
+  position: relative;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.rule-card li:last-child { border-bottom: none; }
+.rule-card li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.7rem;
+  width: 5px; height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+/* ---- PAIRINGS MATRIX ---- */
+.matrix-wrap { overflow-x: auto; }
+.matrix-table {
+  width: 100%; border-collapse: collapse; min-width: 700px;
+}
+.matrix-table th, .matrix-table td {
+  padding: 0.6rem 0.5rem;
+  text-align: center;
+  font-size: 0.68rem;
+  border: 1px solid rgba(45,106,79,0.1);
+}
+.matrix-table th {
+  background: var(--green-dark);
+  color: var(--white);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.matrix-table th:first-child { width: 90px; text-align: left; padding-left: 0.75rem; }
+.matrix-table td:first-child {
+  background: var(--green-dark);
+  color: var(--white);
+  font-weight: 600;
+  text-align: left;
+  padding-left: 0.75rem;
+}
+.matrix-table td { background: var(--cream); color: var(--ink); vertical-align: middle; }
+.cell-partner {
+  background: #D5E8D4 !important;
+  color: var(--green-dark) !important;
+  font-weight: 700;
+}
+.cell-group {
+  background: #DDEAF5 !important;
+  color: #1A3A5C !important;
+}
+.cell-self { background: var(--sand-dark) !important; }
+.matrix-legend {
+  display: flex; gap: 2rem; margin-top: 1rem; flex-wrap: wrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.65rem; font-weight: 500; color: var(--mist);
+}
+.legend-swatch {
+  width: 14px; height: 14px; border-radius: 2px;
+}
+
+/* ---- PRIZE POOL SECTION ---- */
+#prizes { background: var(--cream); }
+.prize-strip {
+  background: var(--green-dark);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 2.5rem;
+}
+@media (max-width: 600px) { .prize-strip { grid-template-columns: 1fr; } }
+.prize-block {
+  padding: 2rem 1.5rem;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+.prize-block:last-child { border-right: none; }
+.prize-num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--gold-light);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.prize-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.games-list { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+@media (max-width: 600px) { .games-list { grid-template-columns: 1fr; } }
+.game-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline;
+  padding: 0.6rem 0.75rem;
+  background: var(--sand);
+  font-size: 0.72rem;
+}
+.game-row-name { color: var(--ink); font-weight: 600; }
+.game-row-units { color: var(--green); font-weight: 700; }
+
+/* ---- FOOTER ---- */
+footer {
+  background: var(--green-dark);
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(181,133,58,0.2);
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+footer p {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+}
+
+/* ---- UTILS ---- */
+.mt-1 { margin-top: 1rem; }
+.text-muted { color: var(--mist); font-size: 0.7rem; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+  NAV
+============================================================ -->
+<nav>
+  <div class="nav-top">
+    <a href="#hero" class="nav-logo">Wedghoods — Spring 2026</a>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#standings-section">Standings</a></li>
+    <li><a href="#standings-section" onclick="setTimeout(()=>switchTab('results'),100)">Results</a></li>
+    <li><a href="#standings-section" onclick="setTimeout(()=>switchTab('birdie'),100)">Birdie</a></li>
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#rules">Rules</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+  HERO
+============================================================ -->
+<section id="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-ornament"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">The Annual Invitational</div>
+    <div class="hero-title">Wedghoods</div>
+    <div class="hero-year">2026</div>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">Palm Springs, California</div>
+    <div class="hero-dates">April 30 &ndash; May 3, 2026</div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ============================================================
+  STANDINGS / RESULTS / BIRDIE DRAW
+  ↓ CONNECT YOUR GOOGLE SHEET CSV URLS IN THE SCRIPT BELOW
+============================================================ -->
+<div id="standings-section">
+  <div class="inner">
+    <div class="section-label">Live Tournament</div>
+    <div class="section-title">Standings &amp; Results</div>
+    <div class="section-rule"></div>
+
+    <div class="standings-meta">
+      <span class="last-updated" id="last-updated-label">Not yet loaded</span>
+      <button class="refresh-btn" id="refresh-btn" onclick="loadAll()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M23 4v6h-6M1 20v-6h6"/>
+          <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+        </svg>
+        Refresh
+      </button>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('standings')">Race to Seattle</button>
+      <button class="tab-btn" onclick="switchTab('results')">Results</button>
+      <button class="tab-btn" onclick="switchTab('birdie')">🎟 Birdie Draw</button>
+    </div>
+
+    <div id="tab-standings" class="tab-panel active">
+      <div id="standings-content">
+        <div class="loading-state">Click Refresh once your CSV is connected</div>
+      </div>
+    </div>
+
+    <div id="tab-results" class="tab-panel">
+      <div id="results-content">
+        <div class="loading-state">Click Refresh once your CSV is connected</div>
+      </div>
+    </div>
+
+    <div id="tab-birdie" class="tab-panel">
+      <div id="birdie-content">
+        <div class="loading-state">Click Refresh once your CSV is connected</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+  SCHEDULE
+============================================================ -->
+<section id="schedule">
+  <div class="section-label">Tournament</div>
+  <div class="section-title">Schedule &amp; Formats</div>
+  <div class="section-rule"></div>
+
+  <div class="schedule-grid" id="schedule-grid"></div>
+  <div class="match-detail-panel" id="match-detail-panel">
+    <div id="match-detail-content"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+  RULES
+============================================================ -->
+<div id="rules">
+  <div class="inner">
+    <div class="section-label">Governing Play</div>
+    <div class="section-title">Governing Rules of Play</div>
+    <div class="section-rule"></div>
+    <div class="rules-grid" id="rules-grid"></div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- ============================================================
+  FOOTER
+============================================================ -->
+<footer>
+  <div class="footer-logo">Wedghoods — Palm Springs</div>
+  <p>Palm Springs &bull; April 30 &ndash; May 3, 2026 &bull; Official Tournament Site</p>
+</footer>
+
+
+<script>
+/* ============================================================
+   DATA CONFIGURATION
+   Edit everything in this block. Layout code is below.
+   ============================================================ */
+
+// ---- CSV URLS ----
+// Paste your Google Sheets "Publish to web" CSV URLs here.
+// Leave as empty string '' until you have them.
+//
+// SCORES tab structure:
+//   Player,M1,M2,M3,M4,M5,M6,Total,BirdieTickets
+//   Cake,10,0,5,0,0,0,15,4
+//   (BirdieTickets = running total of draw tickets earned)
+//
+// RESULTS tab structure:
+//   Match,Award,Winner,Units,Halved
+//   M1,Front 9 — Group 1,Cake / Langley,8,
+//   M1,Back 9 — Group 1,Wise / Macias,8,
+//   M1,Total — Group 1,Halved,,8,YES
+//   M1,Low Net — Group 1,Cake,10,
+//   (Halved column: put YES if the game was halved, leave blank if there was a winner)
+
+const CSV_URL_SCORES  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSqbVI6yCwYknOsNDGxuR95oBBrRIrUq2EISUq-BkSNqaEN9VQn5wFf4RVLRWvQWig3VBobPD0hPSG4/pub?gid=1728014820&single=true&output=csv';
+const CSV_URL_RESULTS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSqbVI6yCwYknOsNDGxuR95oBBrRIrUq2EISUq-BkSNqaEN9VQn5wFf4RVLRWvQWig3VBobPD0hPSG4/pub?gid=415732827&single=true&output=csv';
+
+// ---- PLAYERS ----
+const PLAYERS = ['Cake','Wise','Macias','Langley','Murphy','Festor','Angell','Wohnoutka'];
+const HANDICAPS = { Cake:5, Wise:8, Macias:12, Langley:14, Murphy:15, Festor:22, Angell:26, Wohnoutka:27 };
+
+// ---- MATCHES ----
+const MATCHES = [
+  {
+    id: 1,
+    day: 'Day 1', dayLabel: 'Thursday', date: 'April 30',
+    course: 'Indian Wells Celebrity', tees: 'White · 6,012 yds · Rating 69.8 · Slope 123',
+    time: '1:30 & 1:40 PM',
+    format: '2-Man Net Better Ball',
+    type: 'Match Play + Individual Net Stroke Play',
+    description: 'Full handicaps, no adjustments. Team: low net score wins hole, no tiebreaks, no carryovers — separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split units. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake (5) / Langley (14)', 'Wise (8) / Macias (12)'] },
+      { group: 2, teams: ['Murphy (15) / Wohnoutka (27)', 'Festor (22) / Angell (26)'] },
+    ],
+    payouts: [
+      { desc: 'Front Winning Team (within foursome)', amt: '8 units (4/team · 2/player)' },
+      { desc: 'Back Winning Team (within foursome)', amt: '8 units (4/team · 2/player)' },
+      { desc: 'Total Winning Team (within foursome)', amt: '14 units (7/team · 3.5/player)' },
+      { desc: 'Low Net 18 (within foursome)', amt: '10 units (5/winner)' },
+    ],
+    tiebreak: 'Individual low net: matched scorecards from Hole 3'
+  },
+  {
+    id: 2,
+    day: 'Day 2', dayLabel: 'Friday', date: 'May 1 AM',
+    course: 'Desert Willow — Firecliff', tees: 'White · 6,147 yds · Rating 69.9 · Slope 128',
+    time: 'Morning',
+    format: 'Wedghood Championship',
+    type: 'Individual Net Stroke Play',
+    description: 'Full handicaps, no adjustments. All putts must be holed — no gimmes. Maximum score: Net Double Bogey. Winner retains the trophy for one year. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake (5)', 'Angell (26)', 'Festor (22)', 'Macias (12)'] },
+      { group: 2, teams: ['Langley (14)', 'Murphy (15)', 'Wise (8)', 'Wohnoutka (27)'] },
+    ],
+    payouts: [
+      { desc: '1st Place', amt: '20 units' },
+      { desc: '2nd Place', amt: '12 units' },
+      { desc: '3rd Place', amt: '8 units' },
+    ],
+    tiebreak: '1st: on-course playoff if possible, else matched scorecards from Hole 17 · 2nd/3rd tied: split · 3+ tied for 2nd: match from Hole 2, final two split'
+  },
+  {
+    id: 3,
+    day: 'Day 2', dayLabel: 'Friday', date: 'May 1 PM',
+    course: 'Desert Willow — Mountain View', tees: 'Purple/White · 6,316 yds · Rating 70.3 · Slope 126',
+    time: 'Afternoon',
+    format: '2-Man Net Shamble',
+    type: 'Modified Stableford + Poison Holes',
+    description: 'Playing HCP: 80% of course handicap. Shamble: both tee off, team selects best drive, each plays own ball in — team scores better net ball and applies Stableford points. Poison holes (6 & 15): team must take the HIGH net score. Drive quota: 3 per player. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 3 · Eagle = 5 · Albatross = 8. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake (2ph) / Festor (18ph)', 'Wise (6ph) / Murphy (12ph)'] },
+      { group: 2, teams: ['Macias (10ph) / Wohnoutka (18ph)', 'Langley (11ph) / Angell (18ph)'] },
+    ],
+    payouts: [
+      { desc: 'Front Winning Team — most points (all teams)', amt: '10 units (5/player)' },
+      { desc: 'Back Winning Team — most points (all teams)', amt: '10 units (5/player)' },
+      { desc: 'Total Winning Team — most points (all teams)', amt: '20 units (10/player)' },
+    ],
+    tiebreak: 'Front: Hole 6 · Back: Hole 14 · Total: Hole 18'
+  },
+  {
+    id: 4,
+    day: 'Day 3', dayLabel: 'Saturday', date: 'May 2 AM',
+    course: 'Eagle Falls', tees: 'Hawk · 6,140 yds · Rating 70.0 · Slope 128',
+    time: 'Morning',
+    format: '2-Man Low Net',
+    type: 'w/ High-Ball Tiebreak · Match Play',
+    description: 'Full handicaps, no adjustments. Team: low net score wins hole — if tied, high score is the tiebreak. No carryovers. Separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split units. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake (5) / Angell (26)', 'Langley (14) / Murphy (15)'] },
+      { group: 2, teams: ['Wise (8) / Wohnoutka (27)', 'Macias (12) / Festor (22)'] },
+    ],
+    payouts: [
+      { desc: 'Front Winning Team (within foursome)', amt: '4 units (2/player)' },
+      { desc: 'Back Winning Team (within foursome)', amt: '4 units (2/player)' },
+      { desc: 'Total Winning Team (within foursome)', amt: '7 units (3.5/player)' },
+      { desc: 'Low Net 18 Side (within foursome)', amt: '10 units (5/winner)' },
+    ],
+    tiebreak: 'Individual low net: matched scorecards from Hole 13'
+  },
+  {
+    id: 5,
+    day: 'Day 3', dayLabel: 'Saturday', date: 'May 2 PM',
+    course: 'Silver Rock', tees: 'Blue · 6,313 yds · Rating 70.6 · Slope 129',
+    time: 'Afternoon',
+    format: '2-Man Chapman',
+    type: 'Net Stableford',
+    description: 'Team HCP = 60% of low + 40% of high handicap. Both players hit drives, switch balls for 2nd shots, then pick best ball and play alternate shot to hole. Par 3s: potentially two putts for birdie. One gross/net team score per hole. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 3 · Eagle = 5 · Albatross = 8. No halves.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake (5) / Wohnoutka (27) [Team HCP 13]', 'Macias (12) / Murphy (15) [Team HCP 13]'] },
+      { group: 2, teams: ['Wise (8) / Angell (26) [Team HCP 15]', 'Langley (14) / Festor (22) [Team HCP 17]'] },
+    ],
+    payouts: [
+      { desc: 'Front Winning Team — most points (all teams)', amt: '10 units (5/player)' },
+      { desc: 'Back Winning Team — most points (all teams)', amt: '10 units (5/player)' },
+      { desc: 'Total Winning Team — most points (all teams)', amt: '20 units (10/player)' },
+    ],
+    tiebreak: 'Front: Hole 5 · Back: Hole 15 · Total: Hole 11'
+  },
+  {
+    id: 6,
+    day: 'Day 4', dayLabel: 'Sunday', date: 'May 3',
+    course: 'Escena', tees: 'Middle (Green) · 6,115 yds · Rating 69.4 · Slope 122',
+    time: 'Morning',
+    format: 'Individual Quota',
+    type: 'vs. Foursome',
+    description: 'Individual stroke play scored on Modified Stableford. Each player\'s quota = 36 minus handicap. Winner = highest points-minus-quota score. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 4 · Eagle = 8 · Albatross = 10. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake (5) [Q:31]', 'Wise (8) [Q:28]', 'Angell (26) [Q:10]', 'Wohnoutka (27) [Q:9]'] },
+      { group: 2, teams: ['Festor (22) [Q:14]', 'Langley (14) [Q:22]', 'Macias (12) [Q:24]', 'Murphy (15) [Q:21]'] },
+    ],
+    payouts: [
+      { desc: 'Low Score of Foursome (within foursome)', amt: '28 units (14/winner)' },
+      { desc: 'Wild Cards — 3rd & 4th best score across all foursomes', amt: '12 units (6/wild card)' },
+    ],
+    tiebreak: 'TBD — matched scorecards'
+  }
+];
+
+// ---- WEEK GAMES ----
+const WEEK_GAMES = [
+  { name: 'Race to Seattle', desc: 'Cumulative units over the week. Pays 1st, 2nd, 3rd.', units: 56 },
+  { name: 'Birdie Draw', desc: 'Net birdies = 1 ticket · Net eagles = 3 tickets · Random draw winner.', units: 24 },
+];
+
+// ---- LOCAL RULES ----
+const RULES = [
+  {
+    title: 'Preferred Lies',
+    items: [
+      'Balls in the fairway or first cut (including fringe or tee) may be moved 1 scorecard length, no nearer the hole.',
+      'Balls in the rough are played as they lie.',
+      'Consult playing competitors on any fairway/rough boundary questions.'
+    ]
+  },
+  {
+    title: 'Penalty Areas — All 1-Stroke Hazards',
+    items: [
+      'Standard penalty areas: one-stroke penalty per USGA rules.',
+      'To support pace of play, all balls lost in woods/desert/OB will be played as a red penalty area, with one stroke penalty.',
+      'Balls dropped in fairway receive preferred lies; balls in rough played as they lie.'
+    ]
+  },
+  {
+    title: 'Maximum Scores',
+    items: [
+      'Max score varies by format — see each match section.',
+      'In Stableford and Quota formats, pick up once no additional points can be earned.',
+      'Play ready golf. Pick up promptly when out of the hole.'
+    ]
+  },
+  {
+    title: 'Pace of Play',
+    items: [
+      'Target: rounds completed no later than 4:30 PM, especially on 36-hole days.',
+      'Violations subject to public shaming.',
+      'Play ready golf at all times.'
+    ]
+  },
+  {
+    title: 'Scorecards',
+    items: [
+      'Use provided pre-dotted scorecards for each round.',
+      'During team rounds, record each player\'s individual gross and net score (e.g., 5/4) on every hole.',
+      'Turn all cards in to Cake at end of round. Scores entered into leaderboard after each round.'
+    ]
+  },
+  {
+    title: 'Ties',
+    items: [
+      'Team matches may end in a halve — prize pool split equally.',
+      'Individual side games: tied by matching scorecards starting at designated tiebreak hole.',
+      'Championship ties for 1st: on-course playoff if practical; otherwise scorecard tiebreak.'
+    ]
+  }
+];
+
+// ---- PAIRING MATRIX DATA ----
+// Format: 'PARTNER-M#' or 'GROUP-M#,M#' or 'SELF'
+const MATRIX = {
+  Cake:      { Cake:'SELF', Wise:'GROUP-M1,M3,M6', Macias:'GROUP-M1,M2,M5', Langley:'PARTNER-M1', Murphy:'GROUP-M3,M4,M5', Festor:'PARTNER-M3', Angell:'PARTNER-M4', Wohnoutka:'PARTNER-M5' },
+  Wise:      { Cake:'GROUP-M1,M3,M6', Wise:'SELF', Macias:'PARTNER-M1', Langley:'GROUP-M1,M2,M5', Murphy:'PARTNER-M3', Festor:'GROUP-M3,M4,M5', Angell:'PARTNER-M5', Wohnoutka:'PARTNER-M4' },
+  Macias:    { Cake:'GROUP-M1,M2,M5', Wise:'PARTNER-M1', Macias:'SELF', Langley:'GROUP-M1,M3,M6', Murphy:'PARTNER-M5', Festor:'PARTNER-M4', Angell:'GROUP-M2,M3', Wohnoutka:'PARTNER-M3' },
+  Langley:   { Cake:'PARTNER-M1', Wise:'GROUP-M1,M2,M5', Macias:'GROUP-M1,M3,M6', Langley:'SELF', Murphy:'PARTNER-M4', Festor:'PARTNER-M5', Angell:'PARTNER-M3', Wohnoutka:'GROUP-M2,M3' },
+  Murphy:    { Cake:'GROUP-M3,M4,M5', Wise:'PARTNER-M3', Macias:'PARTNER-M5', Langley:'PARTNER-M4', Murphy:'SELF', Festor:'GROUP-M1,M3,M6', Angell:'GROUP-M1,M4', Wohnoutka:'PARTNER-M1' },
+  Festor:    { Cake:'PARTNER-M3', Wise:'GROUP-M3,M4,M5', Macias:'PARTNER-M4', Langley:'PARTNER-M5', Murphy:'GROUP-M1,M3,M6', Festor:'SELF', Angell:'PARTNER-M1', Wohnoutka:'GROUP-M1,M4' },
+  Angell:    { Cake:'PARTNER-M4', Wise:'PARTNER-M5', Macias:'GROUP-M2,M3', Langley:'PARTNER-M3', Murphy:'GROUP-M1,M4', Festor:'PARTNER-M1', Angell:'SELF', Wohnoutka:'GROUP-M1,M3,M6' },
+  Wohnoutka: { Cake:'PARTNER-M5', Wise:'PARTNER-M4', Macias:'PARTNER-M3', Langley:'GROUP-M2,M3', Murphy:'PARTNER-M1', Festor:'GROUP-M1,M4', Angell:'GROUP-M1,M3,M6', Wohnoutka:'SELF' }
+};
+
+// ---- PLAYER SCHEDULE ----
+const PLAYER_SCHEDULE = {
+  Cake:      { M1:'+ Langley (G1)', M2:'Grp 1', M3:'+ Festor (G1)',     M4:'+ Angell (G1)',    M5:'+ Wohnoutka (G1)', M6:'Grp 1' },
+  Wise:      { M1:'+ Macias (G1)',  M2:'Grp 2', M3:'+ Murphy (G1)',     M4:'+ Wohnoutka (G2)', M5:'+ Angell (G2)',    M6:'Grp 1' },
+  Macias:    { M1:'+ Wise (G1)',    M2:'Grp 1', M3:'+ Wohnoutka (G2)',  M4:'+ Festor (G2)',    M5:'+ Murphy (G1)',    M6:'Grp 2' },
+  Langley:   { M1:'+ Cake (G1)',    M2:'Grp 2', M3:'+ Angell (G2)',     M4:'+ Murphy (G1)',    M5:'+ Festor (G2)',    M6:'Grp 2' },
+  Murphy:    { M1:'+ Wohnoutka (G2)', M2:'Grp 2', M3:'+ Wise (G1)',    M4:'+ Langley (G1)',   M5:'+ Macias (G1)',    M6:'Grp 2' },
+  Festor:    { M1:'+ Angell (G2)', M2:'Grp 1',  M3:'+ Cake (G1)',      M4:'+ Macias (G2)',    M5:'+ Langley (G2)',   M6:'Grp 2' },
+  Angell:    { M1:'+ Festor (G2)', M2:'Grp 1',  M3:'+ Langley (G2)',   M4:'+ Cake (G1)',      M5:'+ Wise (G2)',      M6:'Grp 1' },
+  Wohnoutka: { M1:'+ Murphy (G2)', M2:'Grp 2',  M3:'+ Macias (G2)',    M4:'+ Wise (G2)',      M5:'+ Cake (G1)',      M6:'Grp 1' },
+};
+
+
+/* ============================================================
+   RENDER FUNCTIONS — layout code below, no need to edit
+   ============================================================ */
+
+// ---- SCHEDULE ----
+function renderSchedule() {
+  const grid = document.getElementById('schedule-grid');
+  const days = [
+    { label: 'Day 1', date: 'Thursday Apr 30', course: 'Indian Wells', matches: ['M1 — Better Net Ball'] },
+    { label: 'Day 2', date: 'Friday May 1', course: 'Desert Willow', matches: ['M2 — Championship (AM)', 'M3 — Net Shamble (PM)'] },
+    { label: 'Day 3', date: 'Saturday May 2', course: 'Eagle Falls / Silver Rock', matches: ['M4 — Low Net (AM)', 'M5 — Chapman (PM)'] },
+    { label: 'Day 4', date: 'Sunday May 3', course: 'Escena', matches: ['M6 — Quota'] },
+  ];
+  grid.innerHTML = days.map((d, i) => `
+    <div class="day-card" data-day="${i}" onclick="toggleDay(${i})">
+      <div class="day-num">${d.label}</div>
+      <div class="day-date">${d.date}</div>
+      <div class="day-course">${d.course}</div>
+      <div class="day-matches">
+        ${d.matches.map(m => `<div class="match-pill">${m}</div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function toggleDay(dayIdx) {
+  const cards = document.querySelectorAll('.day-card');
+  const panel = document.getElementById('match-detail-panel');
+  const content = document.getElementById('match-detail-content');
+  const dayMatches = [
+    [MATCHES[0]],
+    [MATCHES[1], MATCHES[2]],
+    [MATCHES[3], MATCHES[4]],
+    [MATCHES[5]]
+  ];
+  const isActive = cards[dayIdx].classList.contains('active');
+  cards.forEach(c => c.classList.remove('active'));
+  if (isActive) { panel.classList.remove('visible'); return; }
+  cards[dayIdx].classList.add('active');
+  const matches = dayMatches[dayIdx];
+  // Scroll the detail panel into view on mobile after a brief delay for the animation
+  setTimeout(() => { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+  content.innerHTML = matches.map(m => `
+    <div style="margin-bottom:${matches.length > 1 ? '2.5rem' : '0'};">
+      <div style="display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;">
+        <span style="font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-light);">Match ${m.id}</span>
+        <span style="font-family:var(--font-display);font-size:1.6rem;font-weight:400;color:white;">${m.format}</span>
+        <span style="font-size:0.7rem;color:rgba(255,255,255,0.45);font-style:italic;">${m.type}</span>
+      </div>
+      <div style="font-size:0.68rem;color:rgba(255,255,255,0.4);margin:0.3rem 0 0.8rem;letter-spacing:0.06em;">
+        ${m.course} &bull; ${m.tees} &bull; ${m.time}
+      </div>
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:1.2rem;max-width:700px;">${m.description}</div>
+      <div class="match-panel-grid">
+        <div class="match-panel-col">
+          <h4>Pairings</h4>
+          ${m.pairings.map(pg => `
+            <div style="margin-bottom:0.8rem;">
+              <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:0.4rem;">Group ${pg.group}</div>
+              ${pg.teams.map(t => `<div class="pairing-team" style="margin-bottom:0.3rem;">&#x2022; ${t}</div>`).join('')}
+            </div>`).join('')}
+        </div>
+        <div class="match-panel-col">
+          <h4>Payouts</h4>
+          ${m.payouts.map(p => `
+            <div class="payout-row">
+              <span class="payout-desc">${p.desc}</span>
+              <span class="payout-amt">${p.amt}</span>
+            </div>`).join('')}
+          <div style="margin-top:0.75rem;font-size:0.65rem;color:rgba(255,255,255,0.3);font-style:italic;">Tiebreak: ${m.tiebreak}</div>
+        </div>
+        <div class="match-panel-col">
+          <h4>Summary</h4>
+          <p><strong>${m.units} units</strong> in play</p>
+          <p>${m.type}</p>
+        </div>
+      </div>
+    </div>`).join('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:0 0 2rem;">');
+  panel.classList.add('visible');
+}
+
+// ---- RULES ----
+function renderRules() {
+  document.getElementById('rules-grid').innerHTML = RULES.map(r => `
+    <div class="rule-card">
+      <h3>${r.title}</h3>
+      <ul>${r.items.map(i => `<li>${i}</li>`).join('')}</ul>
+    </div>`).join('');
+}
+
+// ---- MATRIX ----
+function renderMatrix() {
+  const t = document.getElementById('matrix-table');
+  const header = `<thead><tr><th></th>${PLAYERS.map(p => `<th>${p}<br><span style="font-weight:300;font-size:0.55rem;opacity:0.6;">(${HANDICAPS[p]})</span></th>`).join('')}</tr></thead>`;
+  const rows = PLAYERS.map(p1 => {
+    const cells = PLAYERS.map(p2 => {
+      const val = MATRIX[p1][p2];
+      if (val === 'SELF') return `<td class="cell-self">&mdash;</td>`;
+      if (val.startsWith('PARTNER')) {
+        const matches = val.replace('PARTNER-','');
+        return `<td class="cell-partner">Partner<br><span style="font-size:0.6rem;opacity:0.7;">${matches}</span></td>`;
+      }
+      const matches = val.replace('GROUP-','');
+      return `<td class="cell-group">Group<br><span style="font-size:0.6rem;opacity:0.7;">${matches}</span></td>`;
+    }).join('');
+    return `<tr><td>${p1} (${HANDICAPS[p1]})</td>${cells}</tr>`;
+  }).join('');
+  t.innerHTML = header + `<tbody>${rows}</tbody>`;
+
+  // Player schedule table
+  const st = document.getElementById('player-schedule-table');
+  const matchCols = ['M1 Thu','M2 Fri AM','M3 Fri PM','M4 Sat AM','M5 Sat PM','M6 Sun'];
+  const mKeys = ['M1','M2','M3','M4','M5','M6'];
+  const sh = `<thead><tr>
+    <th style="text-align:left;background:var(--green-dark);color:white;padding:0.6rem 0.75rem;font-size:0.58rem;letter-spacing:0.1em;">Player</th>
+    <th style="background:var(--green-dark);color:white;padding:0.6rem 0.5rem;font-size:0.58rem;letter-spacing:0.1em;">HCP</th>
+    ${matchCols.map(m => `<th style="background:var(--green-dark);color:white;padding:0.6rem 0.5rem;font-size:0.58rem;letter-spacing:0.08em;">${m}</th>`).join('')}
+  </tr></thead>`;
+  const sbody = PLAYERS.map((p, ri) => {
+    const cells = mKeys.map(mk => {
+      const v = PLAYER_SCHEDULE[p][mk];
+      const isPartner = v.startsWith('+');
+      return `<td style="text-align:center;font-size:0.7rem;padding:0.5rem;${isPartner ? 'background:#D5E8D4;color:var(--green-dark);font-weight:600;' : ''}border:1px solid rgba(45,106,79,0.1);">${v}</td>`;
+    }).join('');
+    return `<tr>
+      <td style="font-weight:600;font-size:0.75rem;padding:0.5rem 0.75rem;background:${ri%2===0?'#f5ecd7':'white'};border:1px solid rgba(45,106,79,0.1);">${p}</td>
+      <td style="text-align:center;font-size:0.72rem;padding:0.5rem;background:${ri%2===0?'#f5ecd7':'white'};border:1px solid rgba(45,106,79,0.1);">${HANDICAPS[p]}</td>
+      ${cells}
+    </tr>`;
+  }).join('');
+  st.innerHTML = sh + `<tbody>${sbody}</tbody>`;
+}
+
+// ---- PRIZES ----
+function renderPrizes() {
+  const matchPrizes = MATCHES.map(m => ({ name: `Match ${m.id} — ${m.format}`, units: m.units }));
+  const all = [...matchPrizes, ...WEEK_GAMES];
+  document.getElementById('games-list').innerHTML = all.map(g => `
+    <div class="game-row">
+      <div>
+        <div class="game-row-name">${g.name}</div>
+        ${g.desc ? `<div style="font-size:0.62rem;color:var(--mist);margin-top:0.2rem;">${g.desc}</div>` : ''}
+      </div>
+      <div class="game-row-units">${g.units} units</div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   TAB SWITCHER
+   ============================================================ */
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['standings','results','birdie'][i] === name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+}
+
+/* ============================================================
+   CSV LOADERS
+   ============================================================ */
+
+async function fetchCSV(url, mode) {
+  const bustUrl = url + (url.includes('?') ? '&' : '?') + 'cb' + Math.random().toString(36).slice(2) + '=' + Date.now();
+  const proxyUrl = '/.netlify/functions/fetch-csv?url=' + encodeURIComponent(bustUrl);
+  const res = await fetch(proxyUrl);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const text = await res.text();
+
+  // Full CSV parser — handles quoted fields with embedded commas and newlines
+  function parseCSV(str) {
+    const rows = [];
+    let row = [], cur = '', inQ = false;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i], next = str[i+1];
+      if (ch === '"') {
+        if (inQ && next === '"') { cur += '"'; i++; }
+        else { inQ = !inQ; }
+      } else if (ch === ',' && !inQ) {
+        row.push(cur.trim()); cur = '';
+      } else if ((ch === '\n' || (ch === '\r' && next === '\n')) && !inQ) {
+        if (ch === '\r') i++;
+        row.push(cur.trim()); rows.push(row);
+        row = []; cur = '';
+      } else {
+        cur += ch;
+      }
+    }
+    if (cur || row.length) { row.push(cur.trim()); rows.push(row); }
+    return rows;
+  }
+
+  const rows = parseCSV(text);
+  if (rows.length < 2) throw new Error('Sheet appears empty');
+
+  if (mode === 'results') {
+    // Results sheet: find header row containing "Match"
+    const headerRowIdx = rows.findIndex(r => r.some(c => c.trim() === 'Match'));
+    if (headerRowIdx === -1) throw new Error('Could not find Match column in Results tab');
+    const headers = rows[headerRowIdx].map(h => h.replace(/\n.*/s, '').trim());
+    const WANTED = ['Match','Award','Winner','Units','Halved?'];
+    // Normalise header — sheet may have 'Units /' or similar typo
+    const headersNorm = headers.map(h => h.replace(/^Units.*/, 'Units'));
+    const wantedIdx = WANTED.map(w => headersNorm.indexOf(w));
+    return rows.slice(headerRowIdx + 1)
+      .map(r => {
+        const obj = {};
+        WANTED.forEach((key, i) => {
+          obj[key] = wantedIdx[i] !== -1 ? (r[wantedIdx[i]] || '') : '';
+        });
+        // Normalise key: site uses row.Halved, sheet header is Halved?
+        obj.Halved = obj['Halved?'];
+        return obj;
+      })
+      .filter(row => row.Match && row.Match.trim());
+  } else {
+    // Scores sheet: find header row containing "Player"
+    const headerRowIdx = rows.findIndex(r => r.some(c => c.trim() === 'Player'));
+    if (headerRowIdx === -1) throw new Error('Could not find Player column in Scores tab');
+    // Strip embedded newlines from headers, collapsing across them:
+    // "M1\nThu" -> "M1" (take only first part)
+    // "Birdie\nTickets" -> "BirdieTickets" (join both parts, no space)
+    // "Total\nUnits" -> "Total"
+    const headers = rows[headerRowIdx].map(h => {
+      const parts = h.split(/\n|\\n/).map(p => p.trim()).filter(Boolean);
+      // If first part is a known standalone key, use it alone
+      const SOLO = ['Player','HCP','M1','M2','M3','M4','M5','M6','Total','Match','Award','Winner','Units'];
+      if (parts.length <= 1 || SOLO.includes(parts[0])) return parts[0] || '';
+      // Otherwise join all parts (handles "Birdie"+"Tickets" -> "BirdieTickets")
+      return parts.join('');
+    });
+    const WANTED = ['Player','HCP','M1','M2','M3','M4','M5','M6','Total','BirdieTickets','BirdieWinner'];
+    const wantedIdx = WANTED.map(w => headers.indexOf(w));
+    return rows.slice(headerRowIdx + 1)
+      .map(r => {
+        const obj = {};
+        WANTED.forEach((key, i) => {
+          obj[key] = wantedIdx[i] !== -1 ? (r[wantedIdx[i]] || '') : '';
+        });
+        return obj;
+      })
+      .filter(row => row.Player && !row.Player.match(/TOTAL|HOW TO USE|•/));
+  }
+}
+
+async function loadAll() {
+  if (!CSV_URL_SCORES && !CSV_URL_RESULTS) {
+    ['standings-content','results-content','birdie-content'].forEach(id => {
+      document.getElementById(id).innerHTML =
+        `<div class="loading-state">No CSV URLs configured yet — see setup instructions above.</div>`;
+    });
+    return;
+  }
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+  const errors = [];
+
+  if (CSV_URL_SCORES) {
+    try {
+      const data = await fetchCSV(CSV_URL_SCORES, 'scores');
+      if (!data.length) throw new Error('Sheet returned no rows — check tab is published correctly');
+      renderStandings(data);
+      renderBirdieDraw(data);
+    } catch(e) {
+      document.getElementById('standings-content').innerHTML =
+        `<div class="error-state">Scores error: ${e.message}</div>`;
+      document.getElementById('birdie-content').innerHTML =
+        `<div class="error-state">Scores error: ${e.message}</div>`;
+      errors.push(`Scores: ${e.message}`);
+    }
+  }
+
+  if (CSV_URL_RESULTS) {
+    try {
+      const data = await fetchCSV(CSV_URL_RESULTS, 'results');
+      renderResults(data);
+    } catch(e) {
+      document.getElementById('results-content').innerHTML =
+        `<div class="error-state">Results error: ${e.message}</div>`;
+      errors.push(`Results: ${e.message}`);
+    }
+  }
+
+  btn.classList.remove('spinning');
+  const now = new Date();
+  document.getElementById('last-updated-label').textContent =
+    errors.length
+      ? `Error — ${errors.join(' | ')}`
+      : `Last updated: ${now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+}
+
+/* ============================================================
+   RENDER: STANDINGS (Race to Seattle)
+   ============================================================ */
+function renderStandings(data) {
+  data.sort((a,b) => (parseFloat(b.Total)||0) - (parseFloat(a.Total)||0));
+  const matchCols = ['M1','M2','M3','M4','M5','M6'].filter(m => data.some(r => r[m]));
+  const dayLabels = { M1:'Thu', M2:'Fri AM', M3:'Fri PM', M4:'Sat AM', M5:'Sat PM', M6:'Sun' };
+
+  const table = `
+    <div class="lb-card">
+      <div class="lb-card-header">🏆 Race to Seattle — Cumulative Units</div>
+      <table class="lb-table">
+        <thead><tr>
+          <th></th><th>Player</th>
+          ${matchCols.map(m => `<th>${m}<br><span style="font-weight:400;opacity:0.5;font-size:0.55rem;">${dayLabels[m]||''}</span></th>`).join('')}
+          <th style="text-align:right;">Total</th>
+        </tr></thead>
+        <tbody>
+          ${data.map((row, i) => {
+            const rankClass = i < 3 ? 'rank-'+(i+1) : '';
+            return `<tr>
+              <td class="rank ${rankClass}">${i+1}</td>
+              <td class="player-name">${row.Player}</td>
+
+              ${matchCols.map(m => {
+                const v = row[m];
+                const empty = !v || v === '0';
+                return `<td class="${empty?'units-dim':'units'}">${empty?'—':v}</td>`;
+              }).join('')}
+              <td class="units" style="text-align:right;font-size:0.9rem;">${row.Total||'—'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+
+  document.getElementById('standings-content').innerHTML = table;
+}
+
+/* ============================================================
+   RENDER: RESULTS (Unit Deployment Ledger)
+
+   Expected CSV columns: Match, Award, Winner, Units, Halved
+   - Match:  e.g. "M1" or "M1 — Thu Apr 30"
+   - Award:  e.g. "Front 9 — Group 1"
+   - Winner: e.g. "Cake / Langley" or blank if halved
+   - Units:  number, e.g. "8"
+   - Halved: "YES" if split, blank otherwise
+   ============================================================ */
+function renderResults(data) {
+  if (!data.length) {
+    document.getElementById('results-content').innerHTML =
+      `<div class="loading-state">No results recorded yet — check back after round 1.</div>`;
+    return;
+  }
+
+  // Group by match
+  const byMatch = {};
+  const matchOrder = [];
+  // Filter out summary/footer rows from the sheet
+  const cleanData = data.filter(r => r.Match && /^M\d$/.test(r.Match.trim()));
+  cleanData.forEach(row => {
+    const key = row.Match.trim();
+    if (!byMatch[key]) { byMatch[key] = []; matchOrder.push(key); }
+    byMatch[key].push(row);
+  });
+
+  // Map match keys to day labels
+  const dayMeta = {
+    M1: { day: 'Day 1', label: 'Thu Apr 30 — Indian Wells · 2-Man Better Net Ball' },
+    M2: { day: 'Day 2', label: 'Fri May 1 AM — Desert Willow · Wedghood Championship' },
+    M3: { day: 'Day 2', label: 'Fri May 1 PM — Desert Willow · Net Shamble Stableford' },
+    M4: { day: 'Day 3', label: 'Sat May 2 AM — Eagle Falls · 2-Man Low Net' },
+    M5: { day: 'Day 3', label: 'Sat May 2 PM — Silver Rock · Chapman Stableford' },
+    M6: { day: 'Day 4', label: 'Sun May 3 — Escena · Individual Quota' },
+  };
+
+  const html = [...new Set(matchOrder)].map(matchKey => {
+    const rows = byMatch[matchKey];
+    const meta = dayMeta[matchKey] || { day: matchKey, label: '' };
+    const totalUnits = rows.reduce((sum, r) => sum + (parseFloat(r.Units)||0), 0);
+
+    const tableRows = rows.map(r => {
+      const isHalved = r.Halved && r.Halved.toUpperCase() === 'YES';
+      return `<tr>
+        <td class="award-col">${r.Award || ''}</td>
+        <td class="winner-col">
+          ${isHalved
+            ? `<span class="halved">Halved — ${r.Units} units split</span>`
+            : r.Winner || '—'
+          }
+        </td>
+        <td class="units-col">${isHalved ? '' : (r.Units ? r.Units + ' u' : '—')}</td>
+      </tr>`;
+    }).join('');
+
+    return `
+      <div class="results-day open" onclick="toggleResultsDay(this)">
+        <div class="results-day-header">
+          <span class="results-day-label">${meta.day}</span>
+          <span class="results-day-title">${meta.label || matchKey}</span>
+          <span class="results-day-units">${totalUnits} units deployed</span>
+          <span class="results-day-chevron">▼</span>
+        </div>
+        <div class="results-body">
+          <table class="results-table">
+            <thead><tr>
+              <th>Award</th>
+              <th>Winner</th>
+              <th style="text-align:right;">Units</th>
+            </tr></thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('results-content').innerHTML = html;
+}
+
+function toggleResultsDay(el) {
+  el.classList.toggle('open');
+}
+
+/* ============================================================
+   RENDER: BIRDIE DRAW
+   Reads BirdieTickets column from Scores CSV
+   ============================================================ */
+function renderBirdieDraw(data) {
+  const hasBirdie = data.some(r => parseFloat(r.BirdieTickets) > 0);
+  if (!hasBirdie) {
+    document.getElementById('birdie-content').innerHTML = `
+      <div class="loading-state">No Birdie Draw tickets yet — they'll appear here once rounds begin.</div>`;
+    return;
+  }
+
+  // Check for a winner (any row with BirdieWinner populated)
+  const winnerRow = data.find(r => r.BirdieWinner && r.BirdieWinner.trim());
+  const winnerName = winnerRow ? winnerRow.BirdieWinner.trim() : null;
+
+  // Sort by tickets descending
+  const sorted = [...data].sort((a,b) => (parseFloat(b.BirdieTickets)||0) - (parseFloat(a.BirdieTickets)||0));
+  const totalTickets = sorted.reduce((s,r) => s + (parseFloat(r.BirdieTickets)||0), 0);
+
+  const cards = sorted.map(row => {
+    const tickets = parseFloat(row.BirdieTickets) || 0;
+    const pct = totalTickets > 0 ? ((tickets / totalTickets) * 100).toFixed(0) : 0;
+    return `
+      <div class="birdie-card">
+        <div class="birdie-name">${row.Player}</div>
+        <div class="birdie-tickets">${tickets}</div>
+        <div class="birdie-tickets-label">tickets</div>
+        <div class="birdie-breakdown"><span>${pct}%</span> of draw</div>
+      </div>`;
+  }).join('');
+
+  const summary = `
+    <div style="margin-bottom:1rem;font-size:0.68rem;color:rgba(255,255,255,0.4);line-height:1.7;">
+      <strong style="color:var(--gold-light);">${totalTickets} total tickets</strong> in the draw &mdash;
+      net birdie = 1 ticket &bull; net eagle = 3 tickets &bull;
+      winner drawn at end of trip &bull; prize: <strong style="color:var(--green-light);">24 units ($72)</strong>
+    </div>`;
+
+  const winnerBanner = winnerName ? `
+    <div style="
+      background: linear-gradient(135deg, rgba(181,133,58,0.2), rgba(181,133,58,0.08));
+      border: 1px solid rgba(181,133,58,0.5);
+      border-radius: 2px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    ">
+      <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;">🎟 Birdie Draw Winner</div>
+      <div style="font-family:var(--font-display);font-size:2rem;font-weight:400;color:var(--gold-light);letter-spacing:0.04em;">${winnerName}</div>
+      <div style="font-size:0.65rem;color:rgba(255,255,255,0.4);margin-top:0.3rem;">24 units · $72</div>
+    </div>` : '';
+
+  document.getElementById('birdie-content').innerHTML = winnerBanner + summary + `<div class="birdie-grid">${cards}</div>`;
+}
+
+// ---- INIT ----
+renderSchedule();
+renderRules();
+renderPrizes();
+</script>
+</body>
+</html>
