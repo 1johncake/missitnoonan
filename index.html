@@ -62,7 +62,7 @@
       z-index: 1;
       height: 100vh;
       display: grid;
-      grid-template-rows: auto 1fr auto auto;
+      grid-template-rows: auto auto 1fr auto;
       padding: 0 2.8rem;
       max-width: 1060px;
       margin: 0 auto;
@@ -213,8 +213,8 @@
 
     .card-tag {
       font-family: 'Courier Prime', monospace;
-      font-size: 0.84rem;
-      letter-spacing: 0.14em;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--carolina);
       display: block;
@@ -223,10 +223,10 @@
     /* Badge — top right of card */
     .card-badge {
       font-family: 'Courier Prime', monospace;
-      font-size: 0.78rem;
-      letter-spacing: 0.14em;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      padding: 0.28rem 0.75rem;
+      padding: 0.25rem 0.6rem;
       border-radius: 20px;
       white-space: nowrap;
       flex-shrink: 0;
@@ -245,96 +245,86 @@
     }
 
 
-    /* === TICKER === */
-    .ticker-wrap {
-      overflow: hidden;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(75,156,211,0.12);
-      border-radius: 8px;
-      padding: 0.6rem 0;
+    /* === LIVE BOARD (replaces scrolling ticker) === */
+    .live-board {
       position: relative;
-      opacity: 0;
-      animation: fadeUp 0.65s ease forwards;
-      animation-delay: 0.72s;
-      margin-bottom: 0.7rem;
-    }
-
-    /* fade edges */
-    .ticker-wrap::before,
-    .ticker-wrap::after {
-      content: '';
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 60px;
-      z-index: 2;
-      pointer-events: none;
-    }
-    .ticker-wrap::before {
-      left: 0;
-      background: linear-gradient(to right, #1e1f24, transparent);
-    }
-    .ticker-wrap::after {
-      right: 0;
-      background: linear-gradient(to left, #1e1f24, transparent);
-    }
-
-    .ticker-track {
+      background: rgba(201,168,76,0.06);
+      border-top: 1px solid rgba(201,168,76,0.18);
+      border-bottom: 1px solid rgba(201,168,76,0.18);
+      padding: 0.7rem 2.8rem;
       display: flex;
-      gap: 0;
-      width: max-content;
-      animation: tickerScroll 30s linear infinite;
-    }
-
-    .ticker-track:hover { animation-play-state: paused; }
-
-    @keyframes tickerScroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-
-    .ticker-item {
-      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0 2rem;
+      gap: 1rem;
+      min-height: 48px;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.3s forwards;
+      overflow: hidden;
+    }
+
+    .live-board-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #c9a84c; flex-shrink: 0;
+      animation: livePulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes livePulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(201,168,76,0.4);} 50%{opacity:0.35;box-shadow:0 0 0 4px rgba(201,168,76,0);} }
+
+    .live-board-tag {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #c9a84c;
       white-space: nowrap;
-      border-right: 1px solid rgba(75,156,211,0.1);
+      flex-shrink: 0;
     }
 
-    .ticker-label {
+    .live-board-divider {
+      width: 1px; height: 18px;
+      background: rgba(201,168,76,0.25);
+      flex-shrink: 0;
+    }
+
+    .live-board-content {
+      flex: 1;
+      position: relative;
+      height: 1.4em;
+      overflow: hidden;
+    }
+
+    .live-stat {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
       font-family: 'Courier Prime', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--carolina);
-      opacity: 0.7;
+      font-size: 0.88rem;
+      color: #f4efe5;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      white-space: nowrap;
     }
 
-    .ticker-value {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.78rem;
-      color: var(--white);
-      font-weight: 500;
+    .live-stat.active { opacity: 1; }
+
+    .live-stat-name { font-weight: 700; color: #fff; }
+    .live-stat-score { color: #c9a84c; }
+    .live-stat-score.neg { color: #6dcc8a; }
+    .live-stat-score.pos { color: #e06c75; }
+
+    .live-board-nav {
+      display: flex; gap: 5px; flex-shrink: 0;
     }
 
-    .ticker-score {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.72rem;
-      font-weight: 700;
+    .live-board-pip {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(201,168,76,0.25);
+      transition: background 0.3s;
+      cursor: pointer;
     }
 
-    .ticker-score.up   { color: #6dcc8a; }
-    .ticker-score.down { color: #e06c75; }
-    .ticker-score.even { color: var(--muted); }
-
-    .ticker-loading {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 0 2rem;
-    }
+    .live-board-pip.active { background: #c9a84c; }
 
     .card-title {
       font-family: 'Playfair Display', serif;
@@ -346,7 +336,7 @@
     }
 
     .card-desc {
-      font-size: 0.92rem;
+      font-size: 0.82rem;
       color: var(--muted);
       line-height: 1.6;
       margin-bottom: 1.3rem;
@@ -368,14 +358,14 @@
 
     .btn-primary {
       font-family: 'Courier Prime', monospace;
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       background: var(--carolina);
       color: var(--bg);
       border: none;
       border-radius: 4px;
-      padding: 0.52rem 1.1rem;
+      padding: 0.38rem 0.8rem;
       text-decoration: none;
       font-weight: 700;
       transition: background 0.15s ease;
@@ -385,14 +375,14 @@
 
     .btn-ghost {
       font-family: 'Courier Prime', monospace;
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       background: transparent;
       color: var(--carolina);
       border: 1px solid var(--carolina-border);
       border-radius: 4px;
-      padding: 0.52rem 1.1rem;
+      padding: 0.38rem 0.8rem;
       text-decoration: none;
       transition: border-color 0.15s ease, color 0.15s ease;
       cursor: pointer;
@@ -513,12 +503,29 @@
 
     /* === RESPONSIVE === */
     @media (max-width: 700px) {
-      html, body { overflow: auto; }
-      .page { padding: 0 1.3rem; }
-      .cards-top { grid-template-columns: 1fr; }
-      .other-card { flex-wrap: wrap; gap: 0.8rem; }
+      html, body { overflow: auto; height: auto; }
+      .page {
+        padding: 0 1rem;
+        height: auto;
+        min-height: 100vh;
+        grid-template-rows: auto auto 1fr auto;
+      }
+      header { padding: 1rem 0 0.8rem; }
+      .logo { font-size: 1.35rem; }
+      .cards-area { padding: 1rem 0 0.8rem; gap: 0.6rem; justify-content: flex-start; }
+      .cards-top { grid-template-columns: 1fr; gap: 0.6rem; }
+      .cards-grid { gap: 0.6rem; }
+      .project-card { padding: 1.1rem 1.2rem 1rem; }
+      .card-title { font-size: 1.25rem; }
+      .card-desc { font-size: 0.8rem; margin-bottom: 0.9rem; }
+      .other-card { flex-wrap: wrap; gap: 0.6rem; padding: 0.85rem 1.2rem; }
+      .live-board { padding: 0.65rem 1rem; }
       .header-smails { display: none; }
-      footer { flex-direction: column; gap: 0.4rem; text-align: center; }
+      footer {
+        flex-direction: column; gap: 0.3rem;
+        text-align: center; padding: 0.7rem 0 1rem;
+      }
+      .footer-left { font-size: 0.8rem; }
     }
 
     /* === LIVE LEADER STRIP === */
@@ -544,14 +551,14 @@
 
     .live-label {
       font-family: 'Courier Prime', monospace;
-      font-size: 0.74rem; letter-spacing: 0.16em;
+      font-size: 0.55rem; letter-spacing: 0.2em;
       text-transform: uppercase; color: #c9a84c;
       flex-shrink: 0;
     }
 
     .live-text {
       font-family: 'Courier Prime', monospace;
-      font-size: 0.88rem; color: #f4efe5;
+      font-size: 0.75rem; color: #f4efe5;
       white-space: nowrap; overflow: hidden;
       text-overflow: ellipsis;
       font-style: italic;
@@ -585,6 +592,17 @@
       </div>
     </header>
 
+    <!-- LIVE BOARD -->
+    <div class="live-board" id="live-board">
+      <span class="live-board-dot"></span>
+      <span class="live-board-tag">Live</span>
+      <span class="live-board-divider"></span>
+      <div class="live-board-content" id="live-board-content">
+        <!-- stats injected by JS -->
+      </div>
+      <div class="live-board-nav" id="live-board-nav"></div>
+    </div>
+
     <!-- CARDS -->
     <div class="cards-area">
       <span class="section-label">Projects</span>
@@ -599,19 +617,19 @@
             <div class="card-deco">M</div>
             <div class="card-header">
               <span class="card-tag">Majors · 2026</span>
-              <span class="card-badge badge-live">● Entries Open</span>
+              <span class="card-badge badge-live">● Underway</span>
             </div>
             <h2 class="card-title">Masters Pool</h2>
-            <p class="card-desc">Submit your 9 picks before Wednesday. Best four rounds count each day — Augusta starts April 9.</p>
+            <p class="card-desc">Pick your 9 players across the tiers. Best four rounds count each day. Augusta awaits.</p>
             <div class="live-strip">
               <span class="live-dot"></span>
-              <span class="live-label">Deadline</span>
-              <span class="live-text" id="live-leader">Wed April 9 · 9 pm PT</span>
+              <span class="live-label">Leader</span>
+              <span class="live-text" id="live-leader">Fetching…</span>
             </div>
             <div class="card-footer">
               <div class="card-btns">
-                <a href="/masters-signup.html" class="btn-primary btn-gold">Player Entry</a>
-                <a href="/masters-pool.html" class="btn-ghost">Leaderboard</a>
+                <a href="/masters-pool.html" class="btn-primary btn-gold">Leaderboard</a>
+                <a href="/masters-pool.html" class="btn-ghost">Picks</a>
               </div>
             </div>
           </div>
@@ -620,10 +638,10 @@
           <div class="project-card">
             <div class="card-deco">W</div>
             <div class="card-header">
-              <span class="card-tag">Spring Trip · 2026</span>
+              <span class="card-tag">Annual Trip · 2026</span>
               <span class="card-badge badge-soon">Soon</span>
             </div>
-            <h2 class="card-title">Wedghoods – Palm Springs</h2>
+            <h2 class="card-title">Wedghoods</h2>
             <p class="card-desc">Apr 30 – May 3. Pairings, formats, Race to Seattle leaderboard, and the full Wedghood experience.</p>
             <div class="card-footer">
               <div class="card-btns">
@@ -655,13 +673,6 @@
       </div>
     </div>
 
-    <!-- TICKER -->
-    <div class="ticker-wrap" id="ticker-wrap">
-      <div class="ticker-track" id="ticker-track">
-        <span class="ticker-loading" id="ticker-loading">Loading pool data...</span>
-      </div>
-    </div>
-
     <!-- FOOTER -->
     <footer>
       <span class="footer-left">"Well... we're waiting."</span>
@@ -671,8 +682,11 @@
   </div>
 
   <script>
-    // ===================== LIVE LEADER (Apps Script) =====================
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNDqWoe0vLiFAa34-VChCnew1nx1rD6DPDY_xufZ77W-AdlQKltmCwFIeGSyK8gjOK4w/exec';
+
+    // ── Deadline logic ──
+    const ENTRY_DEADLINE = new Date('2026-04-09T04:00:00Z'); // April 8 9pm PT
+    const preDeadline = () => Date.now() < ENTRY_DEADLINE.getTime();
 
     function fmtScore(v) {
       if (v === null || v === undefined || v === '' || String(v).includes('#')) return null;
@@ -688,29 +702,115 @@
       return parts.length >= 2 ? `${parts[1].trim()} ${parts[0].trim()}` : s;
     }
 
-    // Deadline: Tue April 8 2026 9pm PT = Wed April 9 04:00 UTC
-    const ENTRY_DEADLINE = new Date('2026-04-09T04:00:00Z');
+    // ── Live board (crossfade stat rotator) ──
+    let boardItems = [];
+    let boardIdx = 0;
+    let boardTimer = null;
 
+    function renderBoard(items) {
+      const content = document.getElementById('live-board-content');
+      const nav = document.getElementById('live-board-nav');
+      if (!content || !nav) return;
+
+      content.innerHTML = items.map((item, i) => {
+        const scoreClass = item.scoreNeg ? 'neg' : item.scorePos ? 'pos' : '';
+        return `<div class="live-stat${i === 0 ? ' active' : ''}" id="live-stat-${i}">
+          <span>${item.emoji}</span>
+          <span class="live-board-tag" style="color:rgba(201,168,76,0.75)">${item.label}</span>
+          <span class="live-stat-name">${item.name}</span>
+          ${item.score ? `<span class="live-stat-score ${scoreClass}">${item.score}</span>` : ''}
+        </div>`;
+      }).join('');
+
+      nav.innerHTML = items.map((_, i) =>
+        `<div class="live-board-pip${i === 0 ? ' active' : ''}" onclick="goToStat(${i})" id="pip-${i}"></div>`
+      ).join('');
+
+      boardItems = items;
+      boardIdx = 0;
+      if (boardTimer) clearInterval(boardTimer);
+      if (items.length > 1) boardTimer = setInterval(nextStat, 4000);
+    }
+
+    function goToStat(idx) {
+      const prev = document.getElementById(`live-stat-${boardIdx}`);
+      const prevPip = document.getElementById(`pip-${boardIdx}`);
+      if (prev) prev.classList.remove('active');
+      if (prevPip) prevPip.classList.remove('active');
+      boardIdx = idx;
+      const next = document.getElementById(`live-stat-${boardIdx}`);
+      const nextPip = document.getElementById(`pip-${boardIdx}`);
+      if (next) next.classList.add('active');
+      if (nextPip) nextPip.classList.add('active');
+    }
+
+    function nextStat() {
+      goToStat((boardIdx + 1) % boardItems.length);
+    }
+
+    function buildBoardItems(raw) {
+      const hIdx = raw.findIndex(r => r.some(c => String(c).trim().toUpperCase() === 'PRIOR'));
+      if (hIdx === -1) return [];
+
+      const rows = [];
+      for (let i = hIdx + 1; i < raw.length; i++) {
+        const r = raw[i];
+        const team = String(r[6] || '').trim();
+        const place = Number(r[12]);
+        if (!team || String(r[4]).toUpperCase().includes('ANNOUNCEMENTS')) break;
+        if (!isFinite(place) || place <= 0) continue;
+        const chg = String(r[5] || '').trim();
+        let chgVal = 0;
+        if (chg.includes('▲')) chgVal = parseInt(chg.replace('▲','')) || 0;
+        if (chg.includes('▼')) chgVal = -(parseInt(chg.replace('▼','')) || 0);
+        rows.push({ team, total: r[11], r4: r[10], place, chgVal });
+      }
+
+      const items = [];
+
+      const leader = rows.find(r => r.place === 1);
+      if (leader) {
+        const score = fmtScore(leader.total);
+        const n = Number(leader.total);
+        items.push({ emoji: '🏆', label: 'Leader', name: parseName(leader.team),
+          score, scoreNeg: n < 0, scorePos: n > 0 });
+      }
+
+      const bestUp = rows.filter(r => r.chgVal > 0).sort((a,b) => b.chgVal - a.chgVal)[0];
+      if (bestUp) items.push({ emoji: '📈', label: 'On the move', name: parseName(bestUp.team),
+        score: `↑${bestUp.chgVal} places`, scoreNeg: true });
+
+      const bestDown = rows.filter(r => r.chgVal < 0).sort((a,b) => a.chgVal - b.chgVal)[0];
+      if (bestDown) items.push({ emoji: '📉', label: 'Sliding', name: parseName(bestDown.team),
+        score: `↓${Math.abs(bestDown.chgVal)} places`, scorePos: true });
+
+      const r4valid = rows.filter(r => typeof r.r4 === 'number' && isFinite(r.r4));
+      if (r4valid.length) {
+        const worst = r4valid.sort((a,b) => b.r4 - a.r4)[0];
+        const s = fmtScore(worst.r4);
+        items.push({ emoji: '😬', label: 'Rough day', name: parseName(worst.team),
+          score: s || '', scorePos: Number(worst.r4) > 0 });
+      }
+
+      return items;
+    }
+
+    // ── Live leader strip inside Masters card ──
     async function loadLeader() {
       const el = document.getElementById('live-leader');
-      const liveLabel = el.previousElementSibling; // .live-label span
+      if (!el) return;
 
-      // Before deadline — show static deadline, no fetch needed
-      if (Date.now() < ENTRY_DEADLINE.getTime()) {
+      if (preDeadline()) {
         el.textContent = 'Tue April 8 · 9 pm PT';
         el.style.fontStyle = 'italic';
-        // Check again in 60s in case deadline passes while page is open
-        setTimeout(loadLeader, 60 * 1000);
+        setTimeout(loadLeader, 60000);
         return;
       }
 
-      // After deadline — flip card label and show live leader
       const badge = document.querySelector('.badge-live');
-      if (badge && badge.textContent.includes('Entries Open')) {
-        badge.textContent = '● Underway';
-      }
-      const deadlineLabel = el.previousElementSibling;
-      if (deadlineLabel) deadlineLabel.textContent = 'Leader';
+      if (badge && badge.textContent.includes('Entries Open')) badge.textContent = '● Underway';
+      const lbl = el.previousElementSibling;
+      if (lbl) lbl.textContent = 'Leader';
 
       try {
         const res = await fetch(`${SCRIPT_URL}?_=${Date.now()}`, { cache: 'no-store' });
@@ -727,10 +827,9 @@
           const place = Number(r[12]);
           if (!team || !isFinite(place)) continue;
           if (place > 1 && leaders.length) break;
-          if (place === 1) leaders.push({ team, total: r[11], r4: r[10] });
+          if (place === 1) leaders.push({ team, total: r[11] });
           else break;
         }
-
         if (!leaders.length) throw new Error('No leader');
 
         const name = parseName(leaders[0].team);
@@ -745,78 +844,55 @@
       }
     }
 
-    loadLeader();
-
-    // ===================== TICKER (Apps Script) =====================
-    function buildTickerItems(raw) {
-      const hIdx = raw.findIndex(r => r.some(c => String(c).trim().toUpperCase() === 'PRIOR'));
-      if (hIdx === -1) return [];
-
-      const rows = [];
-      for (let i = hIdx + 1; i < raw.length; i++) {
-        const r = raw[i];
-        const team = String(r[6] || '').trim();
-        const place = Number(r[12]);
-        if (!team) continue;
-        if (String(r[4]).toUpperCase().includes('ANNOUNCEMENTS')) break;
-        if (!isFinite(place) || place <= 0) continue;
-        const chg = String(r[5] || '').trim();
-        let chgVal = 0;
-        if (chg.includes('▲')) chgVal = parseInt(chg.replace('▲','')) || 0;
-        if (chg.includes('▼')) chgVal = -(parseInt(chg.replace('▼','')) || 0);
-        rows.push({ team, total: r[11], r4: r[10], place, chgVal });
-      }
-
-      const items = [];
-      const leader = rows.find(r => r.place === 1);
-      if (leader) {
-        const score = fmtScore(leader.total);
-        items.push({ label: '🏆 Leader', name: parseName(leader.team), score: score || '', cls: score && Number(leader.total) < 0 ? 'up' : 'even' });
-      }
-
-      const bestUp = rows.filter(r => r.chgVal > 0).sort((a,b) => b.chgVal - a.chgVal)[0];
-      if (bestUp) items.push({ label: '📈 On the move', name: parseName(bestUp.team), score: `↑${bestUp.chgVal}`, cls: 'up' });
-
-      const bestDown = rows.filter(r => r.chgVal < 0).sort((a,b) => a.chgVal - b.chgVal)[0];
-      if (bestDown) items.push({ label: '📉 Sliding', name: parseName(bestDown.team), score: `↓${Math.abs(bestDown.chgVal)}`, cls: 'down' });
-
-      const r4valid = rows.filter(r => typeof r.r4 === 'number' && isFinite(r.r4));
-      if (r4valid.length) {
-        const worst = r4valid.sort((a,b) => b.r4 - a.r4)[0];
-        items.push({ label: '😬 Rough day', name: parseName(worst.team), score: fmtScore(worst.r4) || '', cls: 'down' });
-      }
-
-      return items;
-    }
-
-    function renderTicker(items) {
-      const track = document.getElementById('ticker-track');
-      if (!items.length) {
-        document.getElementById('ticker-loading').textContent = 'Pool data coming soon';
-        return;
-      }
-      const html = items.map(item => `
-        <span class="ticker-item">
-          <span class="ticker-label">${item.label}</span>
-          <span class="ticker-value">${item.name}</span>
-          <span class="ticker-score ${item.cls}">${item.score}</span>
-        </span>`).join('');
-      track.innerHTML = html + html;
-    }
-
-    async function loadTicker() {
+    // ── Main data load (fetches once, powers both board and leader strip) ──
+    async function loadAll() {
       try {
         const res = await fetch(`${SCRIPT_URL}?_=${Date.now()}`, { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const raw = await res.json();
-        renderTicker(buildTickerItems(raw));
+
+        if (!preDeadline()) {
+          // Live board
+          const items = buildBoardItems(raw);
+          if (items.length) {
+            renderBoard(items);
+          } else {
+            document.getElementById('live-board-content').innerHTML =
+              '<div class="live-stat active" style="opacity:1"><span class="live-stat-name">Augusta underway</span></div>';
+          }
+
+          // Leader strip
+          const el = document.getElementById('live-leader');
+          const hIdx = raw.findIndex(r => r.some(c => String(c).trim().toUpperCase() === 'PRIOR'));
+          if (el && hIdx !== -1) {
+            for (let i = hIdx + 1; i < raw.length; i++) {
+              const r = raw[i];
+              const team = String(r[6] || '').trim();
+              const place = Number(r[12]);
+              if (!team || !isFinite(place)) continue;
+              if (place === 1) {
+                const score = fmtScore(r[11]);
+                el.textContent = `${parseName(team)}${score ? '  ' + score : ''}`;
+                el.style.fontStyle = 'normal';
+              }
+              break;
+            }
+          }
+        } else {
+          // Pre-deadline: show countdown in board
+          const el = document.getElementById('live-leader');
+          if (el) { el.textContent = 'Tue April 8 · 9 pm PT'; el.style.fontStyle = 'italic'; }
+          document.getElementById('live-board-content').innerHTML =
+            '<div class="live-stat active" style="opacity:1"><span>⏰</span><span class="live-board-tag" style="color:rgba(201,168,76,0.75)">Entries close</span><span class="live-stat-name">Apr 8 · 9 pm PT</span></div>';
+        }
       } catch(e) {
-        document.getElementById('ticker-loading').textContent = 'Pool data coming soon';
+        document.getElementById('live-board-content').innerHTML =
+          '<div class="live-stat active" style="opacity:1"><span class="live-stat-name" style="color:var(--muted)">Augusta · April 9–13</span></div>';
       }
-      setTimeout(loadTicker, 2 * 60 * 1000);
+      setTimeout(loadAll, 3 * 60 * 1000);
     }
 
-    loadTicker();
+    loadAll();
   </script>
 
 </body>
