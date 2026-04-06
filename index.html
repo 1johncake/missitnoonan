@@ -244,60 +244,6 @@
       border: 1px solid rgba(255,255,255,0.1);
     }
 
-    /* === MASTERS COUNTDOWN === */
-    .card-countdown {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.9rem;
-    }
-
-    .cd-item {
-      text-align: center;
-    }
-
-    .cd-val {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--white);
-      display: block;
-      background: rgba(201,168,76,0.1);
-      border: 1px solid rgba(201,168,76,0.2);
-      border-radius: 5px;
-      padding: 0.15rem 0.45rem;
-      min-width: 38px;
-      line-height: 1.3;
-    }
-
-    .cd-label {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.46rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      display: block;
-      margin-top: 0.2rem;
-    }
-
-    .cd-sep {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: rgba(201,168,76,0.4);
-      padding-bottom: 0.8rem;
-      align-self: flex-start;
-      margin-top: 0.2rem;
-    }
-
-    .cd-label-main {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.56rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(201,168,76,0.7);
-      margin-bottom: 0.4rem;
-      display: block;
-    }
 
     /* === TICKER === */
     .ticker-wrap {
@@ -574,6 +520,55 @@
       .header-smails { display: none; }
       footer { flex-direction: column; gap: 0.4rem; text-align: center; }
     }
+
+    /* === LIVE LEADER STRIP === */
+    .live-strip {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.22);
+      border-radius: 5px;
+      padding: 0.45rem 0.75rem;
+      margin-bottom: 1rem;
+      min-height: 32px;
+    }
+
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #c9a84c; flex-shrink: 0;
+      animation: livePulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes livePulse { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+    .live-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.55rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: #c9a84c;
+      flex-shrink: 0;
+    }
+
+    .live-text {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.75rem; color: #f4efe5;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis;
+      font-style: italic;
+    }
+
+    .btn-gold {
+      background: #c9a84c !important;
+      color: #070f1e !important;
+    }
+    .btn-gold:hover { background: #e0c070 !important; }
+
+    .badge-live {
+      color: #6dcc8a;
+      background: rgba(58,138,82,0.15);
+      border: 1px solid rgba(58,138,82,0.3);
+    }
+
   </style>
 </head>
 <body>
@@ -604,36 +599,19 @@
             <div class="card-deco">M</div>
             <div class="card-header">
               <span class="card-tag">Majors · 2026</span>
-              <span class="card-badge badge-soon">Soon</span>
+              <span class="card-badge badge-live">● Underway</span>
             </div>
             <h2 class="card-title">Masters Pool</h2>
-            <p class="card-desc">Pick your players, track Augusta, settle the scores.</p>
-            <span class="cd-label-main" id="cd-label-main">Augusta opens in</span>
-            <div class="card-countdown" id="masters-countdown">
-              <div class="cd-item">
-                <span class="cd-val" id="cd-days">--</span>
-                <span class="cd-label">Days</span>
-              </div>
-              <span class="cd-sep">:</span>
-              <div class="cd-item">
-                <span class="cd-val" id="cd-hours">--</span>
-                <span class="cd-label">Hrs</span>
-              </div>
-              <span class="cd-sep">:</span>
-              <div class="cd-item">
-                <span class="cd-val" id="cd-mins">--</span>
-                <span class="cd-label">Min</span>
-              </div>
-              <span class="cd-sep">:</span>
-              <div class="cd-item">
-                <span class="cd-val" id="cd-secs">--</span>
-                <span class="cd-label">Sec</span>
-              </div>
+            <p class="card-desc">Pick your 9 players across the tiers. Best four rounds count each day. Augusta awaits.</p>
+            <div class="live-strip">
+              <span class="live-dot"></span>
+              <span class="live-label">Leader</span>
+              <span class="live-text" id="live-leader">Fetching…</span>
             </div>
             <div class="card-footer">
               <div class="card-btns">
-                <a href="/masters2026.html" class="btn-primary">Sign up</a>
-                <a href="/masters2026.html" class="btn-ghost">Scoreboard</a>
+                <a href="/masters-pool.html" class="btn-primary btn-gold">Leaderboard</a>
+                <a href="/masters-pool.html" class="btn-ghost">Picks</a>
               </div>
             </div>
           </div>
@@ -693,177 +671,130 @@
   </div>
 
   <script>
-    // ===================== COUNTDOWN =====================
-    // Masters Tournament starts April 9 2026 at 8am ET
-    const mastersStart = new Date('2026-04-09T08:00:00-04:00');
-    const mastersEnd   = new Date('2026-04-13T18:00:00-04:00');
+    // ===================== LIVE LEADER (Apps Script) =====================
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNDqWoe0vLiFAa34-VChCnew1nx1rD6DPDY_xufZ77W-AdlQKltmCwFIeGSyK8gjOK4w/exec';
 
-    function updateCountdown() {
-      const now  = new Date();
-      const diff = mastersStart - now;
-
-      if (now >= mastersEnd) {
-        document.getElementById('masters-countdown').style.display = 'none';
-        document.getElementById('cd-label-main').textContent = 'Tournament complete';
-        return;
-      }
-
-      if (diff <= 0) {
-        document.getElementById('masters-countdown').style.display = 'none';
-        document.getElementById('cd-label-main').textContent = '⛳ Underway at Augusta';
-        return;
-      }
-
-      const days  = Math.floor(diff / 86400000);
-      const hours = Math.floor((diff % 86400000) / 3600000);
-      const mins  = Math.floor((diff % 3600000)  / 60000);
-      const secs  = Math.floor((diff % 60000)    / 1000);
-
-      document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
-      document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
-      document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
-      document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-    // ===================== TICKER =====================
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTPh1Oj-8i_6-vti3rDeXkuQ_AJymnzmuzPvV24K4DaH8XtuFu2qKd3K0TnL70b7qbhcmJZGz9K6Rdw/pub?gid=1225176959&single=true&output=csv';
-
-    // Column indices (0-based):
-    // 0: Prior Place  1: Daily Place Change  2: Name
-    // 3: Rnd1  4: Rnd2  5: Rnd3  6: Rnd4
-    // 7: Total Cumulative Score  8: Current Place
-
-    function parseCSV(text) {
-      const lines = text.trim().split('\n');
-      return lines.slice(1).map(line => {
-        const cols = line.split(',').map(c => c.replace(/^"|"$/g,'').trim());
-        return {
-          priorPlace:  parseInt(cols[0]) || 0,
-          placeChange: parseInt(cols[1]) || 0,
-          name:        cols[2] || '—',
-          rnd1:        cols[3],
-          rnd2:        cols[4],
-          rnd3:        cols[5],
-          rnd4:        cols[6],
-          total:       cols[7],
-          currentPlace: parseInt(cols[8]) || 0
-        };
-      }).filter(r => r.name && r.name !== '—');
-    }
-
-    function currentRoundScore(row) {
-      // Return the most recently completed non-empty round score
-      const rounds = [row.rnd4, row.rnd3, row.rnd2, row.rnd1];
-      for (const r of rounds) {
-        const v = parseInt(r);
-        if (!isNaN(v) && v > 0) return v;
-      }
-      return null;
-    }
-
-    function scoreClass(val) {
-      if (!val && val !== 0) return 'even';
-      return val < 0 ? 'up' : val > 0 ? 'down' : 'even';
-    }
-
-    function fmtScore(val) {
-      if (val === null || val === undefined || val === '') return '—';
-      const n = parseInt(val);
-      if (isNaN(n)) return val;
+    function fmtScore(v) {
+      if (v === null || v === undefined || v === '' || String(v).includes('#')) return null;
+      const n = Number(v);
+      if (!isFinite(n)) return null;
       if (n === 0) return 'E';
       return n > 0 ? `+${n}` : `${n}`;
     }
 
-    function buildTickerItems(rows) {
+    function parseName(raw) {
+      const s = String(raw || '').trim();
+      const parts = s.split(',');
+      return parts.length >= 2 ? `${parts[1].trim()} ${parts[0].trim()}` : s;
+    }
+
+    async function loadLeader() {
+      const el = document.getElementById('live-leader');
+      try {
+        const res = await fetch(`${SCRIPT_URL}?_=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const raw = await res.json();
+
+        const hIdx = raw.findIndex(r => r.some(c => String(c).trim().toUpperCase() === 'PRIOR'));
+        if (hIdx === -1) throw new Error('No data');
+
+        let leaders = [];
+        for (let i = hIdx + 1; i < raw.length; i++) {
+          const r = raw[i];
+          const team = String(r[6] || '').trim();
+          const place = Number(r[12]);
+          if (!team || !isFinite(place)) continue;
+          if (place > 1 && leaders.length) break;
+          if (place === 1) leaders.push({ team, total: r[11], r4: r[10] });
+          else break;
+        }
+
+        if (!leaders.length) throw new Error('No leader');
+
+        const name = parseName(leaders[0].team);
+        const score = fmtScore(leaders[0].total);
+        const tied = leaders.length > 1;
+        el.textContent = `${tied ? 'T1 · ' : ''}${name}${score ? '  ' + score : ''}`;
+        el.style.fontStyle = 'normal';
+        setTimeout(loadLeader, 5 * 60 * 1000);
+      } catch(err) {
+        el.textContent = 'Pool underway — see leaderboard';
+        setTimeout(loadLeader, 2 * 60 * 1000);
+      }
+    }
+
+    loadLeader();
+
+    // ===================== TICKER (Apps Script) =====================
+    function buildTickerItems(raw) {
+      const hIdx = raw.findIndex(r => r.some(c => String(c).trim().toUpperCase() === 'PRIOR'));
+      if (hIdx === -1) return [];
+
+      const rows = [];
+      for (let i = hIdx + 1; i < raw.length; i++) {
+        const r = raw[i];
+        const team = String(r[6] || '').trim();
+        const place = Number(r[12]);
+        if (!team) continue;
+        if (String(r[4]).toUpperCase().includes('ANNOUNCEMENTS')) break;
+        if (!isFinite(place) || place <= 0) continue;
+        const chg = String(r[5] || '').trim();
+        let chgVal = 0;
+        if (chg.includes('▲')) chgVal = parseInt(chg.replace('▲','')) || 0;
+        if (chg.includes('▼')) chgVal = -(parseInt(chg.replace('▼','')) || 0);
+        rows.push({ team, total: r[11], r4: r[10], place, chgVal });
+      }
+
       const items = [];
-
-      // Current leader — place 1
-      const leader = rows.find(r => r.currentPlace === 1);
+      const leader = rows.find(r => r.place === 1);
       if (leader) {
-        items.push({
-          label: '🏆 Leader',
-          name: leader.name,
-          score: fmtScore(leader.total),
-          cls: scoreClass(parseInt(leader.total))
-        });
+        const score = fmtScore(leader.total);
+        items.push({ label: '🏆 Leader', name: parseName(leader.team), score: score || '', cls: score && Number(leader.total) < 0 ? 'up' : 'even' });
       }
 
-      // Biggest mover up — most negative place change
-      const moversUp = rows.filter(r => r.placeChange < 0).sort((a,b) => a.placeChange - b.placeChange);
-      if (moversUp.length) {
-        const m = moversUp[0];
-        items.push({
-          label: '📈 On the move',
-          name: m.name,
-          score: `↑${Math.abs(m.placeChange)}`,
-          cls: 'up'
-        });
-      }
+      const bestUp = rows.filter(r => r.chgVal > 0).sort((a,b) => b.chgVal - a.chgVal)[0];
+      if (bestUp) items.push({ label: '📈 On the move', name: parseName(bestUp.team), score: `↑${bestUp.chgVal}`, cls: 'up' });
 
-      // Biggest mover down — most positive place change
-      const moversDown = rows.filter(r => r.placeChange > 0).sort((a,b) => b.placeChange - a.placeChange);
-      if (moversDown.length) {
-        const m = moversDown[0];
-        items.push({
-          label: '📉 Sliding',
-          name: m.name,
-          score: `↓${m.placeChange}`,
-          cls: 'down'
-        });
-      }
+      const bestDown = rows.filter(r => r.chgVal < 0).sort((a,b) => a.chgVal - b.chgVal)[0];
+      if (bestDown) items.push({ label: '📉 Sliding', name: parseName(bestDown.team), score: `↓${Math.abs(bestDown.chgVal)}`, cls: 'down' });
 
-      // Worst round score — highest round score this round
-      const withRound = rows.map(r => ({ ...r, roundScore: currentRoundScore(r) })).filter(r => r.roundScore !== null);
-      if (withRound.length) {
-        const worst = withRound.sort((a,b) => b.roundScore - a.roundScore)[0];
-        items.push({
-          label: '😬 Rough day',
-          name: worst.name,
-          score: `${worst.roundScore}`,
-          cls: 'down'
-        });
+      const r4valid = rows.filter(r => typeof r.r4 === 'number' && isFinite(r.r4));
+      if (r4valid.length) {
+        const worst = r4valid.sort((a,b) => b.r4 - a.r4)[0];
+        items.push({ label: '😬 Rough day', name: parseName(worst.team), score: fmtScore(worst.r4) || '', cls: 'down' });
       }
 
       return items;
     }
 
     function renderTicker(items) {
+      const track = document.getElementById('ticker-track');
       if (!items.length) {
-        document.getElementById('ticker-loading').textContent = 'Pool data loading soon...';
+        document.getElementById('ticker-loading').textContent = 'Pool data coming soon';
         return;
       }
-
-      const track = document.getElementById('ticker-track');
-
-      // Build items HTML — duplicate for seamless loop
       const html = items.map(item => `
         <span class="ticker-item">
           <span class="ticker-label">${item.label}</span>
           <span class="ticker-value">${item.name}</span>
           <span class="ticker-score ${item.cls}">${item.score}</span>
-        </span>
-      `).join('');
-
-      track.innerHTML = html + html; // duplicate for infinite scroll
+        </span>`).join('');
+      track.innerHTML = html + html;
     }
 
     async function loadTicker() {
       try {
-        const res  = await fetch(CSV_URL);
-        const text = await res.text();
-        const rows = parseCSV(text);
-        const items = buildTickerItems(rows);
-        renderTicker(items);
+        const res = await fetch(`${SCRIPT_URL}?_=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const raw = await res.json();
+        renderTicker(buildTickerItems(raw));
       } catch(e) {
         document.getElementById('ticker-loading').textContent = 'Pool data coming soon';
       }
+      setTimeout(loadTicker, 2 * 60 * 1000);
     }
 
     loadTicker();
-    setInterval(loadTicker, 120000); // refresh every 2 minutes
   </script>
 
 </body>
