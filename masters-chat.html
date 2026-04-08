@@ -211,6 +211,18 @@
     50% { opacity: 0.35; }
   }
 
+  .home-link {
+    font-family: var(--font-m);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+  .home-link:hover { color: var(--cream); }
+
   /* ── ANNOUNCEMENTS ── */
   #announcements-zone {
     flex-shrink: 0;
@@ -618,9 +630,12 @@
         <div class="header-sub">Augusta National · April 2026</div>
       </div>
     </div>
-    <div class="online-pill">
-      <div class="online-dot"></div>
-      <span id="online-count">Live</span>
+    <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
+      <a href="https://www.missitnoonan.com" class="home-link">← Home</a>
+      <div class="online-pill">
+        <div class="online-dot"></div>
+        <span id="online-count">Live</span>
+      </div>
     </div>
   </div>
 

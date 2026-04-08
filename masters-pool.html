@@ -62,7 +62,8 @@
   .masters-board th{color:#111;border-bottom:1px solid #d8d2c4;background:#fff}
   .masters-board td{color:#111;border-bottom:1px solid #ebe6da;background:#fff}
   .masters-board tbody tr:last-child td{border-bottom:none}
-  .masters-board .team-cell{font-weight:600;color:#111}
+  .masters-board td.cuml, .masters-board th.cuml{color:#888;background:#f5f3ef;}
+  .masters-board .team-cell{font-weight:600;color:#111;max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .masters-board .score-under{color:#b22222;font-weight:700}
   .masters-board .score-even{color:#2f7d32;font-weight:700}
   .masters-board .score-over{color:#111}
@@ -400,9 +401,9 @@ function buildLeaderboard(raw){
     <div class="leaders-title">L E A D E R S</div>
     <div class="card masters-board">
       <table>
-        <thead><tr><th class="center">Prior</th><th class="center">CHG</th><th>Team</th><th class="right">RND 1</th><th class="right">RND 2</th><th class="right">RND 3</th><th class="right">RND 4</th><th class="right">CUML</th><th class="center">PLACE</th></tr></thead>
+        <thead><tr><th class="center">Prior</th><th class="center">CHG</th><th>Team</th><th class="right">RND 1</th><th class="right">RND 2</th><th class="right">RND 3</th><th class="right">RND 4</th><th class="right cuml">CUML</th><th class="center">PLACE</th></tr></thead>
         <tbody>
-          ${leaderboardRows.map(r=>`<tr><td class="center prior-cell">${r.prior || '—'}</td><td class="center chg-cell">${r.chgHtml}</td><td class="team-cell">${r.team}</td><td class="right ${scoreClass(r.r1)}">${fmtScore(r.r1)}</td><td class="right ${scoreClass(r.r2)}">${fmtScore(r.r2)}</td><td class="right ${scoreClass(r.r3)}">${fmtScore(r.r3)}</td><td class="right ${scoreClass(r.r4)}">${fmtScore(r.r4)}</td><td class="right ${scoreClass(r.total)}"><strong>${fmtScore(r.total)}</strong></td><td class="center">${r.place}</td></tr>`).join('')}
+          ${leaderboardRows.map(r=>`<tr><td class="center prior-cell">${r.prior || '—'}</td><td class="center chg-cell">${r.chgHtml}</td><td class="team-cell">${r.team}</td><td class="right ${scoreClass(r.r1)}">${fmtScore(r.r1)}</td><td class="right ${scoreClass(r.r2)}">${fmtScore(r.r2)}</td><td class="right ${scoreClass(r.r3)}">${fmtScore(r.r3)}</td><td class="right ${scoreClass(r.r4)}">${fmtScore(r.r4)}</td><td class="right cuml ${scoreClass(r.total)}"><strong>${fmtScore(r.total)}</strong></td><td class="center">${r.place}</td></tr>`).join('')}
         </tbody>
       </table>
     </div>`;
@@ -686,6 +687,22 @@ document.querySelectorAll('button.tab[data-tab]').forEach(btn => btn.addEventLis
 }));
 
 init();
+
+// Auto-switch tab from URL param e.g. ?tab=board
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const tab = params.get('tab');
+  if (tab) {
+    const btn = document.querySelector(`button.tab[data-tab="${tab}"]`);
+    if (btn) {
+      document.querySelectorAll('button.tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = document.getElementById(`${tab}-panel`);
+      if (panel) panel.classList.add('active');
+    }
+  }
+})();
 </script>
 </body>
 </html>
