@@ -700,6 +700,10 @@ const codeInput  = document.getElementById('gate-code');
 const nameInput  = document.getElementById('gate-name');
 const codeErr    = document.getElementById('gate-code-error');
 const nameErr    = document.getElementById('gate-name-error');
+const chatEl     = document.getElementById('chat-messages');
+const msgInput   = document.getElementById('msg-input');
+const sendBtn    = document.getElementById('send-btn');
+const charCount  = document.getElementById('char-count');
 
 // Check if already authenticated
 const savedName = localStorage.getItem('chat_display_name');
@@ -776,10 +780,6 @@ function initPresence() {
 }
 
 // ── MESSAGES ─────────────────────────────────────────────
-const chatEl    = document.getElementById('chat-messages');
-const msgInput  = document.getElementById('msg-input');
-const sendBtn   = document.getElementById('send-btn');
-const charCount = document.getElementById('char-count');
 
 msgInput.addEventListener('input', () => {
   // Auto-resize
