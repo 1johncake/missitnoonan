@@ -107,7 +107,7 @@
   header.site-header{position:relative;z-index:10;padding:40px 24px 0;text-align:center;border-bottom:1px solid var(--border);}
   .logo-wrap img{height:56px;width:auto;}
   .pool-title{font-family:var(--font-d);font-size:clamp(13px,2vw,16px);font-weight:400;font-style:italic;color:var(--gold-light);letter-spacing:.08em;margin-top:10px;}
-  nav.site-nav{position:relative;z-index:10;display:flex;justify-content:center;gap:0;margin-top:28px;padding:0;border-bottom:none;flex-wrap:wrap;}
+  nav.site-nav{position:relative;z-index:10;display:flex;justify-content:center;gap:0;margin-top:28px;padding:0;border-bottom:none;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
   button.tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--cream-muted);font-family:var(--font-m);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;cursor:pointer;transition:color .2s,border-color .2s;white-space:nowrap;}
   button.tab:hover{color:var(--cream);}
   button.tab.active{background:none;color:var(--gold);border-bottom-color:var(--gold);}
@@ -160,6 +160,7 @@
   @media (max-width: 900px){
     nav.site-nav{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding:0 6px 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
     nav.site-nav::-webkit-scrollbar{display:none;}
+  nav.site-nav::-webkit-scrollbar{display:none;}
     button.tab{flex:0 0 auto;padding:12px 14px;font-size:10px;}
     main{padding:22px 10px 64px;}
     .grid{grid-template-columns:1fr;}
