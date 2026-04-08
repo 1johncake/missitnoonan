@@ -618,8 +618,8 @@ function buildPrizes(raw){
     }
   }
 
-  const overallPayouts = payouts.filter(p => /^(first|second|third)$/i.test(p.label));
-  const dailyPayouts = payouts.filter(p => !/^(first|second|third)$/i.test(p.label));
+  const overallPayouts = payouts.filter(p => /^(first|second|third|fourth)$/i.test(p.label));
+  const dailyPayouts = payouts.filter(p => !/^(first|second|third|fourth)$/i.test(p.label));
   const totalDue = totalIdx !== -1 ? money(raw[totalIdx][2]) : '—';
   const totalPaid = totalIdx !== -1 ? money(raw[totalIdx][3]) : '—';
   const note = noteIdx !== -1 ? clean(raw[noteIdx][1]).replace(/^Note:\s*/i,'') : '';
@@ -637,7 +637,7 @@ function buildPrizes(raw){
   root.innerHTML = `
     <div class="card"><h2>Prizes & Participants</h2></div>
     ${overallPayouts.length ? `<div class="card"><h3>Overall Payouts</h3>${renderPrizeGrid(overallPayouts)}</div>` : ''}
-    ${dailyPayouts.length ? `<div class="card"><h3>Daily Low Scores</h3>${renderPrizeGrid(dailyPayouts)}</div>` : ''}
+    ${dailyPayouts.length ? `<div class="card"><h3>Other Prizes</h3>${renderPrizeGrid(dailyPayouts)}</div>` : ''}
     ${!payouts.length ? `<div class="msg error">No payout data found.</div>` : ''}
     ${participants.length ? `
       <div class="card">
