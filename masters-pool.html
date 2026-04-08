@@ -220,6 +220,7 @@
   <button class="tab" data-tab="picks">Picks</button>
   <button class="tab" data-tab="prizes">Prizes</button>
   <button class="tab" data-tab="board">Messages</button>
+  <button class="tab" id="chat-tab-btn">💬 Chat</button>
   <button class="tab" data-tab="rules">Rules</button>
   </nav>
 </header>
@@ -671,7 +672,12 @@ async function init(){
 /* Fix 4: loadAll was called by refresh button but function was named init() */
 function loadAll(){ init(); }
 
-document.querySelectorAll('button.tab').forEach(btn => btn.addEventListener('click', () => {
+// Chat tab — navigate to chat page
+document.getElementById('chat-tab-btn').addEventListener('click', () => {
+  window.location.href = 'masters-chat.html';
+});
+
+document.querySelectorAll('button.tab[data-tab]').forEach(btn => btn.addEventListener('click', () => {
   document.querySelectorAll('button.tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');

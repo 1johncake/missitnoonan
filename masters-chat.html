@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masters Pool 2026 — Chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg:        #1a1b1f;
+    --surface:   #22232a;
+    --surface2:  #2a2b34;
+    --border:    rgba(255,255,255,0.07);
+    --gold:      #c9a84c;
+    --gold-dim:  rgba(201,168,76,0.15);
+    --green:     #2d6a4f;
+    --cream:     #f0ebe0;
+    --cream-dim: rgba(240,235,224,0.55);
+    --cream-muted: rgba(240,235,224,0.35);
+    --blue:      #4B9CD3;
+    --font-d:    'Playfair Display', Georgia, serif;
+    --font-b:    'DM Sans', sans-serif;
+    --font-m:    'Courier Prime', monospace;
+    --radius:    10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--font-b);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── GATE SCREEN ── */
+  #gate {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 24px;
+  }
+
+  .gate-card {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+  }
+
+  .gate-logo {
+    font-family: var(--font-d);
+    font-size: clamp(28px, 6vw, 40px);
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  .gate-sub {
+    font-family: var(--font-m);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    margin-bottom: 40px;
+  }
+
+  .gate-label {
+    font-family: var(--font-m);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    margin-bottom: 10px;
+    display: block;
+    text-align: left;
+  }
+
+  .gate-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--cream);
+    font-family: var(--font-m);
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .gate-input:focus { border-color: var(--gold); }
+  .gate-input.error { border-color: #e05555; animation: shake 0.3s ease; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  .gate-error {
+    font-size: 12px;
+    color: #e05555;
+    margin-bottom: 12px;
+    min-height: 16px;
+    text-align: left;
+  }
+
+  .gate-btn {
+    width: 100%;
+    background: var(--gold);
+    border: none;
+    border-radius: var(--radius);
+    color: #1a1b1f;
+    font-family: var(--font-m);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .gate-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .gate-btn:active { transform: translateY(0); }
+
+  .gate-divider {
+    width: 40px; height: 1px;
+    background: var(--border);
+    margin: 32px auto;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  #app {
+    display: none;
+    flex-direction: column;
+    height: 100dvh;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    background: var(--bg);
+  }
+
+  .header-left { display: flex; align-items: center; gap: 12px; }
+
+  .header-flag {
+    width: 28px; height: 28px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .header-title {
+    font-family: var(--font-d);
+    font-size: 17px;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+
+  .header-sub {
+    font-family: var(--font-m);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    margin-top: 1px;
+  }
+
+  .online-pill {
+    font-family: var(--font-m);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--cream-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+
+  .online-dot {
+    width: 6px; height: 6px;
+    background: #4caf7d;
+    border-radius: 50%;
+    animation: pulse-dot 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  /* ── ANNOUNCEMENTS ── */
+  #announcements-zone {
+    flex-shrink: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  .ann-header {
+    padding: 8px 16px 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 1;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ann-label {
+    font-family: var(--font-m);
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .ann-badge {
+    background: var(--gold);
+    color: #1a1b1f;
+    font-family: var(--font-m);
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 1px 6px;
+    display: none;
+  }
+
+  .ann-item {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .ann-item:last-child { border-bottom: none; }
+
+  .ann-badge-icon {
+    background: var(--gold-dim);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: var(--font-m);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .ann-text {
+    font-size: 13px;
+    color: var(--cream);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .ann-time {
+    font-family: var(--font-m);
+    font-size: 10px;
+    color: var(--cream-muted);
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .ann-empty {
+    padding: 12px 16px;
+    font-family: var(--font-m);
+    font-size: 11px;
+    color: var(--cream-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CHAT AREA ── */
+  #chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 16px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    scroll-behavior: smooth;
+  }
+
+  #chat-messages::-webkit-scrollbar { width: 4px; }
+  #chat-messages::-webkit-scrollbar-track { background: transparent; }
+  #chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* Date divider */
+  .date-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 12px 0 8px;
+    flex-shrink: 0;
+  }
+
+  .date-divider::before,
+  .date-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .date-divider span {
+    font-family: var(--font-m);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    white-space: nowrap;
+  }
+
+  /* Message row */
+  .msg-row {
+    display: flex;
+    gap: 10px;
+    padding: 3px 0;
+    align-items: flex-end;
+    animation: msg-in 0.2s ease;
+  }
+
+  @keyframes msg-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg-row.own { flex-direction: row-reverse; }
+  .msg-row.commish .msg-bubble { background: var(--gold-dim); border-color: rgba(201,168,76,0.3); }
+
+  .msg-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-m);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--cream-dim);
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+
+  .msg-row.own .msg-avatar { background: var(--blue); color: #fff; border-color: transparent; }
+  .msg-row.commish .msg-avatar { background: var(--gold); color: #1a1b1f; border-color: transparent; }
+
+  .msg-content { display: flex; flex-direction: column; gap: 2px; max-width: min(72%, 480px); }
+  .msg-row.own .msg-content { align-items: flex-end; }
+
+  .msg-name {
+    font-family: var(--font-m);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--cream-muted);
+    padding: 0 4px;
+  }
+
+  .msg-row.commish .msg-name { color: var(--gold); }
+
+  .msg-bubble {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    border-bottom-left-radius: 4px;
+    padding: 9px 13px;
+    font-size: 14px;
+    color: var(--cream);
+    line-height: 1.45;
+    word-break: break-word;
+    position: relative;
+  }
+
+  .msg-row.own .msg-bubble {
+    background: rgba(75,156,211,0.18);
+    border-color: rgba(75,156,211,0.3);
+    border-radius: 16px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .msg-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+  }
+
+  .msg-time {
+    font-family: var(--font-m);
+    font-size: 10px;
+    color: var(--cream-muted);
+  }
+
+  /* Reactions */
+  .msg-reactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+  }
+
+  .msg-row.own .msg-reactions { justify-content: flex-end; }
+
+  .reaction-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2px 7px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    line-height: 1.4;
+  }
+
+  .reaction-btn:hover { background: var(--surface2); transform: scale(1.1); }
+  .reaction-btn.reacted { background: var(--gold-dim); border-color: rgba(201,168,76,0.4); }
+
+  .reaction-count {
+    font-family: var(--font-m);
+    font-size: 10px;
+    color: var(--cream-dim);
+  }
+
+  /* Reaction picker */
+  .reaction-picker {
+    display: flex;
+    gap: 4px;
+    padding: 2px 0;
+    opacity: 0;
+    transform: translateY(4px);
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+
+  .msg-row:hover .reaction-picker { opacity: 1; transform: translateY(0); pointer-events: all; }
+
+  .pick-emoji {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+  }
+
+  .pick-emoji:hover { transform: scale(1.25); background: var(--surface2); }
+
+  /* ── INPUT BAR ── */
+  .input-bar {
+    padding: 12px 16px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+
+  .input-wrap {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    transition: border-color 0.2s;
+  }
+
+  .input-wrap:focus-within { border-color: rgba(201,168,76,0.4); }
+
+  #msg-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--cream);
+    font-family: var(--font-b);
+    font-size: 14px;
+    line-height: 1.4;
+    resize: none;
+    max-height: 100px;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  #msg-input::placeholder { color: var(--cream-muted); }
+
+  .send-btn {
+    background: var(--gold);
+    border: none;
+    border-radius: 8px;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 0.2s, transform 0.1s;
+    color: #1a1b1f;
+  }
+
+  .send-btn:hover { opacity: 0.85; transform: scale(1.05); }
+  .send-btn:active { transform: scale(0.95); }
+  .send-btn:disabled { opacity: 0.3; cursor: default; transform: none; }
+
+  .send-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+  .input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 4px 0;
+  }
+
+  .typing-indicator {
+    font-family: var(--font-m);
+    font-size: 10px;
+    color: var(--cream-muted);
+    letter-spacing: 0.05em;
+    min-height: 14px;
+  }
+
+  .char-count {
+    font-family: var(--font-m);
+    font-size: 10px;
+    color: var(--cream-muted);
+  }
+
+  /* ── SCROLLBAR ── */
+  #announcements-zone::-webkit-scrollbar { width: 3px; }
+  #announcements-zone::-webkit-scrollbar-track { background: transparent; }
+  #announcements-zone::-webkit-scrollbar-thumb { background: var(--border); }
+
+  /* ── LOADING ── */
+  .loading-msg {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: var(--font-m);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--cream-muted);
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 480px) {
+    .header { padding: 12px 14px 10px; }
+    #chat-messages { padding: 12px 12px 6px; }
+    .input-bar { padding: 8px 12px 12px; }
+    .msg-bubble { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ GATE ══════════════ -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-logo">⛳ Masters Pool 2026</div>
+    <div class="gate-sub">Commissioner Chat — Augusta National</div>
+    <div class="gate-divider"></div>
+
+    <div id="gate-step-1">
+      <label class="gate-label">Join Code</label>
+      <input class="gate-input" id="gate-code" type="text" placeholder="ENTER CODE" autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="gate-error" id="gate-code-error"></div>
+      <button class="gate-btn" id="gate-code-btn">Continue →</button>
+    </div>
+
+    <div id="gate-step-2" style="display:none">
+      <label class="gate-label">Your Display Name</label>
+      <input class="gate-input" id="gate-name" type="text" placeholder="E.G. LANGLEY" autocomplete="off" style="text-transform:uppercase" maxlength="20">
+      <div class="gate-error" id="gate-name-error"></div>
+      <button class="gate-btn" id="gate-name-btn">Enter the Room →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ APP ══════════════ -->
+<div id="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-flag">⛳</div>
+      <div>
+        <div class="header-title">Masters Pool Chat</div>
+        <div class="header-sub">Augusta National · April 2026</div>
+      </div>
+    </div>
+    <div class="online-pill">
+      <div class="online-dot"></div>
+      <span id="online-count">Live</span>
+    </div>
+  </div>
+
+  <!-- Announcements -->
+  <div id="announcements-zone">
+    <div class="ann-header">
+      <span class="ann-label">📣 Commish Announcements</span>
+      <span class="ann-badge" id="ann-new-badge">NEW</span>
+    </div>
+    <div id="announcements-list">
+      <div class="ann-empty">Loading announcements...</div>
+    </div>
+  </div>
+
+  <!-- Chat messages -->
+  <div id="chat-messages">
+    <div class="loading-msg">Loading chat...</div>
+  </div>
+
+  <!-- Input bar -->
+  <div class="input-bar">
+    <div class="input-wrap">
+      <textarea id="msg-input" rows="1" placeholder="Say something..." maxlength="500"></textarea>
+      <button class="send-btn" id="send-btn" disabled>
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+    <div class="input-footer">
+      <div class="typing-indicator" id="typing-indicator"></div>
+      <div class="char-count" id="char-count"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, push, onValue, set, serverTimestamp, onDisconnect, update }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+// ── CONFIG ──────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyB_ufpAv_kC204KEhCfI-qLD1KCz393AsY",
+  authDomain: "missitnoonan-pool-chat.firebaseapp.com",
+  databaseURL: "https://missitnoonan-pool-chat-default-rtdb.firebaseio.com",
+  projectId: "missitnoonan-pool-chat",
+  storageBucket: "missitnoonan-pool-chat.firebasestorage.app",
+  messagingSenderId: "599171295372",
+  appId: "1:599171295372:web:0a47828c9c90987ebdb3a9"
+};
+
+const JOIN_CODE        = 'MASTERS2026';
+const COMMISH_NAME     = 'Commish';
+const REACTIONS        = ['👍','🔥','😂'];
+const MAX_MESSAGES     = 200;
+
+// Google Sheet CSV for announcements — update this URL to your published CSV
+// File → Share → Publish to web → choose "Announcements" tab → CSV
+// Messages tab CSV — H4 = row index 3, column index 7
+const MESSAGES_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTPh1Oj-8i_6-vti3rDeXkuQ_AJymnzmuzPvV24K4DaH8XtuFu2qKd3K0TnL70b7qbhcmJZGz9K6Rdw/pub?gid=594261132&single=true&output=csv';
+
+// ── INIT ─────────────────────────────────────────────────
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+let currentUser = null;  // { name, uid }
+let lastDateShown = null;
+let messageElements = {};
+
+
+// ── GATE LOGIC ───────────────────────────────────────────
+const gate       = document.getElementById('gate');
+const appEl      = document.getElementById('app');
+const step1      = document.getElementById('gate-step-1');
+const step2      = document.getElementById('gate-step-2');
+const codeInput  = document.getElementById('gate-code');
+const nameInput  = document.getElementById('gate-name');
+const codeErr    = document.getElementById('gate-code-error');
+const nameErr    = document.getElementById('gate-name-error');
+
+// Check if already authenticated
+const savedName = localStorage.getItem('chat_display_name');
+const savedCode = localStorage.getItem('chat_code_ok');
+
+if (savedCode === 'yes' && savedName) {
+  launchApp(savedName);
+} else if (savedCode === 'yes') {
+  step1.style.display = 'none';
+  step2.style.display = 'block';
+}
+
+document.getElementById('gate-code-btn').addEventListener('click', () => {
+  const val = codeInput.value.trim().toUpperCase();
+  if (val === JOIN_CODE) {
+    localStorage.setItem('chat_code_ok', 'yes');
+    codeErr.textContent = '';
+    step1.style.display = 'none';
+    step2.style.display = 'block';
+    nameInput.focus();
+  } else {
+    codeInput.classList.add('error');
+    codeErr.textContent = 'Incorrect code. Ask the Commish.';
+    setTimeout(() => codeInput.classList.remove('error'), 400);
+  }
+});
+
+codeInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('gate-code-btn').click(); });
+
+document.getElementById('gate-name-btn').addEventListener('click', () => {
+  const val = nameInput.value.trim().toUpperCase();
+  if (!val || val.length < 2) {
+    nameErr.textContent = 'Enter at least 2 characters.';
+    return;
+  }
+  localStorage.setItem('chat_display_name', val);
+  launchApp(val);
+});
+
+nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('gate-name-btn').click(); });
+
+function launchApp(name) {
+  currentUser = {
+    name: name,
+    uid: localStorage.getItem('chat_uid') || generateUID()
+  };
+  localStorage.setItem('chat_uid', currentUser.uid);
+
+  gate.style.opacity = '0';
+  gate.style.transition = 'opacity 0.3s ease';
+  setTimeout(() => { gate.style.display = 'none'; }, 300);
+
+  appEl.style.display = 'flex';
+
+  initPresence();
+  listenMessages();
+  loadAnnouncements();
+}
+
+function generateUID() {
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
+
+// ── PRESENCE ─────────────────────────────────────────────
+function initPresence() {
+  const presRef = ref(db, `presence/${currentUser.uid}`);
+  set(presRef, { name: currentUser.name, online: true, ts: serverTimestamp() });
+  onDisconnect(presRef).remove();
+
+  onValue(ref(db, 'presence'), snap => {
+    const count = snap.exists() ? Object.keys(snap.val()).length : 0;
+    document.getElementById('online-count').textContent = count === 1 ? '1 online' : `${count} online`;
+  });
+}
+
+// ── MESSAGES ─────────────────────────────────────────────
+const chatEl    = document.getElementById('chat-messages');
+const msgInput  = document.getElementById('msg-input');
+const sendBtn   = document.getElementById('send-btn');
+const charCount = document.getElementById('char-count');
+
+msgInput.addEventListener('input', () => {
+  // Auto-resize
+  msgInput.style.height = 'auto';
+  msgInput.style.height = Math.min(msgInput.scrollHeight, 100) + 'px';
+
+  const len = msgInput.value.length;
+  sendBtn.disabled = len === 0;
+  charCount.textContent = len > 400 ? `${500 - len} left` : '';
+});
+
+msgInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+sendBtn.addEventListener('click', sendMessage);
+
+function sendMessage() {
+  const text = msgInput.value.trim();
+  if (!text || !currentUser) return;
+
+  const isCommish = currentUser.name === COMMISH_NAME;
+
+  push(ref(db, 'messages'), {
+    text,
+    name: currentUser.name,
+    uid: currentUser.uid,
+    ts: serverTimestamp(),
+    isCommish: isCommish || false,
+    reactions: {}
+  });
+
+  msgInput.value = '';
+  msgInput.style.height = 'auto';
+  sendBtn.disabled = true;
+  charCount.textContent = '';
+}
+
+function listenMessages() {
+  const msgsRef = ref(db, 'messages');
+  chatEl.innerHTML = '';
+
+  onValue(msgsRef, snap => {
+    if (!snap.exists()) {
+      chatEl.innerHTML = '<div class="loading-msg">Be the first to say something.</div>';
+      return;
+    }
+
+    const all = [];
+    snap.forEach(child => {
+      all.push({ id: child.key, ...child.val() });
+    });
+
+    // Keep last MAX_MESSAGES
+    const msgs = all.slice(-MAX_MESSAGES);
+
+    // Re-render all (simple approach — fine for small group)
+    chatEl.innerHTML = '';
+    lastDateShown = null;
+    messageElements = {};
+
+    msgs.forEach(msg => renderMessage(msg));
+    scrollToBottom();
+  });
+}
+
+function renderMessage(msg) {
+  const isOwn     = msg.uid === currentUser?.uid;
+  const isCommish = msg.isCommish;
+
+  // Date divider
+  const msgDate = msg.ts ? formatDate(new Date(msg.ts)) : null;
+  if (msgDate && msgDate !== lastDateShown) {
+    const div = document.createElement('div');
+    div.className = 'date-divider';
+    div.innerHTML = `<span>${msgDate}</span>`;
+    chatEl.appendChild(div);
+    lastDateShown = msgDate;
+  }
+
+  const row = document.createElement('div');
+  row.className = `msg-row${isOwn ? ' own' : ''}${isCommish ? ' commish' : ''}`;
+  row.dataset.id = msg.id;
+
+  const initials = (msg.name || '?').slice(0, 2).toUpperCase();
+  const timeStr  = msg.ts ? formatTime(new Date(msg.ts)) : '';
+
+  // Build reactions HTML
+  const reactionsHtml = buildReactionsHtml(msg.reactions || {}, msg.id, msg.uid);
+  const pickerHtml    = buildPickerHtml(msg.id);
+
+  row.innerHTML = `
+    <div class="msg-avatar">${initials}</div>
+    <div class="msg-content">
+      <div class="msg-name">${escHtml(msg.name)}${isCommish ? ' 🏆' : ''}</div>
+      <div class="msg-bubble">${escHtml(msg.text)}</div>
+      <div class="msg-meta">
+        <span class="msg-time">${timeStr}</span>
+        ${pickerHtml}
+      </div>
+      <div class="msg-reactions">${reactionsHtml}</div>
+    </div>
+  `;
+
+  chatEl.appendChild(row);
+  messageElements[msg.id] = row;
+  wireReactions(row, msg.id);
+}
+
+function buildReactionsHtml(reactions, msgId, authorUid) {
+  const totals = {};
+  const myReacts = new Set();
+
+  Object.values(reactions).forEach(r => {
+    totals[r.emoji] = (totals[r.emoji] || 0) + 1;
+    if (r.uid === currentUser?.uid) myReacts.add(r.emoji);
+  });
+
+  return Object.entries(totals).map(([emoji, count]) => `
+    <button class="reaction-btn${myReacts.has(emoji) ? ' reacted' : ''}"
+            data-msg="${msgId}" data-emoji="${emoji}">
+      ${emoji} <span class="reaction-count">${count}</span>
+    </button>
+  `).join('');
+}
+
+function buildPickerHtml(msgId) {
+  return `<div class="reaction-picker">
+    ${REACTIONS.map(e => `<button class="pick-emoji" data-msg="${msgId}" data-emoji="${e}">${e}</button>`).join('')}
+  </div>`;
+}
+
+function wireReactions(row, msgId) {
+  row.querySelectorAll('[data-emoji]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const emoji = btn.dataset.emoji;
+      toggleReaction(msgId, emoji);
+    });
+  });
+}
+
+function toggleReaction(msgId, emoji) {
+  const reactRef = ref(db, `messages/${msgId}/reactions`);
+  onValue(reactRef, snap => {
+    const existing = snap.val() || {};
+    // Find if user already reacted with this emoji
+    const myKey = Object.keys(existing).find(k =>
+      existing[k].uid === currentUser.uid && existing[k].emoji === emoji
+    );
+
+    if (myKey) {
+      // Remove reaction
+      set(ref(db, `messages/${msgId}/reactions/${myKey}`), null);
+    } else {
+      // Add reaction
+      push(ref(db, `messages/${msgId}/reactions`), {
+        uid: currentUser.uid,
+        emoji
+      });
+    }
+  }, { onlyOnce: true });
+}
+
+// ── ANNOUNCEMENTS ─────────────────────────────────────────
+async function loadAnnouncements() {
+  const listEl  = document.getElementById('announcements-list');
+  const badgeEl = document.getElementById('ann-new-badge');
+
+  try {
+    const res  = await fetch(MESSAGES_CSV_URL);
+    const text = await res.text();
+
+    // H4 = row index 3 (0-based), column index 7 (A=0 … H=7)
+    // parseCSV with skipRows=0 so we keep all rows including blanks
+    const rows = parseCSV(text, 0);
+    const h4   = (rows[3] && rows[3][7]) ? rows[3][7].trim() : '';
+
+    if (!h4) {
+      listEl.innerHTML = `<div class="ann-empty">No announcement — type one in cell H4 of the Messages tab.</div>`;
+      updateHomepageBadge(false);
+      return;
+    }
+
+    // Detect new content via hash
+    const msgHash  = simpleHash(h4);
+    const lastHash = localStorage.getItem('ann_last_hash');
+    const hasNew   = msgHash !== lastHash;
+
+    listEl.innerHTML = `
+      <div class="ann-item">
+        <div class="ann-badge-icon">Commish</div>
+        <div class="ann-text">${escHtml(h4)}</div>
+      </div>
+    `;
+
+    if (hasNew) {
+      badgeEl.style.display = 'inline';
+      setTimeout(() => {
+        localStorage.setItem('ann_last_hash', msgHash);
+        badgeEl.style.display = 'none';
+        updateHomepageBadge(false);
+      }, 4000);
+    }
+
+    updateHomepageBadge(hasNew);
+
+  } catch (e) {
+    listEl.innerHTML = `<div class="ann-empty">Could not load announcement.</div>`;
+  }
+}
+
+function simpleHash(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return String(hash);
+}
+
+function updateHomepageBadge(hasNew) {
+  // Store in localStorage so homepage can read it
+  localStorage.setItem('masters_has_announcement', hasNew ? '1' : '0');
+}
+
+// ── UTILITIES ─────────────────────────────────────────────
+function escHtml(str) {
+  return String(str || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function parseCSV(text, skipRows = 1) {
+  return text.trim().split('\n').slice(skipRows).map(line => {
+    const cols = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      if (line[i] === '"') { inQ = !inQ; continue; }
+      if (line[i] === ',' && !inQ) { cols.push(cur.trim()); cur = ''; continue; }
+      cur += line[i];
+    }
+    cols.push(cur.trim());
+    return cols;
+  }).filter(r => r.some(c => c));
+}
+
+function formatDate(d) {
+  const today = new Date();
+  const yesterday = new Date(today); yesterday.setDate(today.getDate() - 1);
+  if (sameDay(d, today)) return 'Today';
+  if (sameDay(d, yesterday)) return 'Yesterday';
+  return d.toLocaleDateString('en-US', { weekday:'long', month:'short', day:'numeric' });
+}
+
+function sameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate();
+}
+
+function formatTime(d) {
+  return d.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true });
+}
+
+function formatAnnTime(d) {
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+
+function scrollToBottom() {
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+// Auto-scroll on new messages if near bottom
+const observer = new MutationObserver(() => {
+  const nearBottom = chatEl.scrollHeight - chatEl.scrollTop - chatEl.clientHeight < 80;
+  if (nearBottom) scrollToBottom();
+});
+observer.observe(chatEl, { childList: true });
+
+</script>
+</body>
+</html>
