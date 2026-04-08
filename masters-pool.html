@@ -316,13 +316,22 @@ function extractBoardBanner(raw){
 
 
 function extractFeaturedRecap(raw){
-  const rows = Array.isArray(raw) ? raw : [];
+  if(!Array.isArray(raw) || !raw.length) return null;
+  const rows = raw.map(r => Array.isArray(r) ? r.map(v => String(v ?? '').trim()) : []);
+
   /* Recap Title: B9 = row index 8, col index 1
      Recap Date:  D9 = row index 8, col index 3
      Recap Body:  F9 = row index 8, col index 5 */
-  const title = clean(rows?.[8]?.[1]);
-  const date  = clean(rows?.[8]?.[3]);
-  const body  = clean(rows?.[8]?.[5]);
+  let title = clean(rows?.[8]?.[1]);
+  let date  = clean(rows?.[8]?.[3]);
+  let body  = clean(rows?.[8]?.[5]);
+
+  /* Guard: if cells contain instruction/label text, treat as empty */
+  const looksLikeLabel = (s) => /^(recap (title|date|body)|e\.g\.|full recap|date only)/i.test(s);
+  if(looksLikeLabel(title)) title = '';
+  if(looksLikeLabel(date))  date  = '';
+  if(looksLikeLabel(body))  body  = '';
+
   if(!title && !date && !body) return null;
   return {title: title || 'Daily Recap', date, body};
 }
@@ -502,15 +511,22 @@ function buildBoard(raw){
 
   if(headerIdx !== -1){
     const header = normalizedRows[headerIdx].map(v => v.toLowerCase());
-    const dateIdx  = header.findIndex(h => h === 'date' || h === 'time' || h === 'timestamp');
-    const msgIdx   = header.findIndex(h => h === 'message' || h === 'post' || h === 'note');
-    const typeIdx  = header.findIndex(h => h === 'type' || h === 'category' || h === 'tag');
-    const titleIdx = header.findIndex(h => h === 'title' || h === 'headline' || h === 'subject');
-    const activeIdx= header.findIndex(h => h === 'active' || h === 'show' || h === 'display');
+    const dateIdx  = header.findIndex(h => h.startsWith('date') || h.startsWith('time') || h.startsWith('timestamp'));
+    const msgIdx   = header.findIndex(h => h.startsWith('message') || h.startsWith('post') || h.startsWith('note'));
+    const typeIdx  = header.findIndex(h => h.startsWith('type') || h.startsWith('category') || h.startsWith('tag'));
+    const titleIdx = header.findIndex(h => h.startsWith('title') || h.startsWith('headline') || h.startsWith('subject'));
+    const activeIdx= header.findIndex(h => h.startsWith('active') || h.startsWith('show') || h.startsWith('display'));
 
     for(let i=headerIdx+1;i<normalizedRows.length;i++) {
       const r = normalizedRows[i];
       if(!r.some(Boolean)) continue;
+      /* Skip instruction/label rows — identified by date cell containing non-date text
+         or message cell containing instruction-like text */
+      const dateVal = dateIdx !== -1 ? clean(r[dateIdx]).toLowerCase() : '';
+      const msgVal  = msgIdx  !== -1 ? clean(r[msgIdx]).toLowerCase()  : '';
+      const skipPatterns = /^(date|yyyy|e\.g\.|type|short|full|leave|alt\+)/i;
+      if(skipPatterns.test(dateVal) || skipPatterns.test(msgVal)) continue;
+      if(/^(full message|alt\+enter|date \+|short headline)/i.test(msgVal)) continue;
       /* Active logic: blank or Y = show; N = hide */
       const activeVal = activeIdx !== -1 ? clean(r[activeIdx]).toLowerCase() : '';
       if(activeVal === 'n' || activeVal === 'no' || activeVal === 'false' || activeVal === '0') continue;
