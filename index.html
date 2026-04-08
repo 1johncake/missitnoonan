@@ -350,6 +350,40 @@
       margin-top: auto;
     }
 
+    /* Quick links row below CTA buttons */
+    .card-links {
+      display: flex;
+      gap: 1.2rem;
+      margin-top: 0.75rem;
+      padding-top: 0.65rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .card-link {
+      font-family: 'Courier Prime', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240,235,224,0.5);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.2s;
+    }
+
+    .card-link:hover { color: rgba(240,235,224,0.9); }
+
+    .card-link-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4caf7d;
+      display: none;
+      animation: livePulse 2.2s ease-in-out infinite;
+    }
+
+    .card-link-dot.visible { display: inline-block; }
+
     /* CTA buttons inside cards */
     .card-btns {
       display: flex;
@@ -626,10 +660,19 @@
               <span class="live-label">Leader</span>
               <span class="live-text" id="live-leader">Fetching…</span>
             </div>
-            <div class="card-footer">
+            <div class="card-footer" style="flex-direction:column;align-items:flex-start;">
               <div class="card-btns">
                 <a href="/masters-signup.html" class="btn-primary btn-gold">Player Entry</a>
                 <a href="/masters-pool.html" class="btn-ghost">Leaderboard</a>
+              </div>
+              <div class="card-links">
+                <a href="/masters-pool.html#board" class="card-link">
+                  <span class="card-link-dot" id="msg-dot"></span>
+                  📣 Messages
+                </a>
+                <a href="/masters-chat.html" class="card-link">
+                  💬 Chat
+                </a>
               </div>
             </div>
           </div>
@@ -893,6 +936,24 @@
     }
 
     loadAll();
+    checkMessages();
+
+    // Light up Messages dot if H4 has content
+    async function checkMessages() {
+      try {
+        const MSGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTPh1Oj-8i_6-vti3rDeXkuQ_AJymnzmuzPvV24K4DaH8XtuFu2qKd3K0TnL70b7qbhcmJZGz9K6Rdw/pub?gid=594261132&single=true&output=csv';
+        const res  = await fetch(MSGS_CSV + '&_=' + Date.now(), { cache: 'no-store' });
+        const text = await res.text();
+        const rows = text.trim().split('\n');
+        // H4 = row index 3, column index 7
+        if (rows[3]) {
+          const cols = rows[3].split(',');
+          const h4 = cols[7] ? cols[7].replace(/^"|"$/g,'').trim() : '';
+          const dot = document.getElementById('msg-dot');
+          if (dot && h4) dot.classList.add('visible');
+        }
+      } catch(e) {}
+    }
   </script>
 
 </body>
