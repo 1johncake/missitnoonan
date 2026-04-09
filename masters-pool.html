@@ -296,6 +296,21 @@ function pct(v){ const n=Number(v); return Number.isFinite(n) ? `${(n*100).toFix
 function clean(v){ return String(v ?? '').trim(); }
 function fmtScore(v){ if(v===null||v===undefined||v===''||String(v).includes('#')) return '—'; const n=Number(v); if(!Number.isFinite(n)) return '—'; if(n===0) return 'E'; return n>0?`+${n}`:`${n}`; }
 function scoreClass(v){ if(v===null||v===undefined||v===''||String(v).includes('#')) return 'score-empty'; const n=Number(v); if(!Number.isFinite(n)) return 'score-empty'; if(n<0) return 'score-under'; if(n===0) return 'score-even'; return 'score-over'; }
+function fmtThru(v){
+  if(!v || v==='—') return '—';
+  const s = String(v).trim();
+  // If it looks like an ISO datetime, extract time as AM/PM
+  const iso = s.match(/T(\d{2}):(\d{2})/);
+  if(iso){
+    let h = parseInt(iso[1], 10);
+    const m = iso[2];
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return `${h}:${m} ${ampm}`;
+  }
+  // Otherwise pass through as-is (hole number, F, CUT, WD, etc.)
+  return s;
+}
 function parseName(raw){ const s=clean(raw); const parts=s.split(','); return parts.length>=2?{last:parts[0].trim(),first:parts.slice(1).join(',').trim()}:{last:s,first:''}; }
 function parseChg(raw){ const s=clean(raw); if(s.includes('▲')){ const n=s.replace('▲','').trim(); return {html:`<span class="chg-up">▲${n}</span>`, val:parseInt(n,10)||0}; } if(s.includes('▼')){ const n=s.replace('▼','').trim(); return {html:`<span class="chg-down">▼${n}</span>`, val:-(parseInt(n,10)||0)}; } return {html:'<span class="chg-flat">—</span>', val:0}; }
 
@@ -425,7 +440,7 @@ function renderPicksForTeam(teamName){
     const r=allScoreRows[i];
     const tier=clean(r[4]), player=clean(r[5]);
     if(!tier.startsWith('Tier') || !player) continue;
-    picks.push({tier, player, r1:r[7], r2:r[8], r3:r[9], r4:r[10], total:r[11], thru:clean(r[12])});
+    picks.push({tier, player, r1:r[7], r2:r[8], r3:r[9], r4:r[10], total:r[11]});
   }
 
   const {last, first} = parseName(teamName);
@@ -437,7 +452,7 @@ function renderPicksForTeam(teamName){
   const tableHtml = `
     <div class="picks-table-wrap">
       <table>
-        <thead><tr><th>Tier</th><th>Player</th><th class="right">R1</th><th class="right">R2</th><th class="right">R3</th><th class="right">R4</th><th class="right">Total</th><th class="right">Thru</th></tr></thead>
+        <thead><tr><th>Tier</th><th>Player</th><th class="right">R1</th><th class="right">R2</th><th class="right">R3</th><th class="right">R4</th><th class="right">Total</th></tr></thead>
         <tbody>${picks.map(p=>`<tr>
           <td class="small">${p.tier}</td>
           <td>${p.player}</td>
@@ -446,7 +461,6 @@ function renderPicksForTeam(teamName){
           <td class="right ${scoreClass(p.r3)}">${fmtScore(p.r3)}</td>
           <td class="right ${scoreClass(p.r4)}">${fmtScore(p.r4)}</td>
           <td class="right ${scoreClass(p.total)}"><strong>${fmtScore(p.total)}</strong></td>
-          <td class="right small">${p.thru || '—'}</td>
         </tr>`).join('')}</tbody>
       </table>
     </div>`;
@@ -460,7 +474,6 @@ function renderPicksForTeam(teamName){
         <span class="pick-score-hdr">R3</span>
         <span class="pick-score-hdr">R4</span>
         <span class="pick-score-hdr">TOT</span>
-        <span class="pick-score-hdr">THRU</span>
       </div>
       ${picks.map(p=>`
         <div class="pick-card-row">
@@ -474,7 +487,6 @@ function renderPicksForTeam(teamName){
             <span class="pick-card-score ${scoreCardClass(p.r3)}">${fmtScore(p.r3)}</span>
             <span class="pick-card-score ${scoreCardClass(p.r4)}">${fmtScore(p.r4)}</span>
             <span class="pick-card-score ${scoreCardClass(p.total)}">${fmtScore(p.total)}</span>
-            <span class="pick-card-score">${p.thru || '—'}</span>
           </div>
         </div>`).join('')}
     </div>`;
