@@ -440,7 +440,7 @@ function renderPicksForTeam(teamName){
     const r=allScoreRows[i];
     const tier=clean(r[4]), player=clean(r[5]);
     if(!tier.startsWith('Tier') || !player) continue;
-    picks.push({tier, player, r1:r[7], r2:r[8], r3:r[9], r4:r[10], total:r[11]});
+    picks.push({tier, player, r1:r[7], r2:r[8], r3:r[9], r4:r[10], total:r[11], thru:clean(r[12])});
   }
 
   const {last, first} = parseName(teamName);
@@ -452,7 +452,7 @@ function renderPicksForTeam(teamName){
   const tableHtml = `
     <div class="picks-table-wrap">
       <table>
-        <thead><tr><th>Tier</th><th>Player</th><th class="right">R1</th><th class="right">R2</th><th class="right">R3</th><th class="right">R4</th><th class="right">Total</th></tr></thead>
+        <thead><tr><th>Tier</th><th>Player</th><th class="right">R1</th><th class="right">R2</th><th class="right">R3</th><th class="right">R4</th><th class="right">Total</th><th class="right">Thru</th></tr></thead>
         <tbody>${picks.map(p=>`<tr>
           <td class="small">${p.tier}</td>
           <td>${p.player}</td>
@@ -461,6 +461,7 @@ function renderPicksForTeam(teamName){
           <td class="right ${scoreClass(p.r3)}">${fmtScore(p.r3)}</td>
           <td class="right ${scoreClass(p.r4)}">${fmtScore(p.r4)}</td>
           <td class="right ${scoreClass(p.total)}"><strong>${fmtScore(p.total)}</strong></td>
+          <td class="right small">${fmtThru(p.thru)}</td>
         </tr>`).join('')}</tbody>
       </table>
     </div>`;
@@ -474,6 +475,7 @@ function renderPicksForTeam(teamName){
         <span class="pick-score-hdr">R3</span>
         <span class="pick-score-hdr">R4</span>
         <span class="pick-score-hdr">TOT</span>
+        <span class="pick-score-hdr">THRU</span>
       </div>
       ${picks.map(p=>`
         <div class="pick-card-row">
@@ -487,6 +489,7 @@ function renderPicksForTeam(teamName){
             <span class="pick-card-score ${scoreCardClass(p.r3)}">${fmtScore(p.r3)}</span>
             <span class="pick-card-score ${scoreCardClass(p.r4)}">${fmtScore(p.r4)}</span>
             <span class="pick-card-score ${scoreCardClass(p.total)}">${fmtScore(p.total)}</span>
+            <span class="pick-card-score">${fmtThru(p.thru)}</span>
           </div>
         </div>`).join('')}
     </div>`;
