@@ -305,15 +305,22 @@ function scoreClass(v){ if(v===null||v===undefined||v===''||String(v).includes('
 function fmtThru(v){
   if(!v || v==='—') return '—';
   const s = String(v).trim();
-  // If it looks like an ISO datetime, convert UTC to ET and display as AM/PM
+  // Google Sheets serializes datetimes as Date(year,month,day,hour,minute,second)
+  // Month is zero-indexed. These hours are already in local (ET) time.
+  const gSheets = s.match(/^Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)$/);
+  if(gSheets){
+    let h = parseInt(gSheets[4], 10);
+    const m = String(parseInt(gSheets[5], 10)).padStart(2, '0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return `${h}:${m} ${ampm}`;
+  }
+  // ISO datetime strings — convert UTC to ET (EDT = UTC-4 in April)
   const iso = s.match(/T(\d{2}):(\d{2})/);
   if(iso){
-    // Parse the full datetime so we can apply UTC→ET offset
     const dt = new Date(s);
     if(!isNaN(dt)){
-      // ET = UTC-5 (EST) or UTC-4 (EDT). Masters is in April so EDT applies.
-      const etOffset = -4 * 60; // EDT = UTC-4, in minutes
-      const etMs = dt.getTime() + etOffset * 60 * 1000;
+      const etMs = dt.getTime() + (-4 * 60 * 60 * 1000);
       const etDate = new Date(etMs);
       let h = etDate.getUTCHours();
       const m = String(etDate.getUTCMinutes()).padStart(2, '0');
@@ -321,7 +328,7 @@ function fmtThru(v){
       h = h % 12 || 12;
       return `${h}:${m} ${ampm}`;
     }
-    // Fallback: just read raw hours from the ISO string without conversion
+    // Fallback: raw hours, no conversion
     let h = parseInt(iso[1], 10);
     const m = iso[2];
     const ampm = h >= 12 ? 'PM' : 'AM';
