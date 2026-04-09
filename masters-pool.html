@@ -52,6 +52,25 @@
   .recap-body{white-space:pre-wrap;line-height:1.65;font-size:16px;color:#f1ece1}
 
   .ticker-wrap{background:var(--panel);border:1px solid var(--border);padding:12px 14px;margin:0 0 14px}
+  /* Stat carousel */
+  .stat-carousel{background:var(--panel);border:1px solid var(--border);padding:10px 14px;margin:0 0 14px;display:flex;align-items:center;gap:10px;min-height:44px;position:relative;}
+  .stat-carousel-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);opacity:0.9;flex-shrink:0;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:0.9;}50%{opacity:0.4;}}
+  .stat-carousel-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;flex-shrink:0;}
+  .stat-carousel-divider{width:1px;height:16px;background:var(--border);flex-shrink:0;}
+  .stat-carousel-items{flex:1;position:relative;overflow:hidden;min-height:28px;}
+  .stat-carousel-item{position:absolute;top:0;left:0;width:100%;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.4s ease;pointer-events:none;}
+  .stat-carousel-item.active{opacity:1;pointer-events:auto;}
+  .stat-c-emoji{font-size:15px;flex-shrink:0;}
+  .stat-c-tag{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(201,168,76,0.8);font-weight:700;flex-shrink:0;}
+  .stat-c-name{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .stat-c-score{font-size:13px;font-family:var(--font-m);color:var(--gold);flex-shrink:0;}
+  .stat-c-score.up{color:var(--good);}
+  .stat-c-score.down{color:var(--bad);}
+  .stat-c-sub{font-size:11px;color:rgba(255,255,255,0.38);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
+  .stat-carousel-pips{display:flex;gap:5px;flex-shrink:0;}
+  .stat-c-pip{width:5px;height:5px;border-radius:50%;background:rgba(201,168,76,0.25);cursor:pointer;transition:background 0.2s;}
+  .stat-c-pip.active{background:var(--gold);}
   .ticker-track{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
   .ticker-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700;flex:0 0 auto;padding-top:2px}
   .ticker-text{font-size:15px;line-height:1.5;color:var(--text);flex:1 1 320px;white-space:normal}
@@ -135,6 +154,73 @@
 
   /* ── Picks: desktop table stays as-is ── */
   .picks-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  /* ── Dashboard ── */
+  .dash-selector-wrap{margin-bottom:18px;}
+  .dash-selector-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:8px;display:block;}
+  .dash-team-select{width:100%;padding:10px 14px;background:var(--panel);border:1px solid var(--gold);border-radius:4px;color:var(--text);font-family:var(--font-b);font-size:15px;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a84c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+  .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+  .dash-col-left{display:flex;flex-direction:column;gap:14px;}
+  .dash-col-right{display:flex;flex-direction:column;gap:14px;}
+  .dash-card{background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+  .dash-card-head{padding:12px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
+  .dash-card-title{font-family:var(--font-d);font-size:15px;font-weight:700;color:var(--cream);letter-spacing:.01em;}
+  .dash-card-meta{font-size:11px;color:var(--muted);font-family:var(--font-m);}
+  .dash-card-body{padding:12px 16px;}
+  /* Pool standings in dash */
+  .dash-standings{width:100%;border-collapse:collapse;}
+  .dash-standings tr{border-bottom:1px solid var(--border);}
+  .dash-standings tr:last-child{border-bottom:none;}
+  .dash-standings td{padding:7px 4px;font-size:13px;color:var(--text);}
+  .dash-standings td:first-child{width:28px;color:var(--muted);font-family:var(--font-m);font-size:11px;text-align:center;}
+  .dash-standings td.name{font-weight:600;color:var(--cream);}
+  .dash-standings td.score{text-align:right;font-family:var(--font-m);font-size:13px;}
+  .dash-standings td.chg{text-align:right;font-size:11px;width:30px;}
+  .dash-standings tr.my-row{background:rgba(75,156,211,0.12);}
+  .dash-standings tr.my-row td.name{color:#4B9CD3;font-weight:700;}
+  .dash-standings .show-more-btn{width:100%;padding:8px;background:none;border:none;border-top:1px solid var(--border);color:var(--gold);font-size:12px;cursor:pointer;letter-spacing:.06em;font-family:var(--font-m);}
+  .dash-standings .show-more-btn:hover{color:var(--cream);}
+  /* Augusta leaderboard in dash */
+  .dash-augusta{width:100%;border-collapse:collapse;}
+  .dash-augusta tr{border-bottom:1px solid var(--border);}
+  .dash-augusta tr:last-child{border-bottom:none;}
+  .dash-augusta td{padding:7px 4px;font-size:13px;color:var(--text);}
+  .dash-augusta td.pos{width:28px;color:var(--muted);font-family:var(--font-m);font-size:11px;text-align:center;}
+  .dash-augusta td.name{font-weight:600;color:var(--cream);}
+  .dash-augusta td.score{text-align:right;font-family:var(--font-m);font-size:13px;}
+  .dash-augusta td.today{text-align:right;font-size:11px;color:var(--muted);font-family:var(--font-m);}
+  .dash-augusta td.thru{text-align:right;font-size:11px;color:var(--muted);font-family:var(--font-m);width:36px;}
+  /* My picks in dash */
+  .dash-picks-row{display:flex;align-items:baseline;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);gap:8px;}
+  .dash-picks-row:last-child{border-bottom:none;}
+  .dash-picks-left{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0;}
+  .dash-picks-tier{font-family:var(--font-m);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);flex-shrink:0;width:22px;}
+  .dash-picks-player{font-size:13px;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .dash-picks-scores{display:flex;gap:8px;flex-shrink:0;}
+  .dash-picks-score{font-family:var(--font-m);font-size:12px;color:var(--muted);min-width:26px;text-align:right;}
+  .dash-picks-score.neg{color:var(--good);}
+  .dash-picks-score.pos{color:var(--bad);}
+  .dash-picks-score.bold{color:var(--cream);font-weight:700;}
+  .dash-picks-hdrs{display:flex;justify-content:flex-end;gap:8px;padding:0 0 4px;border-bottom:1px solid var(--border);margin-bottom:2px;}
+  .dash-picks-hdr{font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);min-width:26px;text-align:right;}
+  .dash-prompt{padding:32px 16px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6;}
+  .dash-prompt strong{color:var(--gold);display:block;font-size:16px;margin-bottom:6px;}
+  @media(max-width:640px){
+    .dash-grid{grid-template-columns:1fr;}
+  }
+  /* Collapsed standings rows */
+  .dash-standings .hidden-row{display:none;}
+  .dash-standings.expanded .hidden-row{display:table-row;}
+  .dash-augusta .hidden-row{display:none;}
+  .dash-augusta.expanded .hidden-row{display:table-row;}
+
+  /* Collapsible picks */
+  .picks-team-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;gap:8px;}
+  .picks-team-head:hover .picks-chevron{opacity:1;}
+  .picks-chevron{font-size:14px;color:var(--gold);opacity:0.6;transition:transform 0.25s ease,opacity 0.2s;flex-shrink:0;line-height:1;}
+  .picks-chevron.open{transform:rotate(180deg);}
+  .picks-body{overflow:hidden;transition:max-height 0.3s ease,opacity 0.25s ease;max-height:0;opacity:0;}
+  .picks-body.open{max-height:1200px;opacity:1;}
+  .picks-tiebreaker{font-size:12px;color:var(--muted);margin:6px 0 10px;}
   .picks-table-wrap table{min-width:580px;}
   /* THRU column needs extra width to accommodate tee times like "1:44 PM" */
   .picks-table-wrap td.right.small, .picks-table-wrap th.right:last-child{min-width:72px;white-space:nowrap;}
@@ -224,6 +310,7 @@
   </div>
   <p class="pool-title">2026 Pool · Augusta National</p>
   <nav class="site-nav">
+  <button class="tab" data-tab="dashboard">My Dashboard</button>
   <button class="tab active" data-tab="leaderboard">Leaderboard</button>
   <button class="tab" data-tab="picks">Picks</button>
   <button class="tab" data-tab="prizes">Prizes</button>
@@ -240,6 +327,10 @@
   <button class="refresh-btn" onclick="loadAll()">↻ Refresh</button>
 </div>
 <main>
+  <section class="panel" id="dashboard-panel">
+    <div id="dashboard"></div>
+  </section>
+
   <section class="panel active" id="leaderboard-panel">
     <div id="leaderboard-banner"></div>
     <div id="leaderboard"></div>
@@ -402,15 +493,128 @@ function formatBoardDate(value){
 function buildLeaderboardBanner(raw){
   const root = document.getElementById('leaderboard-banner');
   const msg = extractBoardBanner(raw);
-  if(!msg){ root.innerHTML = ''; return; }
-  const safe = msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  root.innerHTML = `
-    <div class="ticker-wrap">
-      <div class="ticker-track">
-        <span class="ticker-label">Commissioner Note</span>
-        <div class="ticker-text">${safe}</div>
-      </div>
-    </div>`;
+
+  // Commissioner note (if present)
+  let commNote = '';
+  if(msg){
+    const safe = msg.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    commNote = `<div class="ticker-wrap"><div class="ticker-track"><span class="ticker-label">Commissioner Note</span><div class="ticker-text">${safe}</div></div></div>`;
+  }
+
+  // Carousel will be injected after leaderboard rows are ready (see init)
+  root.innerHTML = commNote;
+  root._commNote = commNote;
+}
+
+function fmtScoreC(v){ if(v===null||v===undefined||v===''||String(v).includes('#')) return '—'; const n=Number(v); if(!Number.isFinite(n)) return '—'; if(n===0) return 'E'; return n>0?`+${n}`:`${n}`; }
+
+function buildStatCarousel(){
+  if(!leaderboardRows || !leaderboardRows.length) return '';
+  const rows = leaderboardRows;
+  const total = rows.length;
+  const items = [];
+
+  // Detect current round
+  const roundKeys = ['r1','r2','r3','r4'];
+  const roundLabels = ['Round 1','Round 2','Round 3','Round 4'];
+  let curRoundKey = null, curRoundLabel = '';
+  for(const rk of roundKeys){
+    const filled = rows.filter(r => r[rk]!==''&&r[rk]!==null&&r[rk]!==undefined&&Number.isFinite(Number(r[rk]))).length;
+    if(filled >= Math.ceil(rows.length/2)){ curRoundKey=rk; curRoundLabel=roundLabels[roundKeys.indexOf(rk)]; }
+  }
+
+  // 🏆 Leader
+  const leaders = rows.filter(r=>r.place===1);
+  if(leaders.length===1){
+    const ld=leaders[0]; const sc=fmtScoreC(ld.total); const n=Number(ld.total);
+    const quips=[`Sitting pretty at ${sc}. Don't get comfortable.`,`${sc} through Augusta. The rest are watching.`,`Out front at ${sc}. Someone call Amen Corner.`];
+    items.push({emoji:'🏆',tag:'Leader',name:ld.team,score:sc,cls:n<0?'up':n>0?'down':'',sub:quips[Math.floor(Date.now()/30000)%quips.length]});
+  } else if(leaders.length>1){
+    const sc=fmtScoreC(leaders[0].total); const n=Number(leaders[0].total);
+    const names=leaders.slice(0,2).map(r=>{ const p=r.team.split(','); return p.length>=2?p[1].trim():r.team; }).join(' & ');
+    items.push({emoji:'🏆',tag:'Tied for Lead',name:names,score:sc,cls:n<0?'up':n>0?'down':'',sub:`Deadlocked at ${sc}. Augusta will sort it out.`});
+  }
+
+  // 📈 On the Move
+  const moversUp=rows.filter(r=>r.chgVal>0).sort((a,b)=>b.chgVal-a.chgVal);
+  if(moversUp.length){
+    const m=moversUp[0];
+    const quips=[`Up ${m.chgVal} today. The field is starting to sweat.`,`${m.chgVal} spots gained. Somebody's players showed up.`,`Climbing fast — up ${m.chgVal}. Watch this one.`];
+    items.push({emoji:'📈',tag:'On the Move',name:m.team,score:`↑${m.chgVal}`,cls:'up',sub:quips[Math.floor(Date.now()/30000)%quips.length]});
+  }
+
+  // 📉 Going Backwards
+  const moversDown=rows.filter(r=>r.chgVal<0).sort((a,b)=>a.chgVal-b.chgVal);
+  if(moversDown.length){
+    const m=moversDown[0]; const abs=Math.abs(m.chgVal);
+    const quips=[`Down ${abs} today. The greens are not their friend.`,`${abs} spots lost and still going. This is fine. 🔥`,`Sliding ${abs} places. Someone's players are taking a stroll.`];
+    items.push({emoji:'📉',tag:'Going Backwards',name:m.team,score:`↓${abs}`,cls:'down',sub:quips[Math.floor(Date.now()/30000)%quips.length]});
+  }
+
+  // 🪣 Sacko
+  const last=rows[rows.length-1];
+  if(last&&last.place===total){
+    const gap=Number(last.total)-Number(rows[0].total);
+    const gapStr=Number.isFinite(gap)&&gap>0?`+${gap} back`:'';
+    const quips=[`Dead last${gapStr?', '+gapStr:''}. Long walk back to the clubhouse.`,`${total} of ${total}. Augusta is a tough place${gapStr?` to be ${gapStr}`:''}. `,`Bringing up the rear${gapStr?` at ${gapStr}`:''}.  The 19th hole awaits.`];
+    items.push({emoji:'🪣',tag:'Sacko',name:last.team,score:`${last.place} of ${total}`,cls:'down',sub:quips[Math.floor(Date.now()/30000)%quips.length]});
+  }
+
+  // 😬 Rough Day
+  if(curRoundKey){
+    const valid=rows.filter(r=>Number.isFinite(Number(r[curRoundKey])));
+    if(valid.length){
+      const worst=valid.slice().sort((a,b)=>Number(b[curRoundKey])-Number(a[curRoundKey]))[0];
+      const rn=Number(worst[curRoundKey]);
+      const quips=[`${fmtScoreC(rn)} in ${curRoundLabel}. Some days Augusta wins.`,`Carded a ${fmtScoreC(rn)}. The azaleas were not impressed.`,`${fmtScoreC(rn)} on the day. That's a tough one to sleep on.`];
+      items.push({emoji:'😬',tag:'Rough Day',name:worst.team,score:fmtScoreC(rn),cls:rn>2?'down':'',sub:quips[Math.floor(Date.now()/30000)%quips.length]});
+    }
+  }
+
+  if(!items.length) return '';
+
+  // Format name: "Last, First" → "First Last"
+  function fmt(raw){ const p=String(raw||'').split(','); return p.length>=2?`${p[1].trim()} ${p[0].trim()}`:String(raw||''); }
+
+  const itemsHtml = items.map((it,i)=>`
+    <div class="stat-carousel-item${i===0?' active':''}" id="sci-${i}">
+      <span class="stat-c-emoji">${it.emoji}</span>
+      <span class="stat-c-tag">${it.tag}</span>
+      <span class="stat-c-name">${fmt(it.name)}</span>
+      <span class="stat-c-score ${it.cls}">${it.score}</span>
+      <span class="stat-c-sub">${it.sub}</span>
+    </div>`).join('');
+
+  const pipsHtml = items.map((_,i)=>`<div class="stat-c-pip${i===0?' active':''}" id="scp-${i}" onclick="goToStatCard(${i})"></div>`).join('');
+
+  return `<div class="stat-carousel">
+    <span class="stat-carousel-dot"></span>
+    <span class="stat-carousel-label">Live</span>
+    <span class="stat-carousel-divider"></span>
+    <div class="stat-carousel-items" id="stat-carousel-items">${itemsHtml}</div>
+    <div class="stat-carousel-pips">${pipsHtml}</div>
+  </div>`;
+}
+
+let scIdx=0, scTimer=null, scTotal=0;
+function goToStatCard(idx){
+  const prev=document.getElementById('sci-'+scIdx);
+  const prevP=document.getElementById('scp-'+scIdx);
+  if(prev) prev.classList.remove('active');
+  if(prevP) prevP.classList.remove('active');
+  scIdx=idx;
+  const next=document.getElementById('sci-'+scIdx);
+  const nextP=document.getElementById('scp-'+scIdx);
+  if(next) next.classList.add('active');
+  if(nextP) nextP.classList.add('active');
+}
+function startStatCarousel(){
+  const wrap=document.getElementById('stat-carousel-items');
+  if(!wrap) return;
+  scTotal=wrap.querySelectorAll('.stat-carousel-item').length;
+  if(scTotal<2) return;
+  if(scTimer) clearInterval(scTimer);
+  scTimer=setInterval(()=>goToStatCard((scIdx+1)%scTotal), 4500);
 }
 
 function buildLeaderboard(raw){
@@ -512,16 +716,30 @@ function renderPicksForTeam(teamName){
         </div>`).join('')}
     </div>`;
 
+  const safeId = 'picks-' + teamName.replace(/[^a-zA-Z0-9]/g,'_');
   return `
     <div class="card">
-      <div class="picks-team-head">
-        <span class="picks-team-name">${displayName}</span>
-        ${meta ? `<span class="picks-team-meta">${meta}</span>` : ''}
+      <div class="picks-team-head" onclick="togglePicks('${safeId}')" role="button" aria-expanded="false">
+        <div style="display:flex;align-items:baseline;gap:10px;flex:1;min-width:0;">
+          <span class="picks-team-name">${displayName}</span>
+          ${meta ? `<span class="picks-team-meta">${meta}</span>` : ''}
+        </div>
+        <span class="picks-chevron" id="chev-${safeId}">▼</span>
       </div>
-      <div class="picks-tiebreaker">Tiebreaker: <strong>${clean(tiebreaker) || '—'}</strong></div>
-      ${tableHtml}
-      ${cardHtml}
+      <div class="picks-body" id="${safeId}">
+        <div class="picks-tiebreaker">Tiebreaker: <strong>${clean(tiebreaker) || '—'}</strong></div>
+        ${tableHtml}
+        ${cardHtml}
+      </div>
     </div>`;
+}
+
+function togglePicks(id){
+  const body = document.getElementById(id);
+  const chev = document.getElementById('chev-' + id);
+  if(!body) return;
+  const isOpen = body.classList.toggle('open');
+  if(chev) chev.classList.toggle('open', isOpen);
 }
 
 function buildPicks(){
@@ -691,9 +909,16 @@ async function init(){
   try{
     const [scoreData, purseData, boardData] = await Promise.all([fetchSheet(LIVE_SHEET), fetchSheet(PURSE_SHEET), fetchSheet(BOARD_SHEET)]);
     allScoreRows = scoreData;
+    window._rawScoreData = scoreData;
     buildLeaderboardBanner(boardData);
     buildLeaderboard(scoreData);
+    // Now leaderboardRows is populated — build and inject the stat carousel
+    const carouselHtml = buildStatCarousel();
+    const bannerRoot = document.getElementById('leaderboard-banner');
+    if(bannerRoot) bannerRoot.innerHTML = carouselHtml + (bannerRoot._commNote || '');
+    startStatCarousel();
     buildPicks();
+    buildDashboard();
     buildPrizes(purseData);
     buildBoard(boardData);
     document.getElementById('status').textContent = `Loaded ${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
@@ -714,6 +939,273 @@ function loadAll(){ init(); }
 document.getElementById('chat-tab-btn').addEventListener('click', () => {
   window.location.href = 'masters-chat.html';
 });
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────────
+let dashTeam = localStorage.getItem('dashTeam') || '';
+let tournamentData = null;
+
+function scoreClassD(v){ const n=Number(v); if(!Number.isFinite(n)||n===0) return ''; return n<0?'neg':'pos'; }
+function fmtScoreD(v){ if(v===null||v===undefined||v===''||String(v).includes('#')) return '—'; const n=Number(v); if(!Number.isFinite(n)) return '—'; if(n===0) return 'E'; return n>0?`+${n}`:`${n}`; }
+function nameDisplay(raw){ const p=String(raw||'').split(','); return p.length>=2?`${p[1].trim()} ${p[0].trim()}`:String(raw||''); }
+
+async function loadTournament(){
+  if(tournamentData) return tournamentData;
+  try {
+    const raw = await fetchSheet('Tournament');
+    tournamentData = raw;
+    return raw;
+  } catch(e){ return null; }
+}
+
+function buildDashboard(){
+  const root = document.getElementById('dashboard');
+  if(!root) return;
+
+  // Team selector
+  const teamOptions = leaderboardRows.map(r => {
+    const n = nameDisplay(r.team);
+    return `<option value="${r.team.replace(/"/g,'&quot;')}"${r.team===dashTeam?' selected':''}>${n}</option>`;
+  }).join('');
+
+  root.innerHTML = `
+    <div class="dash-selector-wrap">
+      <span class="dash-selector-label">⛳ Select Your Team</span>
+      <select class="dash-team-select" id="dash-select" onchange="onDashTeamChange(this.value)">
+        <option value="">— Choose your team —</option>
+        ${teamOptions}
+      </select>
+    </div>
+    <div id="dash-content"></div>`;
+
+  if(dashTeam) renderDashContent(dashTeam);
+  else document.getElementById('dash-content').innerHTML =
+    '<div class="dash-prompt"><strong>Welcome to Your Dashboard</strong>Pick your team above to see your standings, picks, and how Augusta is playing out.</div>';
+}
+
+function onDashTeamChange(val){
+  dashTeam = val;
+  localStorage.setItem('dashTeam', val);
+  if(val) renderDashContent(val);
+  else document.getElementById('dash-content').innerHTML =
+    '<div class="dash-prompt"><strong>Welcome to Your Dashboard</strong>Pick your team above to see your standings, picks, and how Augusta is playing out.</div>';
+}
+
+async function renderDashContent(teamName){
+  const dc = document.getElementById('dash-content');
+  if(!dc) return;
+  dc.innerHTML = '<div class="dash-prompt" style="padding:20px"><span style="color:var(--gold)">Loading…</span></div>';
+
+  const myRow = leaderboardRows.find(r => r.team === teamName);
+  const myPlace = myRow ? myRow.place : null;
+  const myScore = myRow ? fmtScoreD(myRow.total) : '—';
+
+  // Pool standings — show window around my position
+  const poolHtml = buildPoolStandings(teamName, myPlace);
+
+  // My picks
+  const picksHtml = buildDashPicks(teamName, myRow);
+
+  // Augusta top 5 (async)
+  const augHtml = await buildAugustaPanel();
+
+  dc.innerHTML = `
+    <div class="dash-grid">
+      <div class="dash-col-left">
+        ${picksHtml}
+      </div>
+      <div class="dash-col-right">
+        <div class="dash-card">
+          <div class="dash-card-head">
+            <span class="dash-card-title">🏆 Pool Standings</span>
+            <span class="dash-card-meta">${myPlace ? `You're #${myPlace} · ${myScore}` : ''}</span>
+          </div>
+          <div class="dash-card-body" style="padding:0">
+            ${poolHtml}
+          </div>
+        </div>
+        ${augHtml}
+      </div>
+    </div>`;
+}
+
+function buildPoolStandings(teamName, myPlace){
+  const rows = leaderboardRows;
+  const total = rows.length;
+  const TOP_N = 5;
+
+  // Always show top 5; also show ±2 around my position if outside top 5
+  const alwaysShow = new Set();
+  for(let i=0;i<Math.min(TOP_N,total);i++) alwaysShow.add(i);
+  if(myPlace){
+    const myIdx = rows.findIndex(r=>r.team===teamName);
+    for(let i=Math.max(0,myIdx-2);i<=Math.min(total-1,myIdx+2);i++) alwaysShow.add(i);
+  }
+
+  let html = '<table class="dash-standings" id="dash-standings-table"><tbody>';
+  let hiddenCount = 0;
+
+  rows.forEach((r, i) => {
+    const isMe = r.team === teamName;
+    const show = alwaysShow.has(i);
+    const hidden = !show ? ' hidden-row' : '';
+    if(!show) hiddenCount++;
+    const chgParsed = parseChg(r.chg);
+    html += `<tr class="${isMe?'my-row':''}${hidden}">
+      <td>${r.place}</td>
+      <td class="name">${nameDisplay(r.team)}${isMe?' 👈':''}</td>
+      <td class="score ${scoreClassD(r.total)}">${fmtScoreD(r.total)}</td>
+      <td class="chg">${chgParsed.html}</td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+
+  if(hiddenCount > 0){
+    html += `<button class="show-more-btn" id="dash-show-more" onclick="toggleFullStandings()">Show all ${total} teams ▼</button>`;
+  }
+  return html;
+}
+
+function toggleFullStandings(){
+  const tbl = document.getElementById('dash-standings-table');
+  const btn = document.getElementById('dash-show-more');
+  if(!tbl||!btn) return;
+  const expanded = tbl.classList.toggle('expanded');
+  btn.textContent = expanded ? 'Show less ▲' : `Show all ${leaderboardRows.length} teams ▼`;
+}
+
+function buildDashPicks(teamName, myRow){
+  // Find picks from raw sheet data — reuse same logic as renderPicksForTeam
+  if(!window._rawScoreData) return '<div class="dash-card"><div class="dash-card-body"><span style="color:var(--muted);font-size:13px">Picks loading…</span></div></div>';
+
+  const raw = window._rawScoreData;
+  // Use same anchor logic as renderPicksForTeam: find row where col[4]=teamName and col[10]='TIEBREAKER TOTAL ='
+  const normalized = teamName;
+  let start = -1;
+  for(let i=0; i<raw.length; i++){
+    if(clean(raw[i][4])===normalized && clean(raw[i][10])==='TIEBREAKER TOTAL ='){ start=i; break; }
+  }
+  if(start===-1) return '';
+  const tiebreaker = raw[start][11];
+  const picks = [];
+  for(let i=start+2; i<Math.min(start+11, raw.length); i++){
+    const r=raw[i];
+    const tier=clean(r[4]), player=clean(r[5]);
+    if(!tier.startsWith('Tier') || !player) continue;
+    picks.push({tier, player, r1:r[7], r2:r[8], r3:r[9], r4:r[10], total:r[11], thru:clean(r[12]||'')});
+  }
+
+  if(!picks.length) return '';
+
+  const {last, first} = parseName(teamName);
+  const displayName = first ? `${first} ${last}` : last;
+  const meta = myRow ? `#${myRow.place} · ${fmtScoreD(myRow.total)}` : '';
+
+  const rows = picks.map(p => `
+    <div class="dash-picks-row">
+      <div class="dash-picks-left">
+        <span class="dash-picks-tier">T${p.tier.replace(/\D/g,'')}</span>
+        <span class="dash-picks-player">${p.player}</span>
+      </div>
+      <div class="dash-picks-scores">
+        <span class="dash-picks-score ${scoreClassD(p.r1)}">${fmtScoreD(p.r1)}</span>
+        <span class="dash-picks-score ${scoreClassD(p.r2)}">${fmtScoreD(p.r2)}</span>
+        <span class="dash-picks-score ${scoreClassD(p.r3)}">${fmtScoreD(p.r3)}</span>
+        <span class="dash-picks-score ${scoreClassD(p.r4)}">${fmtScoreD(p.r4)}</span>
+        <span class="dash-picks-score bold ${scoreClassD(p.total)}">${fmtScoreD(p.total)}</span>
+      </div>
+    </div>`).join('');
+
+  return `<div class="dash-card">
+    <div class="dash-card-head">
+      <span class="dash-card-title">🎯 ${displayName}'s Picks</span>
+      <span class="dash-card-meta">${meta}</span>
+    </div>
+    <div class="dash-card-body">
+      <div class="dash-picks-hdrs">
+        <span class="dash-picks-hdr">R1</span>
+        <span class="dash-picks-hdr">R2</span>
+        <span class="dash-picks-hdr">R3</span>
+        <span class="dash-picks-hdr">R4</span>
+        <span class="dash-picks-hdr">TOT</span>
+      </div>
+      ${rows}
+    </div>
+  </div>`;
+}
+
+async function buildAugustaPanel(){
+  const raw = await loadTournament();
+  if(!raw || !raw.length) return '';
+
+  // Header is row 4 (index 3), Player in col B (index 1)
+  // Columns: B=Player, C=Score, D=Today, E=Thru, F=R1, G=R2, H=R3, I=R4, J=Total Score
+  const hIdx = raw.findIndex(r => String(r[1]||'').trim().toLowerCase() === 'player');
+  if(hIdx === -1) return '';
+
+  const players = [];
+  for(let i = hIdx+1; i < raw.length; i++){
+    const r = raw[i];
+    const name = clean(r[1]||'');  // col B
+    if(!name) continue;
+    players.push({
+      name,
+      score: r[2],           // col C = Score (total to par)
+      today: r[3],           // col D = Today
+      thru:  clean(r[4]||''), // col E = Thru
+      r1:r[5], r2:r[6], r3:r[7], r4:r[8]  // F-I
+    });
+  }
+  if(!players.length) return '';
+
+  const top5 = players.slice(0,5);
+  const rest = players.slice(5,15); // show up to 15 in "show more"
+
+  const rowHtml = (p, idx, hidden) => `
+    <tr${hidden?' class="hidden-row"':''}>
+      <td class="pos">${idx+1}</td>
+      <td class="name">${p.name}</td>
+      <td class="score ${scoreClassD(p.score)}">${fmtScoreD(p.score)}</td>
+      <td class="today ${scoreClassD(p.today)}">${fmtScoreD(p.today)}</td>
+      <td class="thru">${p.thru||'—'}</td>
+    </tr>`;
+
+  let tableHtml = `<table class="dash-augusta" id="dash-aug-table">
+    <thead><tr>
+      <td class="pos"></td>
+      <td class="name" style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding-bottom:6px;">Player</td>
+      <td class="score" style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding-bottom:6px;">Tot</td>
+      <td class="today" style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding-bottom:6px;">Today</td>
+      <td class="thru" style="font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding-bottom:6px;">Thru</td>
+    </tr></thead>
+    <tbody>`;
+  top5.forEach((p,i) => tableHtml += rowHtml(p, i, false));
+  rest.forEach((p,i) => tableHtml += rowHtml(p, i+5, true));
+  tableHtml += '</tbody></table>';
+
+  const showMoreBtn = rest.length ? `<button class="show-more-btn" id="aug-show-more" onclick="toggleAugusta()">Show top 15 ▼</button>` : '';
+
+  return `<div class="dash-card">
+    <div class="dash-card-head">
+      <span class="dash-card-title">⛳ Augusta Top 5</span>
+      <span class="dash-card-meta">Tournament leaderboard</span>
+    </div>
+    <div class="dash-card-body" style="padding:0">
+      ${tableHtml}
+      ${showMoreBtn}
+    </div>
+  </div>`;
+}
+
+function toggleAugusta(){
+  const tbl = document.getElementById('dash-aug-table');
+  const btn = document.getElementById('aug-show-more');
+  if(!tbl||!btn) return;
+  const expanded = tbl.classList.toggle('expanded');
+  btn.textContent = expanded ? 'Show less ▲' : 'Show top 15 ▼';
+}
+
+// ── END DASHBOARD ──────────────────────────────────────────────────────────
 
 document.querySelectorAll('button.tab[data-tab]').forEach(btn => btn.addEventListener('click', () => {
   document.querySelectorAll('button.tab').forEach(b => b.classList.remove('active'));
