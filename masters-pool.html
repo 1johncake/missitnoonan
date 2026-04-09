@@ -265,7 +265,7 @@
         </div>
         <div class="rule-item">
           <h3>Prizes</h3>
-          <p>Overall 1st, 2nd, and 3rd place paid out. Daily low-score prize each round. Payouts scale with number of entries — see Prizes tab for amounts.</p>
+          <p>Overall 1st, 2nd, 3rd and 4th place paid out. Daily low team score prize awarded for each round. Payouts scale with number of entries — see Prizes tab for amounts.</p>
         </div>
         <div class="rule-item">
           <h3>Buy-In &amp; Deadline</h3>
@@ -273,7 +273,7 @@
         </div>
         <div class="rule-item">
           <h3>Tiebreakers</h3>
-          <p>In the event there is a tie for first place, there will be a tiebreaker to determine first and second place. First tiebreaker is closest total score to actual winner before playoffs — can be high or low. Second tiebreaker is to match lowest score of best team player. Third is matching second-lowest score of player on team, and on until the tie is broken. If somehow that doesn&rsquo;t work, we&rsquo;ll split the prize or have a chip-off or something.</p>
+          <p>In the event there is a tie for first place, there will be a tiebreaker to determine first and second place. First tiebreaker is closest total score to actual winner before playoffs — can be high or low. Second tiebreaker is to match lowest score of best team player. Third is matching second-lowest score of player on team, and on until the tie is broken. If somehow that doesn&rsquo;t work, we&rsquo;ll split the prize or have a chip-off or something. Ties for 2nd, 3rd or 4th are allowed. If more than 4 players are tied, we will use the tiebreaker score to eliminate the number of players necessary to match the number of places; if still tied after the first tiebreaker, we will follow the same process above.</p>
         </div>
         <div class="rule-item">
           <h3>Tiebreaker &mdash; Daily</h3>
@@ -425,7 +425,7 @@ function renderPicksForTeam(teamName){
     const r=allScoreRows[i];
     const tier=clean(r[4]), player=clean(r[5]);
     if(!tier.startsWith('Tier') || !player) continue;
-    picks.push({tier, player, r1:r[7], r2:r[8], r3:r[9], r4:r[10], total:r[11]});
+    picks.push({tier, player, r1:r[7], r2:r[8], r3:r[9], r4:r[10], total:r[11], thru:clean(r[12])});
   }
 
   const {last, first} = parseName(teamName);
@@ -437,7 +437,7 @@ function renderPicksForTeam(teamName){
   const tableHtml = `
     <div class="picks-table-wrap">
       <table>
-        <thead><tr><th>Tier</th><th>Player</th><th class="right">R1</th><th class="right">R2</th><th class="right">R3</th><th class="right">R4</th><th class="right">Total</th></tr></thead>
+        <thead><tr><th>Tier</th><th>Player</th><th class="right">R1</th><th class="right">R2</th><th class="right">R3</th><th class="right">R4</th><th class="right">Total</th><th class="right">Thru</th></tr></thead>
         <tbody>${picks.map(p=>`<tr>
           <td class="small">${p.tier}</td>
           <td>${p.player}</td>
@@ -446,6 +446,7 @@ function renderPicksForTeam(teamName){
           <td class="right ${scoreClass(p.r3)}">${fmtScore(p.r3)}</td>
           <td class="right ${scoreClass(p.r4)}">${fmtScore(p.r4)}</td>
           <td class="right ${scoreClass(p.total)}"><strong>${fmtScore(p.total)}</strong></td>
+          <td class="right small">${p.thru || '—'}</td>
         </tr>`).join('')}</tbody>
       </table>
     </div>`;
@@ -459,6 +460,7 @@ function renderPicksForTeam(teamName){
         <span class="pick-score-hdr">R3</span>
         <span class="pick-score-hdr">R4</span>
         <span class="pick-score-hdr">TOT</span>
+        <span class="pick-score-hdr">THRU</span>
       </div>
       ${picks.map(p=>`
         <div class="pick-card-row">
@@ -472,6 +474,7 @@ function renderPicksForTeam(teamName){
             <span class="pick-card-score ${scoreCardClass(p.r3)}">${fmtScore(p.r3)}</span>
             <span class="pick-card-score ${scoreCardClass(p.r4)}">${fmtScore(p.r4)}</span>
             <span class="pick-card-score ${scoreCardClass(p.total)}">${fmtScore(p.total)}</span>
+            <span class="pick-card-score">${p.thru || '—'}</span>
           </div>
         </div>`).join('')}
     </div>`;
@@ -618,8 +621,8 @@ function buildPrizes(raw){
     }
   }
 
-  const overallPayouts = payouts.filter(p => /^(first|second|third|fourth)$/i.test(p.label));
-  const dailyPayouts = payouts.filter(p => !/^(first|second|third|fourth)$/i.test(p.label));
+  const overallPayouts = payouts.filter(p => /^(first|second|third)$/i.test(p.label));
+  const dailyPayouts = payouts.filter(p => !/^(first|second|third)$/i.test(p.label));
   const totalDue = totalIdx !== -1 ? money(raw[totalIdx][2]) : '—';
   const totalPaid = totalIdx !== -1 ? money(raw[totalIdx][3]) : '—';
   const note = noteIdx !== -1 ? clean(raw[noteIdx][1]).replace(/^Note:\s*/i,'') : '';
@@ -637,7 +640,7 @@ function buildPrizes(raw){
   root.innerHTML = `
     <div class="card"><h2>Prizes & Participants</h2></div>
     ${overallPayouts.length ? `<div class="card"><h3>Overall Payouts</h3>${renderPrizeGrid(overallPayouts)}</div>` : ''}
-    ${dailyPayouts.length ? `<div class="card"><h3>Other Prizes</h3>${renderPrizeGrid(dailyPayouts)}</div>` : ''}
+    ${dailyPayouts.length ? `<div class="card"><h3>Daily Low Scores</h3>${renderPrizeGrid(dailyPayouts)}</div>` : ''}
     ${!payouts.length ? `<div class="msg error">No payout data found.</div>` : ''}
     ${participants.length ? `
       <div class="card">
