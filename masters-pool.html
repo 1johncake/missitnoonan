@@ -305,22 +305,13 @@ function scoreClass(v){ if(v===null||v===undefined||v===''||String(v).includes('
 function fmtThru(v){
   if(!v || v==='—') return '—';
   const s = String(v).trim();
-  // Google Sheets serializes datetimes as Date(year,month,day,hour,minute,second)
-  // Month is zero-indexed. These hours are already in local (ET) time.
-  const gSheets = s.match(/^Date\((\d+),(\d+),(\d+),(\d+),(\d+),(\d+)\)$/);
-  if(gSheets){
-    let h = parseInt(gSheets[4], 10);
-    const m = String(parseInt(gSheets[5], 10)).padStart(2, '0');
-    const ampm = h >= 12 ? 'PM' : 'AM';
-    h = h % 12 || 12;
-    return `${h}:${m} ${ampm}`;
-  }
-  // ISO datetime strings — convert UTC to ET (EDT = UTC-4 in April)
+  // Apps Script serializes sheet times as ISO UTC strings anchored to 1899-12-30.
+  // The UTC hours are 8 ahead of ET (Apps Script timezone offset), so subtract 8.
   const iso = s.match(/T(\d{2}):(\d{2})/);
   if(iso){
     const dt = new Date(s);
     if(!isNaN(dt)){
-      const etMs = dt.getTime() + (-4 * 60 * 60 * 1000);
+      const etMs = dt.getTime() + (-8 * 60 * 60 * 1000);
       const etDate = new Date(etMs);
       let h = etDate.getUTCHours();
       const m = String(etDate.getUTCMinutes()).padStart(2, '0');
