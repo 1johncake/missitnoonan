@@ -288,7 +288,7 @@
     .live-board-content {
       flex: 1;
       position: relative;
-      height: 1.4em;
+      height: 2.6em;
       overflow: hidden;
     }
 
@@ -593,6 +593,32 @@
       flex-shrink: 0;
     }
 
+    .live-strip-track {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      position: relative;
+      height: 1.3em;
+    }
+    .live-strip-item {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .live-strip-item.active { opacity: 1; }
+    .live-strip-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: .08em; color: rgba(201,168,76,0.8); font-weight: 700; flex-shrink: 0; }
+    .live-strip-name { font-weight: 700; color: #fff; }
+    .live-strip-score { font-size: 0.8rem; }
+    .live-strip-score.neg { color: #6dcc8a; }
+    .live-strip-score.pos { color: #e06c75; }
+    .live-strip-score.up { color: #6dcc8a; }
+    .live-strip-score.down { color: #e06c75; }
     .live-text {
       font-family: 'Courier Prime', monospace;
       font-size: 0.75rem; color: #f4efe5;
@@ -660,8 +686,9 @@
             <p class="card-desc">Submit your 9 picks before Wednesday. Best four rounds count each day — Augusta starts April 9.</p>
             <div class="live-strip">
               <span class="live-dot"></span>
-              <span class="live-label">Leader</span>
-              <span class="live-text" id="live-leader">Fetching…</span>
+              <div class="live-strip-track" id="live-strip-track">
+                <span class="live-text" id="live-leader">Fetching…</span>
+              </div>
             </div>
             <div class="card-footer" style="flex-direction:column;align-items:flex-start;">
               <div class="card-btns">
@@ -780,18 +807,37 @@
       boardIdx = 0;
       if (boardTimer) clearInterval(boardTimer);
       if (items.length > 1) boardTimer = setInterval(nextStat, 4000);
+
+      // Also populate the rotating card strip
+      const track = document.getElementById('live-strip-track');
+      if (track) {
+        const scoreClassFor = (item) => item.scoreNeg ? 'neg' : item.scorePos ? 'pos' : item.scoreUp ? 'up' : item.scoreDown ? 'down' : '';
+        track.innerHTML = items.map((item, i) => {
+          const nameStr = item.name.first ? `${item.name.first} ${item.name.last}` : item.name.last;
+          const sc = scoreClassFor(item);
+          return `<div class="live-strip-item${i===0?' active':''}" id="strip-${i}">
+            <span class="live-strip-tag">${item.emoji} ${item.label}</span>
+            <span class="live-strip-name">${nameStr}</span>
+            ${item.score ? `<span class="live-strip-score ${sc}">${item.score}</span>` : ''}
+          </div>`;
+        }).join('');
+      }
     }
 
     function goToStat(idx) {
       const prev = document.getElementById(`live-stat-${boardIdx}`);
       const prevPip = document.getElementById(`pip-${boardIdx}`);
+      const prevStrip = document.getElementById(`strip-${boardIdx}`);
       if (prev) prev.classList.remove('active');
       if (prevPip) prevPip.classList.remove('active');
+      if (prevStrip) prevStrip.classList.remove('active');
       boardIdx = idx;
       const next = document.getElementById(`live-stat-${boardIdx}`);
       const nextPip = document.getElementById(`pip-${boardIdx}`);
+      const nextStrip = document.getElementById(`strip-${boardIdx}`);
       if (next) next.classList.add('active');
       if (nextPip) nextPip.classList.add('active');
+      if (nextStrip) nextStrip.classList.add('active');
     }
 
     function nextStat() {
@@ -890,14 +936,16 @@
       }
 
       // ── 😬 Rough Day — detect current round by which is the last fully populated one ──
-      // Current round = rightmost column that has ANY data across any row.
+      // Current round = rightmost column where at least HALF the field has a score.
+      // "Any data" was too loose — a single stray 0 in R2 would flip it prematurely.
       const roundKeys = ['r1','r2','r3','r4'];
       const roundLabels = ['Round 1','Round 2','Round 3','Round 4'];
       let currentRoundKey = null;
       let currentRoundLabel = '';
+      const threshold = Math.ceil(rows.length / 2);
       for (const rk of roundKeys) {
-        const hasAny = rows.some(r => r[rk] !== '' && r[rk] !== null && r[rk] !== undefined && Number.isFinite(Number(r[rk])));
-        if (hasAny) { currentRoundKey = rk; currentRoundLabel = roundLabels[roundKeys.indexOf(rk)]; }
+        const filled = rows.filter(r => r[rk] !== '' && r[rk] !== null && r[rk] !== undefined && Number.isFinite(Number(r[rk]))).length;
+        if (filled >= threshold) { currentRoundKey = rk; currentRoundLabel = roundLabels[roundKeys.indexOf(rk)]; }
       }
       if (currentRoundKey) {
         const valid = rows.filter(r => Number.isFinite(Number(r[currentRoundKey])));
