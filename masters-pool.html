@@ -202,6 +202,8 @@
   .dash-picks-score.bold{color:var(--cream);font-weight:700;}
   .dash-picks-hdrs{display:flex;justify-content:flex-end;gap:8px;padding:0 0 4px;border-bottom:1px solid var(--border);margin-bottom:2px;}
   .dash-picks-hdr{font-family:var(--font-m);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);min-width:26px;text-align:right;}
+  .dash-picks-hdr.thru-hdr{min-width:52px;}
+  .dash-picks-score.thru-cell{min-width:52px;color:var(--muted);}
   .dash-prompt{padding:32px 16px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6;}
   .dash-prompt strong{color:var(--gold);display:block;font-size:16px;margin-bottom:6px;}
   @media(max-width:640px){
@@ -1113,6 +1115,7 @@ function buildDashPicks(teamName, myRow){
         <span class="dash-picks-score ${scoreClassD(p.r3)}">${fmtScoreD(p.r3)}</span>
         <span class="dash-picks-score ${scoreClassD(p.r4)}">${fmtScoreD(p.r4)}</span>
         <span class="dash-picks-score bold ${scoreClassD(p.total)}">${fmtScoreD(p.total)}</span>
+        <span class="dash-picks-score thru-cell">${fmtThru(p.thru)}</span>
       </div>
     </div>`).join('');
 
@@ -1128,6 +1131,7 @@ function buildDashPicks(teamName, myRow){
         <span class="dash-picks-hdr">R3</span>
         <span class="dash-picks-hdr">R4</span>
         <span class="dash-picks-hdr">TOT</span>
+        <span class="dash-picks-hdr thru-hdr">THRU</span>
       </div>
       ${rows}
     </div>
@@ -1167,7 +1171,7 @@ async function buildAugustaPanel(){
       <td class="name">${p.name}</td>
       <td class="score ${scoreClassD(p.score)}">${fmtScoreD(p.score)}</td>
       <td class="today ${scoreClassD(p.today)}">${fmtScoreD(p.today)}</td>
-      <td class="thru">${p.thru||'—'}</td>
+      <td class="thru">${fmtThru(p.thru)}</td>
     </tr>`;
 
   let tableHtml = `<table class="dash-augusta" id="dash-aug-table">
