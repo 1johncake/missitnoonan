@@ -519,10 +519,12 @@ function buildStatCarousel(){
   // Detect current round
   const roundKeys = ['r1','r2','r3','r4'];
   const roundLabels = ['Round 1','Round 2','Round 3','Round 4'];
+  // Current round = rightmost column that has ANY data across any row.
+  // This matches John's workflow: scores are hardcoded after each round completes.
   let curRoundKey = null, curRoundLabel = '';
   for(const rk of roundKeys){
-    const filled = rows.filter(r => r[rk]!==''&&r[rk]!==null&&r[rk]!==undefined&&Number.isFinite(Number(r[rk]))).length;
-    if(filled >= Math.ceil(rows.length/2)){ curRoundKey=rk; curRoundLabel=roundLabels[roundKeys.indexOf(rk)]; }
+    const hasAny = rows.some(r => r[rk]!==''&&r[rk]!==null&&r[rk]!==undefined&&Number.isFinite(Number(r[rk])));
+    if(hasAny){ curRoundKey=rk; curRoundLabel=roundLabels[roundKeys.indexOf(rk)]; }
   }
 
   // 🏆 Leader

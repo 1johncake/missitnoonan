@@ -890,18 +890,14 @@
       }
 
       // ── 😬 Rough Day — detect current round by which is the last fully populated one ──
-      // John hardcodes scores after each round completes, so the current round
-      // is whichever is the last column where at least half the field has a score.
+      // Current round = rightmost column that has ANY data across any row.
       const roundKeys = ['r1','r2','r3','r4'];
       const roundLabels = ['Round 1','Round 2','Round 3','Round 4'];
       let currentRoundKey = null;
       let currentRoundLabel = '';
       for (const rk of roundKeys) {
-        const filled = rows.filter(r => r[rk] !== '' && r[rk] !== null && r[rk] !== undefined && Number.isFinite(Number(r[rk]))).length;
-        if (filled >= Math.ceil(rows.length / 2)) {
-          currentRoundKey = rk;
-          currentRoundLabel = roundLabels[roundKeys.indexOf(rk)];
-        }
+        const hasAny = rows.some(r => r[rk] !== '' && r[rk] !== null && r[rk] !== undefined && Number.isFinite(Number(r[rk])));
+        if (hasAny) { currentRoundKey = rk; currentRoundLabel = roundLabels[roundKeys.indexOf(rk)]; }
       }
       if (currentRoundKey) {
         const valid = rows.filter(r => Number.isFinite(Number(r[currentRoundKey])));
