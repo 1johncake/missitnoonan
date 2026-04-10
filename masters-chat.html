@@ -861,6 +861,14 @@ function listenMessages() {
 
     msgs.forEach(msg => renderMessage(msg));
     scrollToBottom();
+
+    // ── UNREAD BADGE: write latest message timestamp so masters-pool can detect new chat activity
+    const latest = msgs[msgs.length - 1];
+    if (latest?.ts) {
+      localStorage.setItem('chat_last_message_ts', latest.ts);
+    }
+    // Mark this visit so the badge clears on masters-pool if user came here directly
+    localStorage.setItem('chat_last_visited_ts', Date.now());
   });
 }
 

@@ -131,6 +131,8 @@
   button.tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--cream-muted);font-family:var(--font-m);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;cursor:pointer;transition:color .2s,border-color .2s;white-space:nowrap;}
   button.tab:hover{color:var(--cream);}
   button.tab.active{background:none;color:var(--gold);border-bottom-color:var(--gold);}
+  .chat-unread-dot{display:inline-block;width:7px;height:7px;background:#e05c5c;border-radius:50%;margin-left:5px;vertical-align:middle;animation:pulse-dot 1.8s ease-in-out infinite;}
+  @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.6;transform:scale(.75);}}
   .status-bar{position:relative;z-index:9;display:flex;align-items:center;justify-content:space-between;padding:9px 24px;background:rgba(0,0,0,.15);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px;}
   .status-dot{display:flex;align-items:center;gap:7px;font-family:var(--font-m);font-size:10px;letter-spacing:.12em;color:var(--cream-muted);text-transform:uppercase;}
   .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2.8s ease-in-out infinite;}
@@ -317,7 +319,7 @@
   <button class="tab" data-tab="picks">Picks</button>
   <button class="tab" data-tab="prizes">Prizes</button>
   <button class="tab" data-tab="board">Messages</button>
-  <button class="tab" id="chat-tab-btn">💬 Chat</button>
+  <button class="tab" id="chat-tab-btn">💬 Chat<span id="chat-unread-dot" class="chat-unread-dot" style="display:none;"></span></button>
   <button class="tab" data-tab="rules">Rules</button>
   </nav>
 </header>
@@ -946,8 +948,27 @@ function loadAll(){ init(); }
 
 // Chat tab — navigate to chat page
 document.getElementById('chat-tab-btn').addEventListener('click', () => {
+  // Clear the badge when user clicks through to chat
+  localStorage.setItem('chat_last_visited_ts', Date.now());
+  document.getElementById('chat-unread-dot').style.display = 'none';
   window.location.href = 'masters-chat.html';
 });
+
+// ── UNREAD CHAT BADGE ──────────────────────────────────────────────────────
+(function checkChatUnread() {
+  const lastMsg     = parseInt(localStorage.getItem('chat_last_message_ts') || '0', 10);
+  const lastVisited = parseInt(localStorage.getItem('chat_last_visited_ts') || '0', 10);
+  const dot = document.getElementById('chat-unread-dot');
+  if (lastMsg && lastMsg > lastVisited) {
+    dot.style.display = 'inline-block';
+  }
+  // Re-check every 30 seconds in case user has chat open in another tab
+  setInterval(() => {
+    const lm = parseInt(localStorage.getItem('chat_last_message_ts') || '0', 10);
+    const lv = parseInt(localStorage.getItem('chat_last_visited_ts') || '0', 10);
+    dot.style.display = (lm && lm > lv) ? 'inline-block' : 'none';
+  }, 30000);
+})();
 
 // ── DASHBOARD ──────────────────────────────────────────────────────────────
 let dashTeam = localStorage.getItem('dashTeam') || '';
