@@ -876,8 +876,8 @@ function buildPrizes(raw){
     }
   }
 
-  const overallPayouts = payouts.filter(p => /^(first|second|third)$/i.test(p.label));
-  const dailyPayouts = payouts.filter(p => !/^(first|second|third)$/i.test(p.label));
+  const overallPayouts = payouts.filter(p => /^(first|second|third|fourth)$/i.test(p.label));
+  const dailyPayouts = payouts.filter(p => !/^(first|second|third|fourth)$/i.test(p.label));
   const totalDue = totalIdx !== -1 ? money(raw[totalIdx][2]) : '—';
   const totalPaid = totalIdx !== -1 ? money(raw[totalIdx][3]) : '—';
   const note = noteIdx !== -1 ? clean(raw[noteIdx][1]).replace(/^Note:\s*/i,'') : '';
