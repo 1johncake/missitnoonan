@@ -936,16 +936,33 @@
       }
 
       // ── 😬 Rough Day — detect current round by which is the last fully populated one ──
-      // Current round = rightmost column where at least HALF the field has a score.
-      // "Any data" was too loose — a single stray 0 in R2 would flip it prematurely.
+      // Current round = rightmost column whose NEXT column is all E/empty.
+      // John pastes scores after each round — so the active round is the last one
+      // with real data, identifiable because the next column has nothing but E or blanks.
       const roundKeys = ['r1','r2','r3','r4'];
       const roundLabels = ['Round 1','Round 2','Round 3','Round 4'];
       let currentRoundKey = null;
       let currentRoundLabel = '';
-      const threshold = Math.ceil(rows.length / 2);
-      for (const rk of roundKeys) {
-        const filled = rows.filter(r => r[rk] !== '' && r[rk] !== null && r[rk] !== undefined && Number.isFinite(Number(r[rk]))).length;
-        if (filled >= threshold) { currentRoundKey = rk; currentRoundLabel = roundLabels[roundKeys.indexOf(rk)]; }
+      const isAllEmpty = (key) => rows.every(r => {
+        const v = r[key];
+        if (v === '' || v === null || v === undefined) return true;
+        const n = Number(v);
+        return !Number.isFinite(n) || n === 0; // 0 = E = even par = "empty" for detection
+      });
+      for (let i = 0; i < roundKeys.length; i++) {
+        const rk = roundKeys[i];
+        const nextRk = roundKeys[i + 1];
+        const hasData = rows.some(r => {
+          const v = r[rk];
+          return v !== '' && v !== null && v !== undefined && Number.isFinite(Number(v));
+        });
+        if (!hasData) break; // this column empty, stop
+        // This column has data — is the next one all empty/E?
+        if (!nextRk || isAllEmpty(nextRk)) {
+          currentRoundKey = rk;
+          currentRoundLabel = roundLabels[i];
+          break;
+        }
       }
       if (currentRoundKey) {
         const valid = rows.filter(r => Number.isFinite(Number(r[currentRoundKey])));

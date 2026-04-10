@@ -519,12 +519,17 @@ function buildStatCarousel(){
   // Detect current round
   const roundKeys = ['r1','r2','r3','r4'];
   const roundLabels = ['Round 1','Round 2','Round 3','Round 4'];
-  // Current round = rightmost column where at least HALF the field has a score.
+  // Current round = rightmost column whose next column is all E/empty.
   let curRoundKey = null, curRoundLabel = '';
-  const threshold = Math.ceil(rows.length / 2);
-  for(const rk of roundKeys){
-    const filled = rows.filter(r => r[rk]!==''&&r[rk]!==null&&r[rk]!==undefined&&Number.isFinite(Number(r[rk]))).length;
-    if(filled >= threshold){ curRoundKey=rk; curRoundLabel=roundLabels[roundKeys.indexOf(rk)]; }
+  const isAllEmpty = (key) => rows.every(r => {
+    const v = r[key]; if(v===''||v===null||v===undefined) return true;
+    const n=Number(v); return !Number.isFinite(n)||n===0;
+  });
+  for(let i=0; i<roundKeys.length; i++){
+    const rk=roundKeys[i], nextRk=roundKeys[i+1];
+    const hasData=rows.some(r=>{ const v=r[rk]; return v!==''&&v!==null&&v!==undefined&&Number.isFinite(Number(v)); });
+    if(!hasData) break;
+    if(!nextRk||isAllEmpty(nextRk)){ curRoundKey=rk; curRoundLabel=roundLabels[i]; break; }
   }
 
   // 🏆 Leader
