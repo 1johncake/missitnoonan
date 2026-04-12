@@ -1358,10 +1358,13 @@ window.initChatPreview = function() {
 
     const msgs = [];
     snap.forEach(child => msgs.push({ id: child.key, ...child.val() }));
-    const latest3 = msgs.slice(-PREVIEW_COUNT);
+
+    // Sort by timestamp ascending, take the 2 most recent
+    msgs.sort((a, b) => (a.ts || 0) - (b.ts || 0));
+    const latest2 = msgs.slice(-2);
 
     // Update unread badge
-    const latest = latest3[latest3.length - 1];
+    const latest = latest2[latest2.length - 1];
     if (latest?.ts) {
       localStorage.setItem('chat_last_message_ts', latest.ts);
       const lastVisited = parseInt(localStorage.getItem('chat_last_visited_ts') || '0', 10);
@@ -1369,9 +1372,10 @@ window.initChatPreview = function() {
       if (dot) dot.style.display = (latest.ts > lastVisited) ? 'inline-block' : 'none';
     }
 
-    if (metaEl) metaEl.textContent = `${latest3.length} recent`;
+    if (metaEl) metaEl.textContent = '';
 
-    previewEl.innerHTML = [...latest3].reverse().map(msg => {
+    // Display newest first
+    previewEl.innerHTML = [...latest2].reverse().map(msg => {
       const initials = (msg.name || '?').slice(0, 2).toUpperCase();
       const commishMark = msg.isCommish ? ' 🏆' : '';
       return `
