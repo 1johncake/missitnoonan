@@ -1291,27 +1291,15 @@ init();
 </script>
 
 <!-- Firebase: Chat preview on dashboard -->
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, onValue, off }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+<script>
+const FIREBASE_URL = 'https://missitnoonan-pool-chat-default-rtdb.firebaseio.com/messages.json?orderBy="ts"&limitToLast=5';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyB_ufpAv_kC204KEhCfI-qLD1KCz393AsY",
-  authDomain: "missitnoonan-pool-chat.firebaseapp.com",
-  databaseURL: "https://missitnoonan-pool-chat-default-rtdb.firebaseio.com",
-  projectId: "missitnoonan-pool-chat",
-  storageBucket: "missitnoonan-pool-chat.firebasestorage.app",
-  messagingSenderId: "599171295372",
-  appId: "1:599171295372:web:0a47828c9c90987ebdb3a9"
+window.goToChat = function() {
+  localStorage.setItem('chat_last_visited_ts', Date.now());
+  const dot = document.getElementById('chat-unread-dot');
+  if (dot) dot.style.display = 'none';
+  window.location.href = 'masters-chat.html';
 };
-
-const app = initializeApp(firebaseConfig, 'pool-preview');
-const db  = getDatabase(app);
-
-const PREVIEW_COUNT = 3;
-let chatListener = null;
-let chatListenerRef = null;
 
 function fmtPreviewTime(ts) {
   if (!ts) return '';
@@ -1329,58 +1317,38 @@ function escP(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-window.goToChat = function() {
-  localStorage.setItem('chat_last_visited_ts', Date.now());
-  const dot = document.getElementById('chat-unread-dot');
-  if (dot) dot.style.display = 'none';
-  window.location.href = 'masters-chat.html';
-};
+window.initChatPreview = async function() {
+  const previewEl = document.getElementById('dash-chat-preview');
+  const metaEl    = document.getElementById('dash-chat-meta');
+  if (!previewEl) return;
 
-// Called by renderDashContent after the card HTML is in the DOM
-window.initChatPreview = function() {
-  // Detach any previous listener to avoid duplicates on team re-select
-  if (chatListenerRef && chatListener) {
-    off(chatListenerRef, 'value', chatListener);
-  }
+  try {
+    const res  = await fetch(FIREBASE_URL);
+    const data = await res.json();
 
-  chatListenerRef = ref(db, 'messages');
-
-  chatListener = onValue(chatListenerRef, snap => {
-    const previewEl = document.getElementById('dash-chat-preview');
-    const metaEl    = document.getElementById('dash-chat-meta');
-    if (!previewEl) return;
-
-    if (!snap.exists()) {
+    if (!data) {
       previewEl.innerHTML = '<div class="chat-preview-empty">No messages yet. Be the first. 👊</div>';
       if (metaEl) metaEl.textContent = '';
       return;
     }
 
-    const msgs = [];
-    snap.forEach(child => msgs.push({ id: child.key, ...child.val() }));
-
-    // Debug: log everything Firebase returned
-    console.log('Firebase returned', msgs.length, 'messages:');
-    msgs.forEach((m, i) => console.log(i, m.ts, new Date(m.ts).toLocaleTimeString(), m.name, m.text?.slice(0,30)));
-
-    // Sort by timestamp ascending, take the 2 most recent
-    msgs.sort((a, b) => (a.ts || 0) - (b.ts || 0));
-    const latest2 = msgs.slice(-2);
+    // data is an object keyed by push ID — convert to array and sort by ts
+    const msgs = Object.values(data).sort((a, b) => (a.ts || 0) - (b.ts || 0));
+    const latest2 = msgs.slice(-2).reverse(); // 2 newest, newest first
 
     // Update unread badge
-    const latest = latest2[latest2.length - 1];
-    if (latest?.ts) {
-      localStorage.setItem('chat_last_message_ts', latest.ts);
+    const newest = latest2[0];
+    if (newest?.ts) {
+      localStorage.setItem('chat_last_message_ts', newest.ts);
       const lastVisited = parseInt(localStorage.getItem('chat_last_visited_ts') || '0', 10);
       const dot = document.getElementById('chat-unread-dot');
-      if (dot) dot.style.display = (latest.ts > lastVisited) ? 'inline-block' : 'none';
+      if (dot) dot.style.display = (newest.ts > lastVisited) ? 'inline-block' : 'none';
     }
 
     if (metaEl) metaEl.textContent = '';
 
-    // Display newest first
-    previewEl.innerHTML = [...latest2].reverse().map(msg => {
-      const initials = (msg.name || '?').slice(0, 2).toUpperCase();
+    previewEl.innerHTML = latest2.map(msg => {
+      const initials   = (msg.name || '?').slice(0, 2).toUpperCase();
       const commishMark = msg.isCommish ? ' 🏆' : '';
       return `
         <div class="chat-preview-item">
@@ -1392,8 +1360,13 @@ window.initChatPreview = function() {
           </div>
         </div>`;
     }).join('');
-  });
+
+  } catch(e) {
+    console.error('Chat preview error:', e);
+    previewEl.innerHTML = '<div class="chat-preview-empty">Couldn\'t load chat.</div>';
+  }
 };
+</script>
 </script>
 </body>
 </html>
