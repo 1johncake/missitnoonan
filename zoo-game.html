@@ -113,6 +113,57 @@
         }
         .summary-pill:hover { background: rgba(255,255,255,0.28); }
 
+        /* Back link */
+        .header-back {
+            font-size: 0.62rem; font-weight: 500;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            letter-spacing: 0.06em;
+            padding: 4px 0;
+            transition: color 0.15s;
+            white-space: nowrap;
+        }
+        .header-back:hover { color: rgba(255,255,255,0.85); }
+
+        /* Player hold badges in header */
+        .header-badges {
+            display: flex; align-items: center; gap: 6px;
+            margin-right: 6px;
+        }
+        .player-badge {
+            display: flex; flex-direction: column; align-items: center;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 3px 8px;
+            min-width: 36px;
+        }
+        .player-badge.has-animals {
+            background: rgba(217,119,6,0.35);
+            border-color: rgba(245,158,11,0.6);
+        }
+        .badge-name {
+            font-size: 0.5rem; font-weight: 700;
+            color: rgba(255,255,255,0.65);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            max-width: 44px;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .badge-count {
+            font-size: 0.85rem; font-weight: 800;
+            color: white; line-height: 1.1;
+        }
+        .player-badge.has-animals .badge-count { color: #fbbf24; }
+
+        /* Cell flash on assign */
+        @keyframes cellFlash {
+            0%   { box-shadow: 0 0 0 0 rgba(45,140,71,0.7); }
+            50%  { box-shadow: 0 0 0 6px rgba(45,140,71,0); }
+            100% { box-shadow: 0 0 0 0 rgba(45,140,71,0); }
+        }
+        .cell-btn.flash { animation: cellFlash 0.4s ease-out; }
+
         .icon-btn {
             width: 38px; height: 38px;
             border-radius: 50%;
@@ -318,7 +369,27 @@
         .setup-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 22px; }
         .setup-label { font-size: 0.82rem; font-weight: 600; margin-bottom: 10px; display: block; }
 
-        .player-count-row { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+        .player-count-row { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+
+        /* Setup animal preview */
+        .setup-animals {
+            display: flex; justify-content: center; flex-wrap: wrap;
+            gap: 6px; margin-bottom: 20px; font-size: 1.4rem;
+            opacity: 0.75;
+        }
+
+        /* Setup name inputs */
+        .setup-names { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .setup-name-row { display: flex; align-items: center; gap: 10px; }
+        .setup-name-emoji { font-size: 1rem; flex-shrink: 0; width: 24px; text-align: center; }
+        .setup-name-input {
+            flex: 1; padding: 10px 12px;
+            border: 2px solid var(--border); border-radius: var(--radius-sm);
+            font-size: 0.9rem; font-family: var(--font);
+            background: var(--bg); color: var(--text);
+            outline: none; transition: border-color 0.15s;
+        }
+        .setup-name-input:focus { border-color: var(--green-mid); }
 
         .count-btn {
             width: 40px; height: 40px; border-radius: 50%;
@@ -528,10 +599,11 @@
              alt="" aria-hidden="true" height="36">
         <div class="brand-text">
             <span class="brand-title">Zoo Game</span>
-            <span class="brand-sub">Animal Tracker</span>
+            <a href="/zoo-game-landing.html" class="header-back">← missitnoonan.com</a>
         </div>
     </div>
     <div class="header-actions">
+        <div class="header-badges" id="header-badges"></div>
         <button class="summary-pill" id="summary-btn">Settle Up</button>
         <button class="icon-btn" id="dark-toggle" aria-label="Toggle dark mode">🌙</button>
         <button class="icon-btn" id="help-btn" aria-label="Help">ℹ️</button>
@@ -704,22 +776,68 @@ function applyTheme() {
 /* ── Render ───────────────────────────────────────────────── */
 function render() {
     state.screen === 'setup' ? renderSetup() : renderGame();
+    updateHeaderBadges();
+}
+
+function updateHeaderBadges() {
+    const el = document.getElementById('header-badges');
+    if (!el) return;
+    if (state.screen !== 'game' || !state.players.length) { el.innerHTML = ''; return; }
+    el.innerHTML = state.players.map(p => {
+        const count = state.totalHeld(p.id);
+        const name = p.name.length > 6 ? p.name.slice(0,5) + '…' : p.name;
+        return `<div class="player-badge${count > 0 ? ' has-animals' : ''}">
+            <span class="badge-name">${esc(name)}</span>
+            <span class="badge-count">${count}</span>
+        </div>`;
+    }).join('');
 }
 
 /* ── Setup ────────────────────────────────────────────────── */
 function renderSetup() {
+    const animalPreview = ANIMALS.map(a => a.emoji).join(' ');
+    const playerEmojis = ['🏌️','🏌️‍♀️','🏌️','🏌️‍♀️'];
+
+    function buildNameInputs(count) {
+        let html = '<div class="setup-names" id="setup-names">';
+        for (let i = 0; i < count; i++) {
+            const saved = state.players[i] && !state.players[i].name.startsWith('Player ') ? state.players[i].name : '';
+            html += `<div class="setup-name-row">
+                <span class="setup-name-emoji">${playerEmojis[i]}</span>
+                <input class="setup-name-input" type="text" maxlength="20"
+                    placeholder="Player ${i+1}" value="${esc(saved)}"
+                    autocomplete="off" autocorrect="off" spellcheck="false"
+                    data-pidx="${i}" />
+            </div>`;
+        }
+        html += '</div>';
+        return html;
+    }
+
     mainEl.innerHTML = `
         <div class="setup-card">
             <h2>🦁 Start a New Round</h2>
-            <p>Set the number of players, then tap Begin. Rename players from the board.</p>
+            <p>Who's collecting animals today?</p>
+            <div class="setup-animals">${animalPreview}</div>
             <span class="setup-label">Number of Players</span>
             <div class="player-count-row">
                 <button class="count-btn" id="dec-btn" ${state.playerCount <= 2 ? 'disabled' : ''}>−</button>
                 <span class="count-display" id="count-disp">${state.playerCount}</span>
                 <button class="count-btn" id="inc-btn" ${state.playerCount >= 4 ? 'disabled' : ''}>+</button>
             </div>
+            <span class="setup-label">Player Names</span>
+            ${buildNameInputs(state.playerCount)}
             <button class="btn btn-primary" id="begin-btn" style="width:100%;padding:14px;font-size:0.95rem">Begin Round</button>
         </div>`;
+
+    function refreshNameInputs() {
+        const namesDiv = document.getElementById('setup-names');
+        namesDiv.outerHTML = buildNameInputs(state.playerCount);
+        // re-attach input listeners after rebuild
+        document.querySelectorAll('.setup-name-input').forEach(inp => {
+            inp.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('begin-btn').click(); });
+        });
+    }
 
     document.getElementById('dec-btn').addEventListener('click', () => {
         if (state.playerCount > 2) {
@@ -727,6 +845,7 @@ function renderSetup() {
             document.getElementById('count-disp').textContent = state.playerCount;
             document.getElementById('dec-btn').disabled = state.playerCount <= 2;
             document.getElementById('inc-btn').disabled = false;
+            refreshNameInputs();
         }
     });
     document.getElementById('inc-btn').addEventListener('click', () => {
@@ -735,10 +854,23 @@ function renderSetup() {
             document.getElementById('count-disp').textContent = state.playerCount;
             document.getElementById('inc-btn').disabled = state.playerCount >= 4;
             document.getElementById('dec-btn').disabled = false;
+            refreshNameInputs();
         }
     });
+
+    // Enter key on any name input triggers begin
+    document.querySelectorAll('.setup-name-input').forEach(inp => {
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('begin-btn').click(); });
+    });
+
     document.getElementById('begin-btn').addEventListener('click', () => {
         state.freshPlayers(state.playerCount);
+        // Apply any names typed on setup screen
+        document.querySelectorAll('.setup-name-input').forEach(inp => {
+            const idx = parseInt(inp.dataset.pidx, 10);
+            const val = inp.value.trim();
+            if (val && state.players[idx]) state.players[idx].name = val;
+        });
         state.screen = 'game';
         state.save();
         render();
@@ -880,6 +1012,17 @@ function handleCellClick(e) {
 
     state.save();
     render();
+
+    // Flash the newly assigned cell after render
+    requestAnimationFrame(() => {
+        const assignedBtn = mainEl.querySelector(`.cell-btn.owner[data-animal="${animalId}"]`);
+        if (assignedBtn) {
+            assignedBtn.classList.remove('flash');
+            void assignedBtn.offsetWidth; // reflow to restart animation
+            assignedBtn.classList.add('flash');
+            setTimeout(() => assignedBtn.classList.remove('flash'), 450);
+        }
+    });
 }
 
 /* ── Name editor ──────────────────────────────────────────── */
