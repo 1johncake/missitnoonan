@@ -1293,7 +1293,7 @@ init();
 <!-- Firebase: Chat preview on dashboard -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, query, limitToLast, onValue, off }
+import { getDatabase, ref, onValue, off }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const firebaseConfig = {
@@ -1343,7 +1343,7 @@ window.initChatPreview = function() {
     off(chatListenerRef, 'value', chatListener);
   }
 
-  chatListenerRef = query(ref(db, 'messages'), limitToLast(10));
+  chatListenerRef = ref(db, 'messages');
 
   chatListener = onValue(chatListenerRef, snap => {
     const previewEl = document.getElementById('dash-chat-preview');
