@@ -1078,6 +1078,9 @@ async function renderDashContent(teamName){
         </div>
       </div>
     </div>`;
+
+  // Now that the chat card is in the DOM, start the Firebase listener
+  if (typeof window.initChatPreview === 'function') window.initChatPreview();
 }
 
 function buildPoolStandings(teamName, myPlace){
@@ -1290,7 +1293,7 @@ init();
 <!-- Firebase: Chat preview on dashboard -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getDatabase, ref, query, limitToLast, onValue }
+import { getDatabase, ref, query, limitToLast, onValue, off }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const firebaseConfig = {
@@ -1307,6 +1310,8 @@ const app = initializeApp(firebaseConfig, 'pool-preview');
 const db  = getDatabase(app);
 
 const PREVIEW_COUNT = 3;
+let chatListener = null;
+let chatListenerRef = null;
 
 function fmtPreviewTime(ts) {
   if (!ts) return '';
@@ -1324,7 +1329,6 @@ function escP(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// Expose goToChat globally so the inline onclick works
 window.goToChat = function() {
   localStorage.setItem('chat_last_visited_ts', Date.now());
   const dot = document.getElementById('chat-unread-dot');
@@ -1332,47 +1336,55 @@ window.goToChat = function() {
   window.location.href = 'masters-chat.html';
 };
 
-const msgsRef = query(ref(db, 'messages'), limitToLast(PREVIEW_COUNT));
-
-onValue(msgsRef, snap => {
-  const previewEl = document.getElementById('dash-chat-preview');
-  const metaEl    = document.getElementById('dash-chat-meta');
-  if (!previewEl) return;
-
-  if (!snap.exists()) {
-    previewEl.innerHTML = '<div class="chat-preview-empty">No messages yet. Be the first. 👊</div>';
-    if (metaEl) metaEl.textContent = '';
-    return;
+// Called by renderDashContent after the card HTML is in the DOM
+window.initChatPreview = function() {
+  // Detach any previous listener to avoid duplicates on team re-select
+  if (chatListenerRef && chatListener) {
+    off(chatListenerRef, 'value', chatListener);
   }
 
-  const msgs = [];
-  snap.forEach(child => msgs.push({ id: child.key, ...child.val() }));
+  chatListenerRef = query(ref(db, 'messages'), limitToLast(PREVIEW_COUNT));
 
-  // Update unread badge while we're here
-  const latest = msgs[msgs.length - 1];
-  if (latest?.ts) {
-    localStorage.setItem('chat_last_message_ts', latest.ts);
-    const lastVisited = parseInt(localStorage.getItem('chat_last_visited_ts') || '0', 10);
-    const dot = document.getElementById('chat-unread-dot');
-    if (dot) dot.style.display = (latest.ts > lastVisited) ? 'inline-block' : 'none';
-  }
+  chatListener = onValue(chatListenerRef, snap => {
+    const previewEl = document.getElementById('dash-chat-preview');
+    const metaEl    = document.getElementById('dash-chat-meta');
+    if (!previewEl) return;
 
-  if (metaEl) metaEl.textContent = `${msgs.length} recent`;
+    if (!snap.exists()) {
+      previewEl.innerHTML = '<div class="chat-preview-empty">No messages yet. Be the first. 👊</div>';
+      if (metaEl) metaEl.textContent = '';
+      return;
+    }
 
-  previewEl.innerHTML = msgs.reverse().map(msg => {
-    const initials = (msg.name || '?').slice(0, 2).toUpperCase();
-    const commishMark = msg.isCommish ? ' 🏆' : '';
-    return `
-      <div class="chat-preview-item">
-        <div class="chat-preview-avatar">${escP(initials)}</div>
-        <div class="chat-preview-body">
-          <div class="chat-preview-name">${escP(msg.name || 'Unknown')}${commishMark}</div>
-          <div class="chat-preview-text">${escP(msg.text || '')}</div>
-          <div class="chat-preview-time">${fmtPreviewTime(msg.ts)}</div>
-        </div>
-      </div>`;
-  }).join('');
-});
+    const msgs = [];
+    snap.forEach(child => msgs.push({ id: child.key, ...child.val() }));
+
+    // Update unread badge
+    const latest = msgs[msgs.length - 1];
+    if (latest?.ts) {
+      localStorage.setItem('chat_last_message_ts', latest.ts);
+      const lastVisited = parseInt(localStorage.getItem('chat_last_visited_ts') || '0', 10);
+      const dot = document.getElementById('chat-unread-dot');
+      if (dot) dot.style.display = (latest.ts > lastVisited) ? 'inline-block' : 'none';
+    }
+
+    if (metaEl) metaEl.textContent = `${msgs.length} recent`;
+
+    previewEl.innerHTML = msgs.reverse().map(msg => {
+      const initials = (msg.name || '?').slice(0, 2).toUpperCase();
+      const commishMark = msg.isCommish ? ' 🏆' : '';
+      return `
+        <div class="chat-preview-item">
+          <div class="chat-preview-avatar">${escP(initials)}</div>
+          <div class="chat-preview-body">
+            <div class="chat-preview-name">${escP(msg.name || 'Unknown')}${commishMark}</div>
+            <div class="chat-preview-text">${escP(msg.text || '')}</div>
+            <div class="chat-preview-time">${fmtPreviewTime(msg.ts)}</div>
+          </div>
+        </div>`;
+    }).join('');
+  });
+};
 </script>
 </body>
 </html>
