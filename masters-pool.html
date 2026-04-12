@@ -1359,6 +1359,10 @@ window.initChatPreview = function() {
     const msgs = [];
     snap.forEach(child => msgs.push({ id: child.key, ...child.val() }));
 
+    // Debug: log everything Firebase returned
+    console.log('Firebase returned', msgs.length, 'messages:');
+    msgs.forEach((m, i) => console.log(i, m.ts, new Date(m.ts).toLocaleTimeString(), m.name, m.text?.slice(0,30)));
+
     // Sort by timestamp ascending, take the 2 most recent
     msgs.sort((a, b) => (a.ts || 0) - (b.ts || 0));
     const latest2 = msgs.slice(-2);
