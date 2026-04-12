@@ -164,6 +164,18 @@
   .dash-col-left{display:flex;flex-direction:column;gap:14px;}
   .dash-col-right{display:flex;flex-direction:column;gap:14px;}
   .dash-card{background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+  /* Chat preview card */
+  .chat-preview-item{display:flex;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);}
+  .chat-preview-item:last-child{border-bottom:none;}
+  .chat-preview-avatar{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;font-family:var(--font-m);}
+  .chat-preview-body{flex:1;min-width:0;}
+  .chat-preview-name{font-size:11px;font-weight:600;color:var(--cream);font-family:var(--font-m);letter-spacing:.04em;text-transform:uppercase;}
+  .chat-preview-text{font-size:13px;color:var(--cream-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .chat-preview-time{font-size:10px;color:var(--muted);margin-top:3px;font-family:var(--font-m);}
+  .chat-preview-empty{padding:14px 16px;font-size:13px;color:var(--muted);font-family:var(--font-m);}
+  .chat-preview-footer{padding:8px 16px;border-top:1px solid var(--border);text-align:right;}
+  .chat-preview-link{font-size:11px;color:var(--gold);font-family:var(--font-m);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;cursor:pointer;}
+  .chat-preview-link:hover{text-decoration:underline;}
   .dash-card-head{padding:12px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;gap:8px;}
   .dash-card-title{font-family:var(--font-d);font-size:15px;font-weight:700;color:var(--cream);letter-spacing:.01em;}
   .dash-card-meta{font-size:11px;color:var(--muted);font-family:var(--font-m);}
@@ -1054,6 +1066,16 @@ async function renderDashContent(teamName){
           </div>
         </div>
         ${augHtml}
+        <div class="dash-card" style="margin-top:16px">
+          <div class="dash-card-head">
+            <span class="dash-card-title">💬 Chat</span>
+            <span class="dash-card-meta" id="dash-chat-meta">loading…</span>
+          </div>
+          <div id="dash-chat-preview"><div class="chat-preview-empty">Loading messages…</div></div>
+          <div class="chat-preview-footer">
+            <a class="chat-preview-link" onclick="goToChat()">Open Chat →</a>
+          </div>
+        </div>
       </div>
     </div>`;
 }
@@ -1263,6 +1285,94 @@ init();
     }
   }
 })();
+</script>
+
+<!-- Firebase: Chat preview on dashboard -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getDatabase, ref, query, limitToLast, onValue }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB_ufpAv_kC204KEhCfI-qLD1KCz393AsY",
+  authDomain: "missitnoonan-pool-chat.firebaseapp.com",
+  databaseURL: "https://missitnoonan-pool-chat-default-rtdb.firebaseio.com",
+  projectId: "missitnoonan-pool-chat",
+  storageBucket: "missitnoonan-pool-chat.firebasestorage.app",
+  messagingSenderId: "599171295372",
+  appId: "1:599171295372:web:0a47828c9c90987ebdb3a9"
+};
+
+const app = initializeApp(firebaseConfig, 'pool-preview');
+const db  = getDatabase(app);
+
+const PREVIEW_COUNT = 3;
+
+function fmtPreviewTime(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  const now = new Date();
+  const diffMin = Math.floor((now - d) / 60000);
+  if (diffMin < 1)  return 'just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24)  return `${diffHr}h ago`;
+  return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+}
+
+function escP(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Expose goToChat globally so the inline onclick works
+window.goToChat = function() {
+  localStorage.setItem('chat_last_visited_ts', Date.now());
+  const dot = document.getElementById('chat-unread-dot');
+  if (dot) dot.style.display = 'none';
+  window.location.href = 'masters-chat.html';
+};
+
+const msgsRef = query(ref(db, 'messages'), limitToLast(PREVIEW_COUNT));
+
+onValue(msgsRef, snap => {
+  const previewEl = document.getElementById('dash-chat-preview');
+  const metaEl    = document.getElementById('dash-chat-meta');
+  if (!previewEl) return;
+
+  if (!snap.exists()) {
+    previewEl.innerHTML = '<div class="chat-preview-empty">No messages yet. Be the first. 👊</div>';
+    if (metaEl) metaEl.textContent = '';
+    return;
+  }
+
+  const msgs = [];
+  snap.forEach(child => msgs.push({ id: child.key, ...child.val() }));
+
+  // Update unread badge while we're here
+  const latest = msgs[msgs.length - 1];
+  if (latest?.ts) {
+    localStorage.setItem('chat_last_message_ts', latest.ts);
+    const lastVisited = parseInt(localStorage.getItem('chat_last_visited_ts') || '0', 10);
+    const dot = document.getElementById('chat-unread-dot');
+    if (dot) dot.style.display = (latest.ts > lastVisited) ? 'inline-block' : 'none';
+  }
+
+  if (metaEl) metaEl.textContent = `${msgs.length} recent`;
+
+  previewEl.innerHTML = msgs.reverse().map(msg => {
+    const initials = (msg.name || '?').slice(0, 2).toUpperCase();
+    const commishMark = msg.isCommish ? ' 🏆' : '';
+    return `
+      <div class="chat-preview-item">
+        <div class="chat-preview-avatar">${escP(initials)}</div>
+        <div class="chat-preview-body">
+          <div class="chat-preview-name">${escP(msg.name || 'Unknown')}${commishMark}</div>
+          <div class="chat-preview-text">${escP(msg.text || '')}</div>
+          <div class="chat-preview-time">${fmtPreviewTime(msg.ts)}</div>
+        </div>
+      </div>`;
+  }).join('');
+});
 </script>
 </body>
 </html>
