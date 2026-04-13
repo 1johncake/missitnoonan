@@ -658,7 +658,7 @@
     <!-- LIVE BOARD -->
     <div class="live-board" id="live-board">
       <span class="live-board-dot"></span>
-      <span class="live-board-tag">Live</span>
+      <span class="live-board-tag">Ended</span>
       <span class="live-board-divider"></span>
       <div class="live-board-content" id="live-board-content">
         <!-- stats injected by JS -->
@@ -680,14 +680,14 @@
             <div class="card-deco">M</div>
             <div class="card-header">
               <span class="card-tag">Majors · 2026</span>
-              <span class="card-badge badge-live">● Live</span>
+              <span class="card-badge badge-live">● Ended</span>
             </div>
             <h2 class="card-title">Masters Pool</h2>
-            <p class="card-desc">Submit your 9 picks before Wednesday. Best four rounds count each day — Augusta starts April 9.</p>
+            <p class="card-desc">The 2026 Masters Pool is in the books. Check the final leaderboard below.</p>
             <div class="live-strip">
-              <span class="live-dot"></span>
+              <span class="live-dot" style="background:#c9a84c;animation:none;opacity:0.6;"></span>
               <div class="live-strip-track" id="live-strip-track">
-                <span class="live-text" id="live-leader">Fetching…</span>
+                <span class="live-text" id="live-leader">Next stop: PGA Championship · Aronimink · May 14–17 &nbsp;·&nbsp; Picks open May 10 — check back here</span>
               </div>
             </div>
             <div class="card-footer" style="flex-direction:column;align-items:flex-start;">
@@ -1035,50 +1035,9 @@
 
     // ── Main data load (fetches once, powers both board and leader strip) ──
     async function loadAll() {
-      try {
-        const res = await fetch(`${SCRIPT_URL}?_=${Date.now()}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const raw = await res.json();
-
-        if (!preDeadline()) {
-          // Live board
-          const items = buildBoardItems(raw);
-          if (items.length) {
-            renderBoard(items);
-          } else {
-            document.getElementById('live-board-content').innerHTML =
-              '<div class="live-stat active" style="opacity:1"><span class="live-stat-name">Augusta underway</span></div>';
-          }
-
-          // Leader strip
-          const el = document.getElementById('live-leader');
-          const hIdx = raw.findIndex(r => r.some(c => String(c).trim().toUpperCase() === 'PRIOR'));
-          if (el && hIdx !== -1) {
-            for (let i = hIdx + 1; i < raw.length; i++) {
-              const r = raw[i];
-              const team = String(r[6] || '').trim();
-              const place = Number(r[12]);
-              if (!team || !isFinite(place)) continue;
-              if (place === 1) {
-                const score = fmtScore(r[11]);
-                el.textContent = `${nameStr(parseName(team))}${score ? '  ' + score : ''}`;
-                el.style.fontStyle = 'normal';
-              }
-              break;
-            }
-          }
-        } else {
-          // Pre-deadline: show countdown in board
-          const el = document.getElementById('live-leader');
-          if (el) { el.textContent = 'Tue April 8 · 9 pm PT'; el.style.fontStyle = 'italic'; }
-          document.getElementById('live-board-content').innerHTML =
-            '<div class="live-stat active" style="opacity:1"><span>⏰</span><span class="live-board-tag" style="color:rgba(201,168,76,0.75)">Entries close</span><span class="live-stat-name">Apr 8 · 9 pm PT</span></div>';
-        }
-      } catch(e) {
-        document.getElementById('live-board-content').innerHTML =
-          '<div class="live-stat active" style="opacity:1"><span class="live-stat-name" style="color:var(--muted)">Augusta · April 9–13</span></div>';
-      }
-      setTimeout(loadAll, 3 * 60 * 1000);
+      // Tournament complete — show static ended state
+      document.getElementById('live-board-content').innerHTML =
+        '<div class="live-stat active" style="opacity:1"><span class="live-board-tag" style="color:rgba(201,168,76,0.75)">Masters 2026</span><span class="live-stat-name" style="margin-left:8px;">Tournament Complete</span></div>';
     }
 
     loadAll();
