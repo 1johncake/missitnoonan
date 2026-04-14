@@ -190,9 +190,9 @@
     }
 
     /* === HERO CARD (Palm Springs) — horizontal layout === */
-    .project-card.card-hero {
+    HERO_PLACEHOLDER {
       flex-direction: row;
-      align-items: center;
+      align-items: stretch;
       gap: 0;
       padding: 0;
       border-color: var(--sand-border);
@@ -216,6 +216,8 @@
       flex: 1;
       min-width: 0;
       padding: 1.6rem 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
     }
 
     .hero-right {
@@ -228,8 +230,7 @@
       width: 160px;
       padding: 1.5rem 1.4rem;
       border-left: 1px solid rgba(212,149,106,0.15);
-      background: rgba(212,149,106,0.04);
-      align-self: stretch;
+      background: rgba(0,0,0,0.12);
     }
 
     /* Hero trip details strip */
@@ -663,7 +664,7 @@
     }
 
     /* === ANIMATIONS === */
-    .project-card.card-hero { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.3s; }
+    HERO_PLACEHOLDER { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.3s; }
     .cards-majors .project-card:nth-child(1) { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.45s; }
     .cards-majors .project-card:nth-child(2) { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.55s; }
     .other-card { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.65s; }
@@ -693,7 +694,7 @@
       .cards-majors { grid-template-columns: 1fr; gap: 0.6rem; }
       .cards-grid { gap: 0.6rem; }
       .project-card { padding: 1.1rem 1.2rem 1rem; }
-      .project-card.card-hero {
+      HERO_PLACEHOLDER {
         flex-direction: column;
       }
       .hero-left { padding: 1.1rem 1.2rem 1rem; }
@@ -762,7 +763,7 @@
                 </div>
                 <div class="hero-detail">
                   <span class="hero-detail-label">Courses</span>
-                  <span class="hero-detail-value">3 Rounds</span>
+                  <span class="hero-detail-value">6 Rounds</span>
                 </div>
               </div>
               <p class="card-desc" style="margin-bottom:0;">Pairings, formats, race to Seattle standings, birdie draw — the full Wedghood experience.</p>
@@ -822,7 +823,7 @@
             <div class="results-strip">
               <span class="results-label">Final</span>
               <div class="results-divider"></div>
-              <span class="results-text" id="masters-result-text">Pool complete — see final standings</span>
+              <span class="results-text" id="masters-result-text">Jeff A takes the crown. The field never had a chance.</span>
             </div>
 
             <p class="card-desc">The 2026 Masters is in the books. Check the final leaderboard or head to the message board for the post-mortem.</p>
@@ -846,6 +847,7 @@
           <div class="other-rule"></div>
           <div class="other-links">
             <a href="/zoo-game-landing.html" class="other-link">Zoo Game</a>
+            <a href="/blue-darts.html" class="other-link">Blue Darts</a>
             <!--
               Add more links here:
               <a href="/rules.html" class="other-link">Rules Cheat Sheet</a>
@@ -899,7 +901,7 @@
     // You can replace this with a real fetch once you have a winner/result to surface
     (function() {
       const el = document.getElementById('masters-result-text');
-      if (el) el.textContent = 'Pool complete — see final standings';
+      if (el) el.textContent = 'Jeff A takes the crown. The field never had a chance.';
     })();
 
     // ── Messages dot ──
