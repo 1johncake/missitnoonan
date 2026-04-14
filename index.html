@@ -22,6 +22,13 @@
       --muted:        #888fa0;
       --subtle:       rgba(255,255,255,0.06);
       --rule:         rgba(75,156,211,0.2);
+      --gold:         #c9a84c;
+      --gold-dim:     rgba(201,168,76,0.12);
+      --gold-border:  rgba(201,168,76,0.25);
+      /* Palm Springs warm accent */
+      --sand:         #d4956a;
+      --sand-dim:     rgba(212,149,106,0.12);
+      --sand-border:  rgba(212,149,106,0.28);
     }
 
     html, body {
@@ -62,7 +69,7 @@
       z-index: 1;
       height: 100vh;
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
+      grid-template-rows: auto 1fr auto;
       padding: 0 2.8rem;
       max-width: 1060px;
       margin: 0 auto;
@@ -110,8 +117,8 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 1.8rem 0 1.2rem;
-      gap: 0.9rem;
+      padding: 1.6rem 0 1.0rem;
+      gap: 0.85rem;
     }
 
     .section-label {
@@ -125,27 +132,27 @@
       animation-delay: 0.25s;
     }
 
-    /* === MAIN GRID: featured pair + apps row === */
+    /* === MAIN GRID === */
     .cards-grid {
       display: grid;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto auto auto;
       gap: 0.85rem;
     }
 
-    /* Top row — two featured cards side by side */
-    .cards-top {
+    /* ── ROW 1: Palm Springs — full-width hero ── */
+    .cards-hero { display: grid; grid-template-columns: 1fr; }
+
+    /* ── ROW 2: Majors pair ── */
+    .cards-majors {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.85rem;
     }
 
-    /* Bottom row — apps/other */
-    .cards-bottom {
-      display: grid;
-      grid-template-columns: 1fr;
-    }
+    /* ── ROW 3: Other things ── */
+    .cards-bottom { display: grid; grid-template-columns: 1fr; }
 
-    /* === FEATURED CARD === */
+    /* === FEATURED CARD (shared base) === */
     .project-card {
       display: flex;
       flex-direction: column;
@@ -158,14 +165,11 @@
       overflow: hidden;
       transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
     }
-
     .project-card:hover {
       background: #353740;
       border-color: rgba(75,156,211,0.45);
       transform: translateY(-3px);
     }
-
-    /* Top accent line on hover */
     .project-card::before {
       content: '';
       position: absolute;
@@ -176,8 +180,6 @@
       transition: opacity 0.2s ease;
     }
     .project-card:hover::before { opacity: 1; }
-
-    /* Carolina glow in card corner */
     .project-card::after {
       content: '';
       position: absolute;
@@ -187,9 +189,78 @@
       pointer-events: none;
     }
 
-    .project-card:hover .card-arrow { transform: translate(3px, -3px); }
+    /* === HERO CARD (Palm Springs) — horizontal layout === */
+    .project-card.card-hero {
+      flex-direction: row;
+      align-items: center;
+      gap: 0;
+      padding: 0;
+      border-color: var(--sand-border);
+      background: linear-gradient(135deg, #2e3038 0%, #2a2b30 100%);
+      overflow: hidden;
+      cursor: default;
+    }
+    .project-card.card-hero::before {
+      background: linear-gradient(to right, transparent, var(--sand), transparent);
+    }
+    .project-card.card-hero::after {
+      background: radial-gradient(circle, rgba(212,149,106,0.08) 0%, transparent 70%);
+    }
+    .project-card.card-hero:hover {
+      border-color: rgba(212,149,106,0.5);
+      transform: none;
+      background: linear-gradient(135deg, #323540 0%, #2e2f35 100%);
+    }
 
-    /* Large decorative letter */
+    .hero-left {
+      flex: 1;
+      min-width: 0;
+      padding: 1.6rem 2rem 1.5rem;
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-shrink: 0;
+      width: 160px;
+      padding: 1.5rem 1.4rem;
+      border-left: 1px solid rgba(212,149,106,0.15);
+      background: rgba(212,149,106,0.04);
+      align-self: stretch;
+    }
+
+    /* Hero trip details strip */
+    .hero-details {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .hero-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .hero-detail-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(212,149,106,0.6);
+    }
+
+    .hero-detail-value {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: rgba(244,248,252,0.9);
+    }
+
+    /* === CARD DECO === */
     .card-deco {
       position: absolute;
       bottom: -0.8rem; right: 0.6rem;
@@ -204,6 +275,10 @@
     }
     .project-card:hover .card-deco { color: rgba(75,156,211,0.09); }
 
+    .card-deco.deco-sand { color: rgba(212,149,106,0.05); }
+    .project-card.card-hero:hover .card-deco.deco-sand { color: rgba(212,149,106,0.10); }
+
+    /* === CARD HEADER === */
     .card-header {
       display: flex;
       align-items: flex-start;
@@ -220,7 +295,11 @@
       display: block;
     }
 
-    /* Badge — top right of card */
+    .card-tag.tag-sand { color: var(--sand); }
+    .card-tag.tag-gold { color: var(--gold); }
+    .card-tag.tag-muted { color: var(--muted); }
+
+    /* Badge */
     .card-badge {
       font-family: 'Courier Prime', monospace;
       font-size: 0.62rem;
@@ -237,98 +316,28 @@
       background: rgba(58,138,82,0.15);
       border: 1px solid rgba(58,138,82,0.3);
     }
-
     .badge-soon {
+      color: var(--sand);
+      background: rgba(212,149,106,0.1);
+      border: 1px solid rgba(212,149,106,0.25);
+    }
+    .badge-upcoming {
+      color: var(--carolina);
+      background: var(--carolina-dim);
+      border: 1px solid var(--carolina-border);
+    }
+    .badge-wrapped {
+      color: rgba(201,168,76,0.8);
+      background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+    .badge-muted {
       color: var(--muted);
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
     }
 
-
-    /* === LIVE BOARD (replaces scrolling ticker) === */
-    .live-board {
-      position: relative;
-      background: rgba(201,168,76,0.06);
-      border-top: 1px solid rgba(201,168,76,0.18);
-      border-bottom: 1px solid rgba(201,168,76,0.18);
-      padding: 0.7rem 2.8rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      min-height: 48px;
-      opacity: 0;
-      animation: fadeUp 0.5s ease 0.3s forwards;
-      overflow: hidden;
-    }
-
-    .live-board-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #c9a84c; flex-shrink: 0;
-      animation: livePulse 2.2s ease-in-out infinite;
-    }
-
-    @keyframes livePulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(201,168,76,0.4);} 50%{opacity:0.35;box-shadow:0 0 0 4px rgba(201,168,76,0);} }
-
-    .live-board-tag {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.68rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #c9a84c;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .live-board-divider {
-      width: 1px; height: 18px;
-      background: rgba(201,168,76,0.25);
-      flex-shrink: 0;
-    }
-
-    .live-board-content {
-      flex: 1;
-      position: relative;
-      height: 2.6em;
-      overflow: hidden;
-    }
-
-    .live-stat {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.88rem;
-      color: #f4efe5;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-      white-space: nowrap;
-    }
-
-    .live-stat.active { opacity: 1; }
-
-    .live-stat-name { font-weight: 700; color: #fff; }
-    .live-stat-score { color: #c9a84c; }
-    .live-stat-score.neg { color: #6dcc8a; }
-    .live-stat-score.pos { color: #e06c75; }
-    .live-stat-score.up { color: #6dcc8a; }
-    .live-stat-score.down { color: #e06c75; }
-    .live-stat-subtext { font-size: 0.72rem; color: rgba(255,255,255,0.45); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .live-board-nav {
-      display: flex; gap: 5px; flex-shrink: 0;
-    }
-
-    .live-board-pip {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: rgba(201,168,76,0.25);
-      transition: background 0.3s;
-      cursor: pointer;
-    }
-
-    .live-board-pip.active { background: #c9a84c; }
-
+    /* Card body */
     .card-title {
       font-family: 'Playfair Display', serif;
       font-weight: 700;
@@ -337,12 +346,15 @@
       line-height: 1.15;
       margin-bottom: 0.5rem;
     }
+    .card-title.title-lg {
+      font-size: 1.75rem;
+    }
 
     .card-desc {
       font-size: 0.82rem;
       color: var(--muted);
       line-height: 1.6;
-      margin-bottom: 1.3rem;
+      margin-bottom: 1.1rem;
       flex: 1;
     }
 
@@ -353,7 +365,7 @@
       margin-top: auto;
     }
 
-    /* Quick links row below CTA buttons */
+    /* Quick links */
     .card-links {
       display: flex;
       gap: 1.2rem;
@@ -374,7 +386,6 @@
       gap: 5px;
       transition: color 0.2s;
     }
-
     .card-link:hover { color: rgba(240,235,224,0.9); }
 
     .card-link-dot {
@@ -384,14 +395,10 @@
       display: none;
       animation: livePulse 2.2s ease-in-out infinite;
     }
-
     .card-link-dot.visible { display: inline-block; }
 
-    /* CTA buttons inside cards */
-    .card-btns {
-      display: flex;
-      gap: 0.5rem;
-    }
+    /* Buttons */
+    .card-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
     .btn-primary {
       font-family: 'Courier Prime', monospace;
@@ -410,6 +417,12 @@
     }
     .btn-primary:hover { background: #5faee0; }
 
+    .btn-primary.btn-sand {
+      background: var(--sand);
+      color: #1a1610;
+    }
+    .btn-primary.btn-sand:hover { background: #e0ad80; }
+
     .btn-ghost {
       font-family: 'Courier Prime', monospace;
       font-size: 0.62rem;
@@ -425,6 +438,128 @@
       cursor: pointer;
     }
     .btn-ghost:hover { border-color: var(--carolina); color: #7dbfe8; }
+
+    .btn-ghost.btn-ghost-sand {
+      color: var(--sand);
+      border-color: var(--sand-border);
+    }
+    .btn-ghost.btn-ghost-sand:hover { border-color: var(--sand); color: #e0ad80; }
+
+    .btn-ghost.btn-ghost-gold {
+      color: var(--gold);
+      border-color: var(--gold-border);
+    }
+    .btn-ghost.btn-ghost-gold:hover { border-color: var(--gold); color: #e0c070; }
+
+    /* === NEXT EVENT NOTICE (on Masters card) === */
+    .next-event-strip {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--carolina-dim);
+      border: 1px solid var(--carolina-border);
+      border-radius: 5px;
+      padding: 0.45rem 0.75rem;
+      margin-bottom: 1rem;
+      min-height: 32px;
+    }
+
+    .next-event-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--carolina); flex-shrink: 0;
+    }
+
+    .next-event-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--carolina);
+      flex-shrink: 0;
+    }
+
+    .next-event-text {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.75rem;
+      color: #f4efe5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* === MASTERS RESULTS STRIP === */
+    .results-strip {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--gold-dim);
+      border: 1px solid var(--gold-border);
+      border-radius: 5px;
+      padding: 0.45rem 0.75rem;
+      margin-bottom: 1rem;
+      min-height: 32px;
+    }
+
+    .results-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .results-divider {
+      width: 1px; height: 14px;
+      background: rgba(201,168,76,0.25);
+      flex-shrink: 0;
+    }
+
+    .results-text {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.75rem;
+      color: #f4efe5;
+      font-style: italic;
+    }
+
+    /* === PGA CARD dimmed state === */
+    .project-card.card-pga {
+      border-color: rgba(75,156,211,0.14);
+      background: #282930;
+    }
+    .project-card.card-pga:hover {
+      border-color: rgba(75,156,211,0.35);
+      background: #2e3038;
+    }
+
+    /* === TRIP COUNTDOWN on hero card === */
+    .trip-countdown {
+      background: rgba(212,149,106,0.1);
+      border: 1px solid rgba(212,149,106,0.2);
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    .countdown-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--sand);
+      line-height: 1;
+      display: block;
+    }
+
+    .countdown-label {
+      font-family: 'Courier Prime', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(212,149,106,0.6);
+      display: block;
+      margin-top: 0.2rem;
+    }
 
     /* === OTHER THINGS CARD === */
     .other-card {
@@ -450,8 +585,7 @@
     }
 
     .other-rule {
-      width: 1px;
-      height: 28px;
+      width: 1px; height: 28px;
       background: rgba(255,255,255,0.08);
       flex-shrink: 0;
     }
@@ -510,7 +644,7 @@
       justify-content: space-between;
       opacity: 0;
       animation: fadeUp 0.6s ease forwards;
-      animation-delay: 0.8s;
+      animation-delay: 0.9s;
     }
 
     .footer-left {
@@ -529,13 +663,19 @@
     }
 
     /* === ANIMATIONS === */
-    .project-card:nth-child(1) { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.35s; }
-    .project-card:nth-child(2) { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.48s; }
-    .other-card               { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.60s; }
+    .project-card.card-hero { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.3s; }
+    .cards-majors .project-card:nth-child(1) { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.45s; }
+    .cards-majors .project-card:nth-child(2) { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.55s; }
+    .other-card { opacity: 0; animation: fadeUp 0.65s ease forwards; animation-delay: 0.65s; }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes livePulse {
+      0%,100% { opacity:1; box-shadow: 0 0 0 0 rgba(201,168,76,0.4); }
+      50% { opacity:0.35; box-shadow: 0 0 0 4px rgba(201,168,76,0); }
     }
 
     /* === RESPONSIVE === */
@@ -545,100 +685,40 @@
         padding: 0 1rem;
         height: auto;
         min-height: 100vh;
-        grid-template-rows: auto auto 1fr auto;
+        grid-template-rows: auto 1fr auto;
       }
       header { padding: 1rem 0 0.8rem; }
       .logo { font-size: 1.35rem; }
       .cards-area { padding: 1rem 0 0.8rem; gap: 0.6rem; justify-content: flex-start; }
-      .cards-top { grid-template-columns: 1fr; gap: 0.6rem; }
+      .cards-majors { grid-template-columns: 1fr; gap: 0.6rem; }
       .cards-grid { gap: 0.6rem; }
       .project-card { padding: 1.1rem 1.2rem 1rem; }
+      .project-card.card-hero {
+        flex-direction: column;
+      }
+      .hero-left { padding: 1.1rem 1.2rem 1rem; }
+      .hero-right {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.75rem;
+        border-left: none;
+        border-top: 1px solid rgba(212,149,106,0.15);
+        padding: 0.9rem 1.2rem;
+        align-self: auto;
+      }
       .card-title { font-size: 1.25rem; }
+      .card-title.title-lg { font-size: 1.45rem; }
       .card-desc { font-size: 0.8rem; margin-bottom: 0.9rem; }
       .other-card { flex-wrap: wrap; gap: 0.6rem; padding: 0.85rem 1.2rem; }
-      .live-board { padding: 0.65rem 1rem; }
-      .header-smails { display: none; }
       footer {
         flex-direction: column; gap: 0.3rem;
         text-align: center; padding: 0.7rem 0 1rem;
       }
       .footer-left { font-size: 0.8rem; }
+      .hero-details { gap: 1rem; flex-wrap: wrap; }
     }
-
-    /* === LIVE LEADER STRIP === */
-    .live-strip {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: rgba(201,168,76,0.08);
-      border: 1px solid rgba(201,168,76,0.22);
-      border-radius: 5px;
-      padding: 0.45rem 0.75rem;
-      margin-bottom: 1rem;
-      min-height: 32px;
-    }
-
-    .live-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: #c9a84c; flex-shrink: 0;
-      animation: livePulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes livePulse { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
-
-    .live-label {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.55rem; letter-spacing: 0.2em;
-      text-transform: uppercase; color: #c9a84c;
-      flex-shrink: 0;
-    }
-
-    .live-strip-track {
-      flex: 1;
-      min-width: 0;
-      overflow: hidden;
-      position: relative;
-      height: 1.3em;
-    }
-    .live-strip-item {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      gap: 0.4em;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-    .live-strip-item.active { opacity: 1; }
-    .live-strip-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: .08em; color: rgba(201,168,76,0.8); font-weight: 700; flex-shrink: 0; }
-    .live-strip-name { font-weight: 700; color: #fff; }
-    .live-strip-score { font-size: 0.8rem; }
-    .live-strip-score.neg { color: #6dcc8a; }
-    .live-strip-score.pos { color: #e06c75; }
-    .live-strip-score.up { color: #6dcc8a; }
-    .live-strip-score.down { color: #e06c75; }
-    .live-text {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.75rem; color: #f4efe5;
-      white-space: nowrap; overflow: hidden;
-      text-overflow: ellipsis;
-      font-style: italic;
-    }
-
-    .btn-gold {
-      background: #c9a84c !important;
-      color: #070f1e !important;
-    }
-    .btn-gold:hover { background: #e0c070 !important; }
-
-    .badge-live {
-      color: #6dcc8a;
-      background: rgba(58,138,82,0.15);
-      border: 1px solid rgba(58,138,82,0.3);
-    }
-
   </style>
 </head>
 <body>
@@ -655,89 +735,121 @@
       </div>
     </header>
 
-    <!-- LIVE BOARD -->
-    <div class="live-board" id="live-board">
-      <span class="live-board-dot"></span>
-      <span class="live-board-tag">Ended</span>
-      <span class="live-board-divider"></span>
-      <div class="live-board-content" id="live-board-content">
-        <!-- stats injected by JS -->
-      </div>
-      <div class="live-board-nav" id="live-board-nav"></div>
-    </div>
-
     <!-- CARDS -->
     <div class="cards-area">
       <span class="section-label">Projects</span>
 
       <div class="cards-grid">
 
-        <!-- TOP ROW — two featured cards -->
-        <div class="cards-top">
+        <!-- ROW 1: PALM SPRINGS HERO -->
+        <div class="cards-hero">
+          <div class="project-card card-hero">
+            <div class="card-deco deco-sand">W</div>
+            <div class="hero-left">
+              <div class="card-header">
+                <span class="card-tag tag-sand">Wedghoods · Spring Trip 2026</span>
+                <span class="card-badge badge-soon">● Apr 30</span>
+              </div>
+              <h2 class="card-title title-lg">Palm Springs</h2>
+              <div class="hero-details">
+                <div class="hero-detail">
+                  <span class="hero-detail-label">Dates</span>
+                  <span class="hero-detail-value">Apr 30 – May 3</span>
+                </div>
+                <div class="hero-detail">
+                  <span class="hero-detail-label">Crew</span>
+                  <span class="hero-detail-value">8 Wedghoods</span>
+                </div>
+                <div class="hero-detail">
+                  <span class="hero-detail-label">Courses</span>
+                  <span class="hero-detail-value">3 Rounds</span>
+                </div>
+              </div>
+              <p class="card-desc" style="margin-bottom:0;">Pairings, formats, race to Seattle standings, birdie draw — the full Wedghood experience.</p>
+            </div>
+            <div class="hero-right">
+              <div class="trip-countdown">
+                <span class="countdown-number" id="countdown-days">—</span>
+                <span class="countdown-label">Days Out</span>
+              </div>
+              <div class="card-btns" style="flex-direction:column;gap:0.5rem;width:100%;">
+                <a href="/wedghood2026.html" class="btn-primary btn-sand" style="text-align:center;display:block;">Trip Hub</a>
+                <a href="/wedghood2026.html#standings" class="btn-ghost btn-ghost-sand" style="text-align:center;display:block;">Standings</a>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <!-- Masters Pool -->
-          <div class="project-card">
-            <div class="card-deco">M</div>
+        <!-- ROW 2: MAJORS PAIR -->
+        <div class="cards-majors">
+
+          <!-- PGA Championship 2026 — Coming Up -->
+          <div class="project-card card-pga">
+            <div class="card-deco">P</div>
             <div class="card-header">
               <span class="card-tag">Majors · 2026</span>
-              <span class="card-badge badge-live">● Ended</span>
+              <span class="card-badge badge-upcoming">● May 14</span>
             </div>
-            <h2 class="card-title">Masters Pool</h2>
-            <p class="card-desc">The 2026 Masters Pool is in the books. Check the final leaderboard below.</p>
-            <div class="live-strip">
-              <span class="live-dot" style="background:#c9a84c;animation:none;opacity:0.6;"></span>
-              <div class="live-strip-track" id="live-strip-track">
-                <span class="live-text" id="live-leader">Next stop: PGA Championship · Aronimink · May 14–17 &nbsp;·&nbsp; Picks open May 10 — check back here</span>
-              </div>
+            <h2 class="card-title">PGA Championship</h2>
+
+            <!-- Next event notice -->
+            <div class="next-event-strip">
+              <div class="next-event-dot"></div>
+              <span class="next-event-label">Next Up</span>
+              <span class="next-event-text">Aronimink GC · May 14–17 · Picks open soon</span>
             </div>
+
+            <p class="card-desc">Aronimink Golf Club, Wayne, PA. Picks open closer to the event — check back here to enter the pool.</p>
+
             <div class="card-footer" style="flex-direction:column;align-items:flex-start;">
               <div class="card-btns">
-                <span class="btn-primary btn-gold btn-disabled" style="opacity:0.35;cursor:not-allowed;pointer-events:none;">Entries Closed</span>
-                <a href="/masters-pool.html" class="btn-ghost">Leaderboard</a>
-              </div>
-              <div class="card-links">
-                <a href="/masters-pool.html?tab=board" class="card-link">
-                  <span class="card-link-dot" id="msg-dot"></span>
-                  📣 Messages
-                </a>
-                <a href="/masters-chat.html" class="card-link">
-                  💬 Chat
-                </a>
+                <span class="btn-primary" style="opacity:0.35;cursor:not-allowed;pointer-events:none;">Picks Not Open</span>
+                <span class="btn-ghost" style="opacity:0.3;cursor:not-allowed;pointer-events:none;">Leaderboard</span>
               </div>
             </div>
           </div>
 
-          <!-- Palm Springs / Wedghood -->
+          <!-- Masters 2026 — Wrapped -->
           <div class="project-card">
-            <div class="card-deco">W</div>
+            <div class="card-deco">M</div>
             <div class="card-header">
-              <span class="card-tag">Spring Trip · 2026</span>
-              <span class="card-badge badge-soon">Soon</span>
+              <span class="card-tag tag-gold">Majors · 2026</span>
+              <span class="card-badge badge-wrapped">✓ Wrapped</span>
             </div>
-            <h2 class="card-title">Wedghoods – Palm Springs</h2>
-            <p class="card-desc">Apr 30 – May 3. Pairings, formats, Race to Seattle leaderboard, and the full Wedghood experience.</p>
-            <div class="card-footer">
+            <h2 class="card-title">The Masters</h2>
+
+            <!-- Results strip -->
+            <div class="results-strip">
+              <span class="results-label">Final</span>
+              <div class="results-divider"></div>
+              <span class="results-text" id="masters-result-text">Pool complete — see final standings</span>
+            </div>
+
+            <p class="card-desc">The 2026 Masters is in the books. Check the final leaderboard or head to the message board for the post-mortem.</p>
+
+            <div class="card-footer" style="flex-direction:column;align-items:flex-start;">
               <div class="card-btns">
-                <a href="/wedghood2026.html" class="btn-primary">Trip hub</a>
-                <a href="/wedghood2026.html#standings" class="btn-ghost">Standings</a>
+                <a href="/masters-pool.html" class="btn-ghost btn-ghost-gold">Final Standings</a>
+                <a href="/masters-pool.html?tab=board" class="btn-ghost">Messages</a>
+              </div>
+              <div class="card-links">
+                <a href="/masters-chat.html" class="card-link">💬 Chat</a>
               </div>
             </div>
           </div>
 
         </div>
 
-        <!-- BOTTOM ROW — other things -->
+        <!-- ROW 3: OTHER THINGS -->
         <div class="other-card">
           <span class="other-label">Other things</span>
           <div class="other-rule"></div>
           <div class="other-links">
             <a href="/zoo-game-landing.html" class="other-link">Zoo Game</a>
             <!--
-              Add more links here as they go live:
+              Add more links here:
               <a href="/rules.html" class="other-link">Rules Cheat Sheet</a>
-              <a href="/sg-tracker.html" class="other-link">SG Tracker</a>
-              Use .other-link-soon for things not ready yet:
-              <span class="other-link-soon">Handicap Calc</span>
+              <span class="other-link-soon">US Open Pool</span>
             -->
             <span class="other-add">+ more soon</span>
           </div>
@@ -755,302 +867,48 @@
   </div>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNDqWoe0vLiFAa34-VChCnew1nx1rD6DPDY_xufZ77W-AdlQKltmCwFIeGSyK8gjOK4w/exec';
-
-    // ── Deadline logic ──
-    const ENTRY_DEADLINE = new Date('2026-04-09T04:00:00Z'); // April 8 9pm PT
-    const preDeadline = () => Date.now() < ENTRY_DEADLINE.getTime();
-
-    function fmtScore(v) {
-      if (v === null || v === undefined || v === '' || String(v).includes('#')) return null;
-      const n = Number(v);
-      if (!isFinite(n)) return null;
-      if (n === 0) return 'E';
-      return n > 0 ? `+${n}` : `${n}`;
-    }
-
-    function parseName(raw) {
-      const s = String(raw || '').trim();
-      const parts = s.split(',');
-      if (parts.length >= 2) return { last: parts[0].trim(), first: parts[1].trim() };
-      return { last: s, first: '' };
-    }
-    function nameStr(n) { return (n && n.first) ? n.first + ' ' + n.last : (n && n.last ? n.last : String(n)); }
-
-    // ── Live board (crossfade stat rotator) ──
-    let boardItems = [];
-    let boardIdx = 0;
-    let boardTimer = null;
-
-    function renderBoard(items) {
-      const content = document.getElementById('live-board-content');
-      const nav = document.getElementById('live-board-nav');
-      if (!content || !nav) return;
-
-      content.innerHTML = items.map((item, i) => {
-        const scoreClass = item.scoreNeg ? 'neg' : item.scorePos ? 'pos' : item.scoreUp ? 'up' : item.scoreDown ? 'down' : '';
-        const nameStr = item.name.first ? `${item.name.first} ${item.name.last}` : item.name.last;
-        return `<div class="live-stat${i === 0 ? ' active' : ''}" id="live-stat-${i}">
-          <span>${item.emoji}</span>
-          <span class="live-board-tag" style="color:rgba(201,168,76,0.75)">${item.label}</span>
-          <span class="live-stat-name">${nameStr}</span>
-          ${item.score ? `<span class="live-stat-score ${scoreClass}">${item.score}</span>` : ''}
-          ${item.subtext ? `<span class="live-stat-subtext">${item.subtext}</span>` : ''}
-        </div>`;
-      }).join('');
-
-      nav.innerHTML = items.map((_, i) =>
-        `<div class="live-board-pip${i === 0 ? ' active' : ''}" onclick="goToStat(${i})" id="pip-${i}"></div>`
-      ).join('');
-
-      boardItems = items;
-      boardIdx = 0;
-      if (boardTimer) clearInterval(boardTimer);
-      if (items.length > 1) boardTimer = setInterval(nextStat, 4000);
-
-      // Also populate the rotating card strip
-      const track = document.getElementById('live-strip-track');
-      if (track) {
-        const scoreClassFor = (item) => item.scoreNeg ? 'neg' : item.scorePos ? 'pos' : item.scoreUp ? 'up' : item.scoreDown ? 'down' : '';
-        track.innerHTML = items.map((item, i) => {
-          const nameStr = item.name.first ? `${item.name.first} ${item.name.last}` : item.name.last;
-          const sc = scoreClassFor(item);
-          return `<div class="live-strip-item${i===0?' active':''}" id="strip-${i}">
-            <span class="live-strip-tag">${item.emoji} ${item.label}</span>
-            <span class="live-strip-name">${nameStr}</span>
-            ${item.score ? `<span class="live-strip-score ${sc}">${item.score}</span>` : ''}
-          </div>`;
-        }).join('');
-      }
-    }
-
-    function goToStat(idx) {
-      const prev = document.getElementById(`live-stat-${boardIdx}`);
-      const prevPip = document.getElementById(`pip-${boardIdx}`);
-      const prevStrip = document.getElementById(`strip-${boardIdx}`);
-      if (prev) prev.classList.remove('active');
-      if (prevPip) prevPip.classList.remove('active');
-      if (prevStrip) prevStrip.classList.remove('active');
-      boardIdx = idx;
-      const next = document.getElementById(`live-stat-${boardIdx}`);
-      const nextPip = document.getElementById(`pip-${boardIdx}`);
-      const nextStrip = document.getElementById(`strip-${boardIdx}`);
-      if (next) next.classList.add('active');
-      if (nextPip) nextPip.classList.add('active');
-      if (nextStrip) nextStrip.classList.add('active');
-    }
-
-    function nextStat() {
-      goToStat((boardIdx + 1) % boardItems.length);
-    }
-
-    function buildBoardItems(raw) {
-      const hIdx = raw.findIndex(r => r.some(c => String(c).trim().toUpperCase() === 'PRIOR'));
-      if (hIdx === -1) return [];
-
-      const rows = [];
-      for (let i = hIdx + 1; i < raw.length; i++) {
-        const r = raw[i];
-        const team = String(r[6] || '').trim();
-        const place = Number(r[12]);
-        if (!team || String(r[4]).toUpperCase().includes('ANNOUNCEMENTS')) break;
-        if (!isFinite(place) || place <= 0) continue;
-        const chg = String(r[5] || '').trim();
-        let chgVal = 0;
-        if (chg.includes('▲')) chgVal = parseInt(chg.replace('▲','')) || 0;
-        if (chg.includes('▼')) chgVal = -(parseInt(chg.replace('▼','')) || 0);
-        rows.push({ team, total: r[11], r1: r[7], r2: r[8], r3: r[9], r4: r[10], place, chgVal });
-      }
-
-      const items = [];
-      const totalPlayers = rows.length;
-
-      // ── 🏆 Leader ──
-      const leaders = rows.filter(r => r.place === 1);
-      if (leaders.length === 1) {
-        const ld = leaders[0];
-        const score = fmtScore(ld.total);
-        const n = Number(ld.total);
-        const quips = [
-          `Sitting pretty at ${score}. Don't get comfortable.`,
-          `${score} through Augusta. The rest are just watching.`,
-          `Out front at ${score}. Someone call Amen Corner.`
-        ];
-        items.push({ emoji: '🏆', label: 'Leader', name: parseName(ld.team),
-          score, subtext: quips[Math.floor(Date.now()/30000) % quips.length],
-          scoreNeg: n < 0, scorePos: n > 0 });
-      } else if (leaders.length > 1) {
-        // Tied for lead — show first two names
-        const names = leaders.slice(0,2).map(r => parseName(r.team).first || parseName(r.team).last).join(' & ');
-        const score = fmtScore(leaders[0].total);
-        items.push({ emoji: '🏆', label: 'Tied at the top', name: { last: names, first: '' },
-          score, subtext: `Deadlocked at ${score}. Augusta will sort it out.`,
-          scoreNeg: Number(leaders[0].total) < 0, scorePos: Number(leaders[0].total) > 0 });
-      }
-
-      // ── 📈 On the Move ──
-      const moversUp = rows.filter(r => r.chgVal > 0).sort((a,b) => b.chgVal - a.chgVal);
-      if (moversUp.length) {
-        const m = moversUp[0];
-        const upQuips = [
-          `Up ${m.chgVal} today. The field is starting to sweat.`,
-          `${m.chgVal} spots gained. Somebody's players showed up.`,
-          `Climbing fast — up ${m.chgVal}. Watch this one.`
-        ];
-        items.push({ emoji: '📈', label: 'On the Move', name: parseName(m.team),
-          score: `↑${m.chgVal} places`,
-          subtext: upQuips[Math.floor(Date.now()/30000) % upQuips.length],
-          scoreNeg: false, scorePos: false, scoreUp: true });
-      }
-
-      // ── 📉 Going Backwards ──
-      const moversDown = rows.filter(r => r.chgVal < 0).sort((a,b) => a.chgVal - b.chgVal);
-      if (moversDown.length) {
-        const m = moversDown[0];
-        const abs = Math.abs(m.chgVal);
-        const downQuips = [
-          `Down ${abs} today. The greens are not their friend.`,
-          `${abs} spots lost and still going. This is fine. 🔥`,
-          `Sliding ${abs} places. Someone's players are out here taking a walk.`
-        ];
-        items.push({ emoji: '📉', label: 'Going Backwards', name: parseName(m.team),
-          score: `↓${abs} places`,
-          subtext: downQuips[Math.floor(Date.now()/30000) % downQuips.length],
-          scoreNeg: false, scorePos: false, scoreDown: true });
-      }
-
-      // ── 🪣 Sacko ──
-      const last = rows[rows.length - 1];
-      if (last && last.place === totalPlayers) {
-        const gap = Number(last.total) - Number(rows[0].total);
-        const gapStr = Number.isFinite(gap) && gap > 0 ? `+${gap}` : '';
-        const sackoQuips = [
-          `Dead last${gapStr ? `, ${gapStr} back` : ''}. It's a long walk back to the clubhouse.`,
-          `${totalPlayers} of ${totalPlayers}. Augusta is a tough place to be${gapStr ? ` ${gapStr} off the lead` : ''}.`,
-          `Bringing up the rear${gapStr ? ` at ${gapStr} back` : ''}. The 19th hole awaits.`
-        ];
-        items.push({ emoji: '🪣', label: 'Sacko', name: parseName(last.team),
-          score: `${last.place} of ${totalPlayers}`,
-          subtext: sackoQuips[Math.floor(Date.now()/30000) % sackoQuips.length],
-          scoreNeg: false, scorePos: false, scoreDown: true });
-      }
-
-      // ── 😬 Rough Day — detect current round by which is the last fully populated one ──
-      // Current round = rightmost column whose NEXT column is all E/empty.
-      // John pastes scores after each round — so the active round is the last one
-      // with real data, identifiable because the next column has nothing but E or blanks.
-      const roundKeys = ['r1','r2','r3','r4'];
-      const roundLabels = ['Round 1','Round 2','Round 3','Round 4'];
-      let currentRoundKey = null;
-      let currentRoundLabel = '';
-      const isAllEmpty = (key) => rows.every(r => {
-        const v = r[key];
-        if (v === '' || v === null || v === undefined) return true;
-        const n = Number(v);
-        return !Number.isFinite(n) || n === 0; // 0 = E = even par = "empty" for detection
-      });
-      for (let i = 0; i < roundKeys.length; i++) {
-        const rk = roundKeys[i];
-        const nextRk = roundKeys[i + 1];
-        const hasData = rows.some(r => {
-          const v = r[rk];
-          return v !== '' && v !== null && v !== undefined && Number.isFinite(Number(v));
-        });
-        if (!hasData) break; // this column empty, stop
-        // This column has data — is the next one all empty/E?
-        if (!nextRk || isAllEmpty(nextRk)) {
-          currentRoundKey = rk;
-          currentRoundLabel = roundLabels[i];
-          break;
-        }
-      }
-      if (currentRoundKey) {
-        const valid = rows.filter(r => Number.isFinite(Number(r[currentRoundKey])));
-        if (valid.length) {
-          const worst = valid.slice().sort((a,b) => Number(b[currentRoundKey]) - Number(a[currentRoundKey]))[0];
-          const rn = Number(worst[currentRoundKey]);
-          const roughQuips = [
-            `${fmtScore(rn)} in ${currentRoundLabel}. Some days Augusta wins.`,
-            `Carded a ${fmtScore(rn)}. The azaleas were not impressed.`,
-            `${fmtScore(rn)} on the day. That's a tough one to sleep on.`
-          ];
-          items.push({ emoji: '😬', label: 'Rough Day', name: parseName(worst.team),
-            score: fmtScore(rn),
-            subtext: roughQuips[Math.floor(Date.now()/30000) % roughQuips.length],
-            scoreNeg: false, scorePos: false, scoreDown: rn > 2 });
-        }
-      }
-
-      return items;
-    }
-
-    // ── Live leader strip inside Masters card ──
-    async function loadLeader() {
-      const el = document.getElementById('live-leader');
+    // ── Countdown to Palm Springs (Apr 30) ──
+    (function() {
+      const tripDate = new Date('2026-04-30T00:00:00');
+      const el = document.getElementById('countdown-days');
       if (!el) return;
-
-      if (preDeadline()) {
-        el.textContent = 'Tue April 8 · 9 pm PT';
-        el.style.fontStyle = 'italic';
-        setTimeout(loadLeader, 60000);
-        return;
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const diff = Math.ceil((tripDate - today) / (1000 * 60 * 60 * 24));
+      if (diff > 0) {
+        el.textContent = diff;
+      } else if (diff === 0) {
+        el.textContent = '🌴';
+        el.style.fontSize = '1.5rem';
+      } else {
+        // Trip in the past — show recap mode
+        el.textContent = '✓';
+        el.style.fontSize = '1.5rem';
+        const lbl = el.nextElementSibling;
+        if (lbl) lbl.textContent = 'In the books';
+        // swap badge
+        const badge = document.querySelector('.card-hero .card-badge');
+        if (badge) { badge.textContent = '✓ Complete'; badge.className = 'card-badge badge-wrapped'; }
+        // swap tag
+        const tag = document.querySelector('.card-hero .card-tag');
+        if (tag) tag.textContent = 'Wedghoods · Spring 2026';
       }
+    })();
 
-      const badge = document.querySelector('.badge-live');
-      if (badge && badge.textContent.includes('Entries Open')) badge.textContent = '● Underway';
-      const lbl = el.previousElementSibling;
-      if (lbl) lbl.textContent = 'Leader';
+    // ── Masters result stub ──
+    // You can replace this with a real fetch once you have a winner/result to surface
+    (function() {
+      const el = document.getElementById('masters-result-text');
+      if (el) el.textContent = 'Pool complete — see final standings';
+    })();
 
-      try {
-        const res = await fetch(`${SCRIPT_URL}?_=${Date.now()}`, { cache: 'no-store' });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const raw = await res.json();
-
-        const hIdx = raw.findIndex(r => r.some(c => String(c).trim().toUpperCase() === 'PRIOR'));
-        if (hIdx === -1) throw new Error('No data');
-
-        let leaders = [];
-        for (let i = hIdx + 1; i < raw.length; i++) {
-          const r = raw[i];
-          const team = String(r[6] || '').trim();
-          const place = Number(r[12]);
-          if (!team || !isFinite(place)) continue;
-          if (place > 1 && leaders.length) break;
-          if (place === 1) leaders.push({ team, total: r[11] });
-          else break;
-        }
-        if (!leaders.length) throw new Error('No leader');
-
-        const name = parseName(leaders[0].team);
-        const score = fmtScore(leaders[0].total);
-        const tied = leaders.length > 1;
-        el.textContent = `${tied ? 'T1 · ' : ''}${nameStr(name)}${score ? '  ' + score : ''}`;
-        el.style.fontStyle = 'normal';
-        setTimeout(loadLeader, 5 * 60 * 1000);
-      } catch(err) {
-        el.textContent = 'Pool underway — see leaderboard';
-        setTimeout(loadLeader, 2 * 60 * 1000);
-      }
-    }
-
-    // ── Main data load (fetches once, powers both board and leader strip) ──
-    async function loadAll() {
-      // Tournament complete — show static ended state
-      document.getElementById('live-board-content').innerHTML =
-        '<div class="live-stat active" style="opacity:1"><span class="live-board-tag" style="color:rgba(201,168,76,0.75)">Masters 2026</span><span class="live-stat-name" style="margin-left:8px;">Tournament Complete</span></div>';
-    }
-
-    loadAll();
-    checkMessages();
-
-    // Light up Messages dot if H4 has content
+    // ── Messages dot ──
     async function checkMessages() {
       try {
         const MSGS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTPh1Oj-8i_6-vti3rDeXkuQ_AJymnzmuzPvV24K4DaH8XtuFu2qKd3K0TnL70b7qbhcmJZGz9K6Rdw/pub?gid=594261132&single=true&output=csv';
         const res  = await fetch(MSGS_CSV + '&_=' + Date.now(), { cache: 'no-store' });
         const text = await res.text();
         const rows = text.trim().split('\n');
-        // H4 = row index 3, column index 7
         if (rows[3]) {
           const cols = rows[3].split(',');
           const h4 = cols[7] ? cols[7].replace(/^"|"$/g,'').trim() : '';
@@ -1059,6 +917,7 @@
         }
       } catch(e) {}
     }
+    checkMessages();
   </script>
 
 </body>
