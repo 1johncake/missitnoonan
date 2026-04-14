@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue Darts — Est. 2024</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bd-blue:      #4B9CD3;
+      --bd-blue-dark: #2b7ab8;
+      --bd-blue-pale: #d6eaf8;
+      --bd-blue-dim:  rgba(75,156,211,0.12);
+      --white:        #ffffff;
+      --off-white:    #f7f9fc;
+      --cream:        #f2f0eb;
+      --ink:          #1a1f2e;
+      --ink-mid:      #3d4456;
+      --muted:        #7a8299;
+      --rule:         rgba(75,156,211,0.2);
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ── THIN BLUE TOP BAR ── */
+    .top-bar {
+      height: 4px;
+      background: linear-gradient(to right, var(--bd-blue-dark), var(--bd-blue), #7dbfe8, var(--bd-blue));
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 3rem;
+      border-bottom: 1px solid rgba(75,156,211,0.15);
+      background: var(--white);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 28px;
+      width: auto;
+    }
+
+    .nav-back {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--bd-blue); }
+    .nav-back::before { content: '←'; font-size: 0.9rem; }
+
+    .nav-tagline {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 88vh;
+      opacity: 0;
+      animation: fadeIn 0.8s ease 0.2s forwards;
+    }
+
+    /* Left — editorial copy side */
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 4rem 5rem 3rem;
+      background: var(--white);
+      position: relative;
+    }
+
+    /* Subtle vertical rule between columns */
+    .hero-copy::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 10%; bottom: 10%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--rule), transparent);
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--bd-blue);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1px;
+      background: var(--bd-blue);
+    }
+
+    .hero-logo-img {
+      width: 80%;
+      max-width: 380px;
+      height: auto;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: slideUp 0.7s ease 0.5s forwards;
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      line-height: 0.92;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: slideUp 0.7s ease 0.65s forwards;
+    }
+
+    .hero-headline em {
+      color: var(--bd-blue);
+      font-style: normal;
+    }
+
+    .hero-body {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--ink-mid);
+      max-width: 400px;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: slideUp 0.7s ease 0.8s forwards;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      animation: slideUp 0.7s ease 0.95s forwards;
+    }
+
+    .btn-bd-primary {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: var(--bd-blue);
+      color: var(--white);
+      border: none;
+      border-radius: 3px;
+      padding: 0.75rem 1.6rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+    .btn-bd-primary:hover { background: var(--bd-blue-dark); transform: translateY(-1px); }
+
+    .btn-bd-ghost {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: transparent;
+      color: var(--bd-blue);
+      border: 1px solid rgba(75,156,211,0.4);
+      border-radius: 3px;
+      padding: 0.75rem 1.4rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    .btn-bd-ghost:hover { border-color: var(--bd-blue); color: var(--bd-blue-dark); }
+
+    .hero-stat-row {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(75,156,211,0.15);
+      opacity: 0;
+      animation: slideUp 0.7s ease 1.1s forwards;
+    }
+
+    .hero-stat {}
+    .hero-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: var(--bd-blue);
+      line-height: 1;
+      display: block;
+    }
+    .hero-stat-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    /* Right — photo side */
+    .hero-photo {
+      position: relative;
+      overflow: hidden;
+      background: var(--bd-blue-pale);
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      opacity: 0;
+      animation: fadeIn 1s ease 0.4s forwards;
+    }
+
+    /* Photo overlay — bottom fade */
+    .hero-photo::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40%;
+      background: linear-gradient(to top, rgba(255,255,255,0.3), transparent);
+      pointer-events: none;
+    }
+
+    /* Pull-quote badge over photo */
+    .photo-badge {
+      position: absolute;
+      bottom: 2.5rem;
+      left: -1px;
+      background: var(--white);
+      border-left: 3px solid var(--bd-blue);
+      padding: 0.8rem 1.2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      max-width: 260px;
+      opacity: 0;
+      animation: slideRight 0.6s ease 1.2s forwards;
+    }
+
+    .photo-badge-quote {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .photo-badge-attr {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    /* ── COMING SOON BAND ── */
+    .coming-band {
+      background: var(--bd-blue);
+      color: var(--white);
+      text-align: center;
+      padding: 1.4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .coming-band::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 20px,
+        rgba(255,255,255,0.04) 20px,
+        rgba(255,255,255,0.04) 40px
+      );
+    }
+
+    .coming-band-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .coming-band-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+    }
+
+    .coming-band-sep {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+    }
+
+    .coming-band-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    /* ── FEATURES GRID ── */
+    .features {
+      background: var(--off-white);
+      padding: 5rem 3rem;
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .features-eyebrow {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--bd-blue);
+      margin-bottom: 0.8rem;
+    }
+
+    .features-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border: 1px solid rgba(75,156,211,0.15);
+      border-radius: 8px;
+      padding: 2rem 1.8rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(75,156,211,0.4);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── MANIFESTO SECTION ── */
+    .manifesto {
+      background: var(--ink);
+      color: var(--white);
+      padding: 6rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .manifesto::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(75,156,211,0.1) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .manifesto-wordmark {
+      height: 60px;
+      width: auto;
+      opacity: 0.15;
+      display: block;
+      margin: 0 auto 3rem;
+      filter: invert(1);
+    }
+
+    .manifesto-quote {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      line-height: 1.55;
+      color: var(--white);
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+
+    .manifesto-quote::before {
+      content: '\201C';
+      font-size: 5rem;
+      color: var(--bd-blue);
+      opacity: 0.3;
+      position: absolute;
+      top: -2rem; left: -1rem;
+      line-height: 1;
+      font-family: 'Libre Baskerville', serif;
+    }
+
+    .manifesto-attr {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--bd-blue);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--white);
+      border-top: 1px solid rgba(75,156,211,0.15);
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo img { height: 22px; opacity: 0.5; }
+
+    .footer-copy {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .footer-back {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--bd-blue);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .footer-back:hover { opacity: 0.7; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideRight {
+      from { opacity: 0; transform: translateX(-16px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0.9rem 1.2rem; }
+      .nav-tagline { display: none; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .hero-copy {
+        padding: 3rem 1.5rem 2.5rem;
+        order: 2;
+      }
+      .hero-copy::after { display: none; }
+      .hero-photo {
+        order: 1;
+        min-height: 55vw;
+      }
+      .hero-logo-img { width: 65%; }
+      .hero-headline { font-size: 3rem; }
+      .hero-stat-row { gap: 1.5rem; }
+      .photo-badge { display: none; }
+
+      .features { padding: 3.5rem 1.5rem; }
+      .features-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+      .manifesto { padding: 4rem 1.5rem; }
+
+      footer {
+        flex-direction: column;
+        gap: 0.8rem;
+        text-align: center;
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-back">missitnoonan.com</a>
+    <span class="nav-tagline">Weekly roasts. Zero remorse. All gas.</span>
+    <div style="width:120px;"></div><!-- spacer for centering -->
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="hero-copy">
+      <span class="hero-eyebrow">Fantasy Football · Est. 2024</span>
+      <img src="Blue_Darts_Final_blue_on_trans.png" alt="Blue Darts" class="hero-logo-img" />
+      <h1 class="hero-headline">ASS BEATINGS.<br>DELIVERED <em>WEEKLY.</em></h1>
+      <p class="hero-body">
+        Every September, the Blue Darts take the field. Every week, some poor bastard opens the app 
+        on Monday morning and sees what happened to them. This is not a fantasy team. 
+        This is a warning system.
+      </p>
+      <div class="hero-cta-row">
+        <a href="#" class="btn-bd-primary">Victims TBD · Fall 2025</a>
+        <a href="/" class="btn-bd-ghost">Back to MIN</a>
+      </div>
+      <div class="hero-stat-row">
+        <div class="hero-stat">
+          <span class="hero-stat-num">1</span>
+          <span class="hero-stat-label">Season. Undefeated attitude.</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">12</span>
+          <span class="hero-stat-label">Weeks of Pain</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">0</span>
+          <span class="hero-stat-label">Mercy Given</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-photo">
+      <img src="Blue_Darts_Abercrombie_Ad.png" alt="Blue Darts lifestyle" />
+      <div class="photo-badge">
+        <p class="photo-badge-quote">"I don't check the waiver wire. I check the obituaries."</p>
+        <p class="photo-badge-attr">— Blue Darts GM, pregame every week</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- COMING SOON BAND -->
+  <div class="coming-band">
+    <div class="coming-band-inner">
+      <span class="coming-band-label">Full Site Victims TBD · Fall 2025</span>
+      <span class="coming-band-sep"></span>
+      <span class="coming-band-sub">Weekly Roasts · Public Humiliation · Body Bag Game Recaps</span>
+      <span class="coming-band-sep"></span>
+      <span class="coming-band-label">Prepare Accordingly</span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="features-header">
+      <p class="features-eyebrow">What's Coming</p>
+      <h2 class="features-title">What's Coming For You</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🏆</span>
+        <h3 class="feature-title">Live Standings</h3>
+        <p class="feature-desc">Real-time proof of dominance. Updated weekly so you can watch your playoff hopes decompose in real time.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📣</span>
+        <h3 class="feature-title">Weekly Roast</h3>
+        <p class="feature-desc">Every Monday, the Blue Darts PR machine drops a full campaign on that week's opponent. Think press release. Think billboards. Think restraining orders.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💨</span>
+        <h3 class="feature-title">The Hall of Bodies</h3>
+        <p class="feature-desc">A permanent record of everyone who stepped into the ring with the Blue Darts and left on a stretcher. Season by season. Name by name.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MANIFESTO -->
+  <section class="manifesto">
+    <img src="Blue_darts_wordmark.png" alt="" class="manifesto-wordmark" />
+    <blockquote class="manifesto-quote">
+      Somewhere right now, someone is confidently setting their lineup against the Blue Darts. 
+      That's the most tragic thing I've ever heard.
+    </blockquote>
+    <p class="manifesto-attr">— Official Blue Darts Scouting Report on Every Opponent, Every Week</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+      <img src="Blue_Darts_Final_blue_on_trans.png" alt="Blue Darts" />
+    </div>
+    <span class="footer-copy">© 2025 Blue Darts · A missitnoonan.com Production</span>
+    <a href="/" class="footer-back">← missitnoonan.com</a>
+  </footer>
+
+</body>
+</html>
