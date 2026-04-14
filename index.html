@@ -32,11 +32,10 @@
     }
 
     html, body {
-      height: 100%;
+      min-height: 100%;
       font-family: 'DM Sans', sans-serif;
       background: var(--bg);
       color: var(--white);
-      overflow: hidden;
     }
 
     /* === BACKGROUND TEXTURE === */
@@ -67,7 +66,7 @@
     .page {
       position: relative;
       z-index: 1;
-      height: 100vh;
+      min-height: 100vh;
       display: grid;
       grid-template-rows: auto 1fr auto;
       padding: 0 2.8rem;
