@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Birdie Draw — Wedghoods 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0e0f12;
+  --bg2:       #161820;
+  --gold:      #C9A84C;
+  --gold-dim:  #8a7030;
+  --white:     #F5F0E8;
+  --muted:     rgba(245,240,232,0.4);
+  --font-d:    'Cormorant Garamond', serif;
+  --font-b:    'DM Sans', sans-serif;
+
+  /* 8 player slice colors — rich, distinct, readable */
+  --c0: #4B9CD3;   /* Carolina blue  */
+  --c1: #C9A84C;   /* Gold           */
+  --c2: #5BAD72;   /* Green          */
+  --c3: #D4614A;   /* Rust red       */
+  --c4: #9B7FD4;   /* Lavender       */
+  --c5: #D4955A;   /* Amber          */
+  --c6: #4ABBC4;   /* Teal           */
+  --c7: #C46FAA;   /* Rose           */
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font-b);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ---- BG TEXTURE ---- */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 80% at 80% 80%, rgba(75,156,211,0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- HEADER ---- */
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 0;
+  position: relative;
+  z-index: 10;
+}
+.header-back {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.header-back:hover { color: var(--gold); }
+.header-title {
+  font-family: var(--font-d);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+}
+.header-sub {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---- MAIN LAYOUT ---- */
+.main {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1.25rem 2rem;
+  position: relative;
+  z-index: 10;
+  gap: 0;
+}
+
+/* ---- WHEEL CONTAINER ---- */
+.wheel-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+/* Pointer */
+.pointer {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+}
+.pointer-diamond {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 22px solid var(--gold);
+}
+.pointer-stem {
+  width: 3px;
+  height: 6px;
+  background: var(--gold);
+}
+
+canvas#wheel {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 3px rgba(201,168,76,0.25),
+    0 0 0 6px rgba(201,168,76,0.08),
+    0 20px 60px rgba(0,0,0,0.7);
+}
+
+/* Center cap */
+.wheel-cap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 3px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+  pointer-events: none;
+}
+.wheel-cap-inner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.9;
+}
+
+/* ---- LEGEND ---- */
+.legend {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 1.25rem;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 3px;
+  padding: 8px 10px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.legend-item.winner {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.08);
+  animation: winnerPulse 1s ease-in-out infinite;
+}
+@keyframes winnerPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.3); }
+  50%      { box-shadow: 0 0 0 6px rgba(201,168,76,0); }
+}
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-name {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--white);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.legend-tickets {
+  font-family: var(--font-d);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--gold);
+}
+
+/* ---- SPIN BUTTON ---- */
+.spin-btn {
+  margin-top: 1.5rem;
+  width: 100%;
+  max-width: 340px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+  border: none;
+  border-radius: 3px;
+  font-family: var(--font-b);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bg);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 20px rgba(201,168,76,0.25);
+}
+.spin-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.spin-btn:hover::before { opacity: 1; }
+.spin-btn:active { transform: scale(0.98); }
+.spin-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---- WINNER REVEAL ---- */
+.winner-reveal {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 1.25rem;
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 3px;
+  padding: 1.5rem;
+  text-align: center;
+  display: none;
+}
+.winner-reveal.show { display: block; animation: revealFade 0.6s ease both; }
+@keyframes revealFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.winner-eyebrow {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.75rem;
+}
+.winner-name {
+  font-family: var(--font-d);
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.winner-detail {
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+.winner-prize {
+  font-family: var(--font-d);
+  font-size: 1.5rem;
+  color: var(--gold);
+  margin-top: 0.75rem;
+}
+
+/* ---- RESET LINK ---- */
+.reset-link {
+  margin-top: 0.75rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border: none;
+  background: none;
+  display: none;
+  transition: color 0.2s;
+}
+.reset-link.show { display: inline-block; }
+.reset-link:hover { color: var(--gold); }
+
+/* ---- MANUAL ENTRY FALLBACK ---- */
+.manual-section {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 1rem;
+}
+.manual-toggle {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
+  width: 100%;
+  text-align: center;
+}
+.manual-toggle:hover { color: var(--gold); }
+.manual-panel {
+  display: none;
+  margin-top: 0.75rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 3px;
+  padding: 1rem;
+}
+.manual-panel.open { display: block; }
+.manual-row {
+  display: grid;
+  grid-template-columns: 1fr 80px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.manual-row:last-child { margin-bottom: 0; }
+.manual-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(245,240,232,0.7);
+}
+.manual-input {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 2px;
+  padding: 0.4rem 0.6rem;
+  font-family: var(--font-b);
+  font-size: 0.8rem;
+  color: var(--white);
+  text-align: center;
+  width: 100%;
+}
+.manual-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.manual-apply {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.6rem;
+  background: rgba(201,168,76,0.15);
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 2px;
+  font-family: var(--font-b);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.manual-apply:hover { background: rgba(201,168,76,0.25); }
+
+/* ---- STATUS ---- */
+.status-bar {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+.status-bar.error { color: #e07070; }
+.status-bar.ok { color: var(--gold); }
+
+/* ---- TOTAL BADGE ---- */
+.total-badge {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+.total-badge span { color: var(--gold); }
+
+/* ---- TICK SOUND (visual only) ---- */
+@keyframes pointerBounce {
+  0%   { transform: translateX(-50%) rotate(0deg); }
+  50%  { transform: translateX(-50%) rotate(-8deg); }
+  100% { transform: translateX(-50%) rotate(0deg); }
+}
+.pointer.tick { animation: pointerBounce 0.06s ease; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <a class="header-back" href="/">← Wedghoods</a>
+  <div class="header-title">Birdie Draw</div>
+  <div class="header-sub">2026</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- WHEEL -->
+  <div class="wheel-wrap">
+    <div class="pointer" id="pointer">
+      <div class="pointer-diamond"></div>
+      <div class="pointer-stem"></div>
+    </div>
+    <canvas id="wheel" width="680" height="680"></canvas>
+    <div class="wheel-cap"><div class="wheel-cap-inner"></div></div>
+  </div>
+
+  <div class="total-badge" id="total-badge"></div>
+  <div class="status-bar" id="status-bar">Loading ticket data…</div>
+
+  <!-- LEGEND -->
+  <div class="legend" id="legend"></div>
+
+  <!-- SPIN BUTTON -->
+  <button class="spin-btn" id="spin-btn" disabled onclick="spin()">Spin the Wheel</button>
+
+  <!-- WINNER REVEAL -->
+  <div class="winner-reveal" id="winner-reveal">
+    <div class="winner-eyebrow">🎟 Birdie Draw Winner</div>
+    <div class="winner-name" id="winner-name"></div>
+    <div class="winner-detail" id="winner-detail"></div>
+    <div class="winner-prize">24 units · $72</div>
+  </div>
+
+  <button class="reset-link" id="reset-btn" onclick="resetDraw()">Spin Again</button>
+
+  <!-- MANUAL FALLBACK -->
+  <div class="manual-section">
+    <button class="manual-toggle" onclick="toggleManual()">Enter tickets manually</button>
+    <div class="manual-panel" id="manual-panel">
+      <div id="manual-rows"></div>
+      <button class="manual-apply" onclick="applyManual()">Apply & Draw</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSqbVI6yCwYknOsNDGxuR95oBBrRIrUq2EISUq-BkSNqaEN9VQn5wFf4RVLRWvQWig3VBobPD0hPSG4/pub?gid=1728014820&single=true&output=csv';
+
+const PLAYERS = ['Cake','Wise','Macias','Langley','Murphy','Festor','Angell','Wohnoutka'];
+
+const COLORS = [
+  '#4B9CD3', // Carolina blue
+  '#C9A84C', // Gold
+  '#5BAD72', // Green
+  '#D4614A', // Rust red
+  '#9B7FD4', // Lavender
+  '#D4955A', // Amber
+  '#4ABBC4', // Teal
+  '#C46FAA', // Rose
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let players = [];      // [{name, tickets, color}]
+let rotation = 0;      // current wheel rotation in radians
+let isSpinning = false;
+let winnerIndex = null;
+let lastTickAngle = 0;
+
+/* ============================================================
+   CANVAS SETUP
+   ============================================================ */
+const canvas  = document.getElementById('wheel');
+const ctx     = canvas.getContext('2d');
+const W       = canvas.width;
+const cx      = W / 2;
+const cy      = W / 2;
+const R       = W / 2 - 6;
+
+/* ============================================================
+   DRAW WHEEL
+   ============================================================ */
+function drawWheel(rot) {
+  ctx.clearRect(0, 0, W, W);
+
+  if (!players.length) return;
+
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  if (total === 0) return;
+
+  let startAngle = rot - Math.PI / 2; // 12 o'clock start
+
+  players.forEach((p, i) => {
+    const sweep = (p.tickets / total) * 2 * Math.PI;
+    const endAngle = startAngle + sweep;
+    const mid = startAngle + sweep / 2;
+
+    // Slice
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, R, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = p.color;
+    ctx.fill();
+
+    // Subtle separator
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, R, startAngle, endAngle);
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(14,15,18,0.5)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Winner highlight
+    if (i === winnerIndex) {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, R, startAngle, endAngle);
+      ctx.closePath();
+      ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+    }
+
+    // Label — only draw if slice is big enough
+    const slicePct = p.tickets / total;
+    if (slicePct > 0.035) {
+      const labelR = R * 0.67;
+      const lx = cx + labelR * Math.cos(mid);
+      const ly = cy + labelR * Math.sin(mid);
+
+      ctx.save();
+      ctx.translate(lx, ly);
+      ctx.rotate(mid + Math.PI / 2);
+
+      // Name
+      const fontSize = Math.max(16, Math.min(28, slicePct * 260));
+      ctx.font = `600 ${fontSize}px 'DM Sans', sans-serif`;
+      ctx.fillStyle = 'rgba(255,255,255,0.95)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.shadowColor = 'rgba(0,0,0,0.6)';
+      ctx.shadowBlur = 4;
+      ctx.fillText(p.name, 0, 0);
+
+      // Ticket count
+      const tSize = Math.max(12, Math.min(20, slicePct * 190));
+      ctx.font = `400 ${tSize}px 'Cormorant Garamond', serif`;
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.textBaseline = 'top';
+      ctx.fillText(`${p.tickets}`, 0, 3);
+
+      ctx.restore();
+    }
+
+    startAngle = endAngle;
+  });
+
+  // Outer ring
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'rgba(201,168,76,0.3)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+}
+
+/* ============================================================
+   BUILD LEGEND
+   ============================================================ */
+function buildLegend() {
+  const el = document.getElementById('legend');
+  el.innerHTML = players.map((p, i) => `
+    <div class="legend-item" id="legend-${i}">
+      <div class="legend-dot" style="background:${p.color}"></div>
+      <div class="legend-name">${p.name}</div>
+      <div class="legend-tickets">${p.tickets}</div>
+    </div>`).join('');
+
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  document.getElementById('total-badge').innerHTML =
+    `<span>${total}</span> total tickets in the draw`;
+}
+
+/* ============================================================
+   BUILD MANUAL ENTRY ROWS
+   ============================================================ */
+function buildManualRows() {
+  const el = document.getElementById('manual-rows');
+  el.innerHTML = PLAYERS.map((name, i) => `
+    <div class="manual-row">
+      <div class="manual-label">${name}</div>
+      <input class="manual-input" type="number" min="0" max="50" value="${players[i]?.tickets || 0}" id="mi-${i}">
+    </div>`).join('');
+}
+
+/* ============================================================
+   LOAD CSV
+   ============================================================ */
+async function loadCSV() {
+  try {
+    const res  = await fetch(CSV_URL);
+    const text = await res.text();
+    const rows = text.trim().split('\n');
+    const headers = rows[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
+    const birdieCol = headers.findIndex(h => h === 'BirdieTickets');
+
+    if (birdieCol === -1) throw new Error('BirdieTickets column not found');
+
+    const data = {};
+    rows.slice(1).forEach(row => {
+      const cols = row.split(',').map(c => c.trim().replace(/^"|"$/g,''));
+      const name = cols[0];
+      if (PLAYERS.includes(name)) {
+        data[name] = parseInt(cols[birdieCol]) || 0;
+      }
+    });
+
+    players = PLAYERS.map((name, i) => ({
+      name,
+      tickets: data[name] ?? 0,
+      color: COLORS[i]
+    }));
+
+    const total = players.reduce((s, p) => s + p.tickets, 0);
+
+    setStatus(total > 0
+      ? `Live data loaded · ${total} tickets`
+      : 'Data loaded — no tickets yet', total > 0 ? 'ok' : '');
+
+    ready();
+  } catch (e) {
+    setStatus('Could not load live data — enter tickets manually', 'error');
+    players = PLAYERS.map((name, i) => ({ name, tickets: 0, color: COLORS[i] }));
+    ready(false);
+  }
+}
+
+function ready(enableSpin = true) {
+  buildLegend();
+  buildManualRows();
+  drawWheel(rotation);
+  if (enableSpin) {
+    document.getElementById('spin-btn').disabled = false;
+  }
+}
+
+/* ============================================================
+   SPIN
+   ============================================================ */
+function spin() {
+  if (isSpinning) return;
+
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  if (total === 0) {
+    setStatus('No tickets — enter counts manually first', 'error');
+    return;
+  }
+
+  isSpinning = true;
+  winnerIndex = null;
+  document.getElementById('spin-btn').disabled = true;
+  document.getElementById('winner-reveal').classList.remove('show');
+  document.getElementById('reset-btn').classList.remove('show');
+
+  // Pick winner weighted by tickets
+  const rand = Math.random() * total;
+  let cumulative = 0;
+  let chosen = 0;
+  for (let i = 0; i < players.length; i++) {
+    cumulative += players[i].tickets;
+    if (rand < cumulative) { chosen = i; break; }
+  }
+
+  // Calculate where the wheel needs to stop so chosen slice is at top (pointer)
+  // Pointer is at top = -PI/2 from 0
+  // We need the midpoint of the chosen slice to land at top
+  const sliceMidAngles = getSliceMidAngles();
+  const targetMid = sliceMidAngles[chosen];
+
+  // We want targetMid + finalRotation ≡ -PI/2 (mod 2PI)
+  // So finalRotation = -PI/2 - targetMid
+  // But we add several full rotations for drama
+  const minSpins = 6;
+  const extraSpins = minSpins * 2 * Math.PI + (Math.random() * 2 * Math.PI);
+  const targetRotation = rotation - targetMid - (Math.PI / 2) - (rotation % (2 * Math.PI)) + extraSpins;
+  const finalRotation = targetRotation + Math.ceil(minSpins) * 2 * Math.PI;
+
+  const duration = 5500 + Math.random() * 1000;
+  const startRot = rotation;
+  const startTime = performance.now();
+
+  lastTickAngle = 0;
+
+  function animate(now) {
+    const elapsed = now - startTime;
+    const t = Math.min(elapsed / duration, 1);
+
+    // Ease: fast start, dramatic slowdown with slight wobble near end
+    const eased = easeOutQuintic(t);
+    rotation = startTime ? startRot + (finalRotation - startRot) * eased : startRot;
+
+    // Tick the pointer when crossing a slice boundary
+    checkTick();
+    drawWheel(rotation);
+
+    if (t < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      rotation = finalRotation;
+      winnerIndex = chosen;
+      drawWheel(rotation);
+      isSpinning = false;
+      revealWinner(chosen);
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+function easeOutQuintic(t) {
+  // Smooth deceleration
+  const t1 = t - 1;
+  return t1 * t1 * t1 * t1 * t1 + 1;
+}
+
+function getSliceMidAngles() {
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  const angles = [];
+  let angle = -Math.PI / 2; // matches our draw starting point + base rotation
+  players.forEach(p => {
+    const sweep = (p.tickets / total) * 2 * Math.PI;
+    angles.push(angle + sweep / 2);
+    angle += sweep;
+  });
+  return angles;
+}
+
+function checkTick() {
+  // Visual pointer bounce when crossing a slice boundary
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  if (!total) return;
+
+  const normalised = ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+  // How many slices have we passed?
+  let cumAngle = 0;
+  for (let i = 0; i < players.length; i++) {
+    cumAngle += (players[i].tickets / total) * 2 * Math.PI;
+    const boundary = cumAngle % (2 * Math.PI);
+    if (Math.abs(normalised - boundary) < 0.08 && Math.abs(lastTickAngle - boundary) > 0.1) {
+      lastTickAngle = boundary;
+      const ptr = document.getElementById('pointer');
+      ptr.classList.remove('tick');
+      void ptr.offsetWidth;
+      ptr.classList.add('tick');
+    }
+  }
+}
+
+/* ============================================================
+   REVEAL WINNER
+   ============================================================ */
+function revealWinner(i) {
+  const p = players[i];
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  const pct = ((p.tickets / total) * 100).toFixed(0);
+
+  document.getElementById('winner-name').textContent = p.name;
+  document.getElementById('winner-detail').textContent =
+    `${p.tickets} ticket${p.tickets !== 1 ? 's' : ''} · ${pct}% draw probability`;
+
+  document.getElementById('winner-reveal').classList.add('show');
+  document.getElementById('reset-btn').classList.add('show');
+
+  // Highlight in legend
+  document.querySelectorAll('.legend-item').forEach((el, j) => {
+    el.classList.toggle('winner', j === i);
+  });
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+function resetDraw() {
+  winnerIndex = null;
+  document.getElementById('winner-reveal').classList.remove('show');
+  document.getElementById('reset-btn').classList.remove('show');
+  document.getElementById('spin-btn').disabled = false;
+  document.querySelectorAll('.legend-item').forEach(el => el.classList.remove('winner'));
+  drawWheel(rotation);
+}
+
+/* ============================================================
+   MANUAL ENTRY
+   ============================================================ */
+function toggleManual() {
+  document.getElementById('manual-panel').classList.toggle('open');
+}
+
+function applyManual() {
+  players = PLAYERS.map((name, i) => ({
+    name,
+    tickets: parseInt(document.getElementById(`mi-${i}`)?.value) || 0,
+    color: COLORS[i]
+  }));
+  buildLegend();
+  drawWheel(rotation);
+  document.getElementById('spin-btn').disabled = false;
+  document.getElementById('manual-panel').classList.remove('open');
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  setStatus(`Manual data applied · ${total} tickets`, 'ok');
+  resetDraw();
+}
+
+/* ============================================================
+   UTILS
+   ============================================================ */
+function setStatus(msg, type = '') {
+  const el = document.getElementById('status-bar');
+  el.textContent = msg;
+  el.className = 'status-bar' + (type ? ` ${type}` : '');
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+drawWheel(rotation); // draw empty placeholder
+loadCSV();
+</script>
+</body>
+</html>
