@@ -169,7 +169,7 @@ nav {
 /* ---- HERO ---- */
 #hero {
   min-height: 100vh;
-  background: linear-gradient(160deg, var(--surface-1) 0%, #1C2639 45%, #253248 75%, #2E3D57 100%);
+  background: linear-gradient(160deg, #C8A878 0%, #DBBF95 30%, #EDD9BA 60%, #FAF0D7 100%);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
   padding: 76px 2rem 4rem;
@@ -177,15 +177,15 @@ nav {
 .hero-texture {
   position: absolute; inset: 0;
   background-image:
-    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(201,138,44,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(122,158,130,0.06) 0%, transparent 50%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.012'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(201,138,44,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(122,158,130,0.08) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   pointer-events: none;
 }
 .hero-ornament {
   position: absolute;
   width: 600px; height: 600px;
-  border: 1px solid rgba(201,138,44,0.1);
+  border: 1px solid rgba(176,128,80,0.2);
   border-radius: 50%;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
@@ -194,7 +194,7 @@ nav {
 .hero-ornament::before {
   content: '';
   position: absolute; inset: 40px;
-  border: 1px solid rgba(201,138,44,0.06);
+  border: 1px solid rgba(176,128,80,0.12);
   border-radius: 50%;
 }
 .hero-content {
@@ -210,22 +210,20 @@ nav {
   height: auto;
   display: block;
   margin: 0 auto 2rem;
-  mix-blend-mode: screen;
-  filter: brightness(1.1) contrast(1.05);
 }
 .hero-eyebrow {
   font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  color: var(--gold-bright);
+  color: var(--gold-dark);
   margin-bottom: 1.2rem;
 }
 .hero-title {
   font-family: var(--font-display);
   font-size: clamp(5rem, 14vw, 10rem);
   font-weight: 300;
-  color: var(--white);
+  color: var(--navy-dark);
   letter-spacing: 0.06em;
   line-height: 0.9;
   margin-bottom: 0.3rem;
@@ -234,13 +232,13 @@ nav {
   font-family: var(--font-display);
   font-size: clamp(2rem, 6vw, 4rem);
   font-weight: 300;
-  color: var(--gold-bright);
+  color: var(--gold-dark);
   letter-spacing: 0.25em;
   margin-bottom: 2rem;
 }
 .hero-divider {
   width: 80px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
   margin: 0 auto 2rem;
 }
 .hero-meta {
@@ -248,7 +246,7 @@ nav {
   font-size: 1.25rem;
   font-weight: 300;
   font-style: italic;
-  color: rgba(255,255,255,0.8);
+  color: var(--navy-dark);
   letter-spacing: 0.04em;
   margin-bottom: 0.5rem;
 }
@@ -258,21 +256,21 @@ nav {
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
+  color: rgba(28,38,57,0.5);
 }
 .hero-scroll {
   position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-  color: rgba(255,255,255,0.7);
+  color: rgba(28,38,57,0.5);
   font-family: var(--font-body);
   font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
   animation: pulse 2s ease-in-out infinite;
 }
-@keyframes pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+@keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.9; } }
 .hero-scroll::after {
   content: '';
   width: 1px; height: 36px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.7), transparent);
+  background: linear-gradient(to bottom, rgba(28,38,57,0.5), transparent);
 }
 
 /* ---- SECTIONS ---- */
