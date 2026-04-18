@@ -717,18 +717,27 @@ function spin() {
   }
 
   // Calculate where the wheel needs to stop so chosen slice is at top (pointer)
-  // Pointer is at top = -PI/2 from 0
-  // We need the midpoint of the chosen slice to land at top
-  const sliceMidAngles = getSliceMidAngles();
-  const targetMid = sliceMidAngles[chosen];
+  // drawWheel draws slices starting at (rot - PI/2), so slice[0] starts at rot - PI/2
+  // We need the midpoint of the chosen slice to be at angle 0 in draw space (top = -PI/2 + rot)
+  // Slice mid in draw-space = rot - PI/2 + cumulative_angle + sweep/2
+  // We want that to equal -PI/2 + finalRot  =>  finalRot = rot - cumulative_angle - sweep/2 + N*2PI
+  
+  const total2 = players.reduce((s, p) => s + p.tickets, 0);
+  let cumAngle = 0;
+  for (let i = 0; i < chosen; i++) cumAngle += (players[i].tickets / total2) * 2 * Math.PI;
+  const chosenSweep = (players[chosen].tickets / total2) * 2 * Math.PI;
+  const chosenMid = cumAngle + chosenSweep / 2;
 
-  // We want targetMid + finalRotation ≡ -PI/2 (mod 2PI)
-  // So finalRotation = -PI/2 - targetMid
-  // But we add several full rotations for drama
-  const minSpins = 6;
-  const extraSpins = minSpins * 2 * Math.PI + (Math.random() * 2 * Math.PI);
-  const targetRotation = rotation - targetMid - (Math.PI / 2) - (rotation % (2 * Math.PI)) + extraSpins;
-  const finalRotation = targetRotation + Math.ceil(minSpins) * 2 * Math.PI;
+  // finalRot such that top of wheel (angle = rot - PI/2) lands on chosenMid
+  // rot - PI/2 ≡ chosenMid (mod 2PI)  =>  rot = chosenMid + PI/2
+  const minSpins = 7;
+  const baseTarget = chosenMid + Math.PI / 2;
+  // Normalise to current rotation, then add spins
+  const currentNorm = ((rotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+  const baseNorm = ((baseTarget % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+  let delta = baseNorm - currentNorm;
+  if (delta < 0) delta += 2 * Math.PI;
+  const finalRotation = rotation + delta + minSpins * 2 * Math.PI + (Math.random() * 0.5 * Math.PI);
 
   const duration = 5500 + Math.random() * 1000;
   const startRot = rotation;

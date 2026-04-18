@@ -131,8 +131,15 @@ nav {
   height: 28px;
   width: auto;
   display: block;
-  mix-blend-mode: screen;
-  filter: brightness(1.1);
+  background: rgba(255,255,255,0.0);
+  border-radius: 3px;
+}
+.nav-logo-pill {
+  display: flex; align-items: center;
+  background: rgba(250,240,215,0.12);
+  border: 1px solid rgba(201,138,44,0.2);
+  border-radius: 4px;
+  padding: 3px 10px;
 }
 .nav-logo-text {
   font-family: var(--font-display);
@@ -288,10 +295,10 @@ section {
   margin-bottom: 0.6rem;
 }
 .section-title {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 400;
-  font-style: italic;
+  font-family: var(--font-body);
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
   color: var(--navy-dark);
   margin-bottom: 0.5rem;
   line-height: 1.1;
@@ -312,7 +319,7 @@ section {
   max-width: 1100px;
   margin: 0 auto;
 }
-#standings-section .section-title { color: var(--white); font-style: italic; }
+#standings-section .section-title { color: var(--white); }
 #standings-section .section-label { color: var(--gold-bright); }
 #standings-section .section-rule { background: var(--gold-bright); }
 
@@ -619,7 +626,6 @@ section {
   font-size: 1.1rem;
   color: var(--white);
   font-weight: 400;
-  font-style: italic;
 }
 .results-day-units {
   margin-left: auto;
@@ -954,12 +960,18 @@ footer {
 .footer-logo {
   margin-bottom: 1rem;
 }
+.footer-logo {
+  background: rgba(250,240,215,0.08);
+  border: 1px solid rgba(201,138,44,0.15);
+  border-radius: 6px;
+  display: inline-block;
+  padding: 10px 20px;
+  margin-bottom: 0.75rem;
+}
 .footer-logo img {
   height: 42px;
   width: auto;
-  opacity: 0.8;
-  mix-blend-mode: screen;
-  filter: brightness(0.95);
+  display: block;
 }
 footer p {
   font-size: 0.6rem;
@@ -1331,8 +1343,10 @@ footer p {
 <nav>
   <div class="nav-top">
     <a href="#hero" class="nav-logo">
-      <img src="/Wedhgoods-palmsprings-logo.png" alt="Wedghoods Palm Springs" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-      <span class="nav-logo-text" style="display:none;">Wedghoods — Palm Springs</span>
+      <div class="nav-logo-pill">
+        <img src="/Wedhgoods-palmsprings-logo.png" alt="Wedghoods Palm Springs" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="nav-logo-text" style="display:none;">Wedghoods — Palm Springs</span>
+      </div>
     </a>
   </div>
   <ul class="nav-links">
