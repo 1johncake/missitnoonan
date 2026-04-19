@@ -643,7 +643,8 @@ function buildManualRows() {
    ============================================================ */
 async function loadCSV() {
   try {
-    const res  = await fetch(CSV_URL);
+    const proxyUrl = '/.netlify/functions/fetch-csv?url=' + encodeURIComponent(CSV_URL + '&_=' + Date.now());
+    const res  = await fetch(proxyUrl);
     const text = await res.text();
     const rows = text.trim().split('\n');
     const headers = rows[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
