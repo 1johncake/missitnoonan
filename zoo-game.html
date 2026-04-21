@@ -14,33 +14,23 @@
     <style>
         /* ── Variables ──────────────────────────────────── */
         :root {
-            /* Brand green — header only */
             --green-dark:   #1a5c2a;
             --green-mid:    #2d8c47;
-
-            /* Slate — table chrome & buttons */
             --slate-dark:   #1e293b;
             --slate-mid:    #334155;
             --slate-light:  #e2e8f0;
-
-            /* Amber — assigned cells & active dots */
             --amber-dark:   #b45309;
             --amber-mid:    #d97706;
             --amber-light:  #fef3c7;
             --amber-border: #f59e0b;
-
-            /* Blue — current hole dot */
             --blue-dark:    #1d4ed8;
             --blue-mid:     #3b82f6;
-
-            /* Neutrals */
             --text:         #1a1a1a;
             --text-muted:   #64748b;
             --bg:           #f4f6f8;
             --card:         #ffffff;
             --border:       #e2e8f0;
             --shadow:       rgba(0,0,0,0.07);
-
             --radius:       10px;
             --radius-sm:    6px;
             --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
@@ -59,6 +49,8 @@
 
         /* ── Reset ──────────────────────────────────────── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body { overflow-x: hidden; max-width: 100vw; }
 
         body {
             font-family: var(--font);
@@ -82,9 +74,9 @@
         /* ── Header ─────────────────────────────────────── */
         .header {
             background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
-            padding: 0 14px;
+            padding: 0 12px;
             padding-top: env(safe-area-inset-top);
-            height: calc(56px + env(safe-area-inset-top));
+            height: calc(66px + env(safe-area-inset-top));
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -92,77 +84,28 @@
             top: 0;
             z-index: 80;
             box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            overflow: hidden;
         }
 
-        .header-brand { display: flex; align-items: center; gap: 10px; }
-        .header-brand img { height: 36px; width: auto; display: block; flex-shrink: 0; }
-        .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
-        .brand-title { font-size: 1.05rem; font-weight: 800; color: white; }
-        .brand-sub   { font-size: 0.6rem; font-weight: 500; color: rgba(255,255,255,0.65); letter-spacing: 0.09em; text-transform: uppercase; }
+        .header-brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+        .header-brand img { height: 50px; width: auto; display: block; flex-shrink: 0; }
+        .brand-text { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+        .brand-title { font-size: 1.1rem; font-weight: 800; color: white; white-space: nowrap; }
+        .brand-sub   { font-size: 0.57rem; font-weight: 500; color: rgba(255,255,255,0.65); letter-spacing: 0.09em; text-transform: uppercase; }
 
-        .header-actions { display: flex; align-items: center; gap: 4px; }
-
-        .summary-pill {
-            background: rgba(255,255,255,0.18);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 20px;
-            padding: 6px 13px;
-            font-size: 0.78rem; font-weight: 600;
-            color: white; margin-right: 2px;
-            transition: background 0.15s;
-        }
-        .summary-pill:hover { background: rgba(255,255,255,0.28); }
-
-        /* Back link */
         .header-back {
-            font-size: 0.62rem; font-weight: 500;
+            font-size: 0.58rem; font-weight: 500;
             color: rgba(255,255,255,0.5);
             text-decoration: none;
-            letter-spacing: 0.06em;
-            padding: 4px 0;
+            letter-spacing: 0.05em;
             transition: color 0.15s;
             white-space: nowrap;
+            margin-top: 1px;
+            display: block;
         }
         .header-back:hover { color: rgba(255,255,255,0.85); }
 
-        /* Player hold badges in header */
-        .header-badges {
-            display: flex; align-items: center; gap: 6px;
-            margin-right: 6px;
-        }
-        .player-badge {
-            display: flex; flex-direction: column; align-items: center;
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            padding: 3px 8px;
-            min-width: 36px;
-        }
-        .player-badge.has-animals {
-            background: rgba(217,119,6,0.35);
-            border-color: rgba(245,158,11,0.6);
-        }
-        .badge-name {
-            font-size: 0.5rem; font-weight: 700;
-            color: rgba(255,255,255,0.65);
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            max-width: 44px;
-            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-        }
-        .badge-count {
-            font-size: 0.85rem; font-weight: 800;
-            color: white; line-height: 1.1;
-        }
-        .player-badge.has-animals .badge-count { color: #fbbf24; }
-
-        /* Cell flash on assign */
-        @keyframes cellFlash {
-            0%   { box-shadow: 0 0 0 0 rgba(45,140,71,0.7); }
-            50%  { box-shadow: 0 0 0 6px rgba(45,140,71,0); }
-            100% { box-shadow: 0 0 0 0 rgba(45,140,71,0); }
-        }
-        .cell-btn.flash { animation: cellFlash 0.4s ease-out; }
+        .header-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 
         .icon-btn {
             width: 38px; height: 38px;
@@ -173,29 +116,74 @@
         }
         .icon-btn:hover { background: rgba(255,255,255,0.2); }
 
+        /* ── Action Bar ─────────────────────────────────── */
+        .action-bar {
+            background: var(--slate-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 7px 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            position: sticky;
+            top: calc(66px + env(safe-area-inset-top));
+            z-index: 70;
+        }
+
+        .action-bar-btn {
+            flex: 1;
+            max-width: 160px;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem; font-weight: 600;
+            display: flex; align-items: center; justify-content: center; gap: 5px;
+            transition: all 0.15s;
+            color: white;
+        }
+        .action-bar-btn.settle {
+            background: var(--green-mid);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .action-bar-btn.settle:hover { background: var(--green-dark); }
+
+        .action-bar-btn.new-game {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.9);
+        }
+        .action-bar-btn.new-game:hover { background: rgba(255,255,255,0.15); }
+
+        /* Cell flash on assign */
+        @keyframes cellFlash {
+            0%   { box-shadow: 0 0 0 0 rgba(45,140,71,0.7); }
+            50%  { box-shadow: 0 0 0 6px rgba(45,140,71,0); }
+            100% { box-shadow: 0 0 0 0 rgba(45,140,71,0); }
+        }
+        .cell-btn.flash { animation: cellFlash 0.4s ease-out; }
+
         /* ── Main ───────────────────────────────────────── */
-        .main { max-width: 680px; margin: 0 auto; padding: 14px 12px; }
+        .main { max-width: 100%; margin: 0 auto; padding: 10px 10px; overflow-x: hidden; }
 
         /* ── Hole Nav Card ──────────────────────────────── */
         .hole-nav-card {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 12px 14px 14px;
-            margin-bottom: 12px;
+            padding: 10px 10px 12px;
+            margin-bottom: 10px;
             box-shadow: 0 1px 4px var(--shadow);
         }
 
         .hole-nav {
             display: flex; align-items: center;
-            justify-content: space-between; gap: 10px;
-            margin-bottom: 14px;
+            justify-content: space-between; gap: 8px;
+            margin-bottom: 12px;
         }
 
         .hole-arrow {
-            width: 50px; height: 50px; border-radius: 50%;
+            width: 44px; height: 44px; border-radius: 50%;
             background: var(--slate-mid); color: white;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
             box-shadow: 0 2px 6px rgba(0,0,0,0.18);
@@ -208,13 +196,13 @@
         .hole-center { flex: 1; text-align: center; }
 
         .hole-label {
-            font-size: 0.6rem; font-weight: 700;
+            font-size: 0.58rem; font-weight: 700;
             letter-spacing: 0.13em; text-transform: uppercase;
             color: var(--text-muted); display: block; margin-bottom: 1px;
         }
 
         .hole-number {
-            font-size: 2.8rem; font-weight: 800;
+            font-size: 2.4rem; font-weight: 800;
             color: var(--slate-dark); line-height: 1; display: block;
         }
         [data-theme="dark"] .hole-number { color: #e2e8f0; }
@@ -223,15 +211,15 @@
         .hole-dots {
             display: grid;
             grid-template-columns: repeat(9, 1fr);
-            gap: 5px;
+            gap: 4px;
         }
 
         .hole-dot {
-            aspect-ratio: 1; min-height: 32px;
-            border-radius: var(--radius-sm);
+            aspect-ratio: 1; min-height: 26px;
+            border-radius: 4px;
             border: 2px solid var(--border);
             background: transparent;
-            font-size: 0.68rem; font-weight: 700;
+            font-size: 0.6rem; font-weight: 700;
             color: var(--text-muted);
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
@@ -262,36 +250,49 @@
             overflow: hidden;
             box-shadow: 0 1px 4px var(--shadow);
             margin-bottom: 12px;
+            max-width: 100%;
         }
 
-        .grid-table { width: 100%; border-collapse: collapse; }
+        .grid-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
 
-        /* Slate column header — not green */
         .grid-table thead tr { background: var(--slate-dark); }
 
         .th-animal {
-            padding: 10px 10px;
+            padding: 8px 4px 8px 8px;
             text-align: left;
-            font-size: 0.62rem; font-weight: 700;
-            letter-spacing: 0.1em; text-transform: uppercase;
-            color: rgba(255,255,255,0.6); width: 34%;
+            font-size: 0.56rem; font-weight: 700;
+            letter-spacing: 0.09em; text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            width: 32%;
         }
 
         .th-player {
-            padding: 8px 4px; text-align: center;
+            padding: 7px 3px; text-align: center;
             color: white; cursor: pointer;
             transition: background 0.15s;
+            vertical-align: middle;
         }
         .th-player:hover { background: rgba(255,255,255,0.1); }
 
-        .player-name-display {
-            display: block; font-size: 0.78rem; font-weight: 700;
-            max-width: 72px;
-            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-            margin: 0 auto;
+        /* Stacked name + count inside header */
+        .th-player-inner {
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
         }
-
-        .edit-hint { display: block; font-size: 0.52rem; opacity: 0.5; margin-top: 2px; font-weight: 400; }
+        .player-name-display {
+            display: block; font-size: 0.72rem; font-weight: 700;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            max-width: 100%;
+        }
+        .th-player-count {
+            font-size: 1.1rem; font-weight: 800;
+            color: rgba(255,255,255,0.7); line-height: 1;
+        }
+        .th-player-count.has-animals { color: #fbbf24; }
+        .edit-hint { display: block; font-size: 0.46rem; opacity: 0.4; font-weight: 400; margin-top: 1px; }
 
         /* Animal rows */
         .animal-row:nth-child(even) td { background: rgba(0,0,0,0.016); }
@@ -299,14 +300,24 @@
         .animal-row td { border-bottom: 1px solid var(--border); }
         .animal-row:last-child td { border-bottom: none; }
 
-        .td-animal { padding: 0 8px 0 10px; height: 52px; vertical-align: middle; cursor: help; }
-        .animal-label { display: flex; align-items: center; gap: 5px; }
-        .animal-emoji { font-size: 1.05rem; flex-shrink: 0; }
-        .animal-name-text { font-size: 0.8rem; font-weight: 500; color: var(--text); }
+        .td-animal { padding: 0 3px 0 8px; height: 50px; vertical-align: middle; cursor: help; }
+        .animal-label { display: flex; align-items: center; gap: 4px; }
+        .animal-emoji { font-size: 0.95rem; flex-shrink: 0; }
+        .animal-name-text { font-size: 0.75rem; font-weight: 600; color: var(--text); line-height: 1.2; }
 
-        .td-cell { text-align: center; padding: 4px 3px; height: 52px; vertical-align: middle; }
+        /* Custom wildcard row */
+        .td-animal.custom-animal { cursor: pointer; }
+        .td-animal.custom-animal:active { background: rgba(45,140,71,0.08); }
+        .td-animal.custom-animal .animal-name-text { color: var(--green-mid); font-style: italic; }
+        [data-theme="dark"] .td-animal.custom-animal .animal-name-text { color: #4ade80; }
+        .custom-rename-hint {
+            display: block; font-size: 0.5rem;
+            color: var(--text-muted); margin-top: 1px; opacity: 0.75;
+        }
 
-        /* Amber assigned cells */
+        .td-cell { text-align: center; padding: 3px 2px; height: 50px; vertical-align: middle; }
+
+        /* Cell buttons */
         .cell-btn {
             width: 100%; height: 44px;
             border-radius: var(--radius-sm);
@@ -326,25 +337,9 @@
         }
         .cell-btn.owner:hover { background: var(--amber-dark); }
 
-        .cell-check { font-size: 1rem; line-height: 1; }
-        .cell-hole  { font-size: 0.58rem; line-height: 1; opacity: 0.85; font-weight: 600; }
-
-        /* Totals row — slate tint */
-        .totals-row td { padding: 10px 10px; background: var(--slate-light); }
-        [data-theme="dark"] .totals-row td { background: rgba(51,65,85,0.4); }
-
-        .td-total-label {
-            font-size: 0.7rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.07em;
-            color: var(--slate-mid); vertical-align: middle;
-        }
-        [data-theme="dark"] .td-total-label { color: #94a3b8; }
-
-        .td-total-val {
-            text-align: center; font-size: 1.2rem; font-weight: 800;
-            color: var(--slate-dark); vertical-align: middle;
-        }
-        [data-theme="dark"] .td-total-val { color: #e2e8f0; }
+        /* Bigger bolder check mark and hole number in owned cells */
+        .cell-check { font-size: 1.15rem; font-weight: 900; line-height: 1; }
+        .cell-hole  { font-size: 0.62rem; line-height: 1; opacity: 0.9; font-weight: 700; letter-spacing: 0.02em; }
 
         /* ── Buttons ────────────────────────────────────── */
         .btn {
@@ -371,14 +366,12 @@
 
         .player-count-row { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
 
-        /* Setup animal preview */
         .setup-animals {
             display: flex; justify-content: center; flex-wrap: wrap;
             gap: 6px; margin-bottom: 20px; font-size: 1.4rem;
             opacity: 0.75;
         }
 
-        /* Setup name inputs */
         .setup-names { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
         .setup-name-row { display: flex; align-items: center; gap: 10px; }
         .setup-name-emoji { font-size: 1rem; flex-shrink: 0; width: 24px; text-align: center; }
@@ -509,7 +502,6 @@
             display: flex; gap: 10px; flex-shrink: 0;
         }
 
-        /* Summary internals */
         .sum-player-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
             gap: 10px; margin-bottom: 6px;
@@ -534,7 +526,6 @@
         [data-theme="dark"] .spc-tag { color: #fbbf24; border-color: #d97706; }
         .spc-none { font-size: 0.72rem; color: var(--text-muted); margin-top: 6px; font-style: italic; }
 
-        /* Collapsible history */
         .history-toggle {
             width: 100%;
             display: flex; align-items: center; justify-content: space-between;
@@ -549,10 +540,8 @@
             transition: color 0.15s;
         }
         .history-toggle:hover { color: var(--text); }
-
         .chevron { font-size: 0.85rem; display: inline-block; transition: transform 0.22s; }
         .history-toggle.open .chevron { transform: rotate(180deg); }
-
         .history-body { display: none; padding-bottom: 4px; }
         .history-body.open { display: block; }
 
@@ -582,11 +571,12 @@
 
         /* ── Responsive ─────────────────────────────────── */
         @media (max-width: 380px) {
-            .hole-dot { font-size: 0.62rem; min-height: 28px; }
-            .hole-number { font-size: 2.3rem; }
+            .hole-dot { font-size: 0.56rem; min-height: 23px; }
+            .hole-number { font-size: 2rem; }
             .cell-btn { height: 40px; }
-            .td-animal { padding: 0 4px 0 6px; }
-            .animal-name-text { font-size: 0.74rem; }
+            .td-animal { padding: 0 2px 0 6px; }
+            .animal-name-text { font-size: 0.68rem; }
+            .th-animal { width: 30%; }
         }
     </style>
 </head>
@@ -596,19 +586,23 @@
 <header class="header" role="banner">
     <div class="header-brand">
         <img src="https://res.cloudinary.com/dqe6xjwoe/image/upload/v1753074898/zoogametracker_header_nz0xgs-1_hdz04i_e_background_removal_f_png_ddh5h7.png"
-             alt="" aria-hidden="true" height="36">
+             alt="" aria-hidden="true" height="50">
         <div class="brand-text">
-            <span class="brand-title">Zoo Game</span>
+            <span class="brand-title">Zoo Game Tracker</span>
             <a href="/zoo-game-landing.html" class="header-back">← missitnoonan.com</a>
         </div>
     </div>
     <div class="header-actions">
-        <div class="header-badges" id="header-badges"></div>
-        <button class="summary-pill" id="summary-btn">Settle Up</button>
         <button class="icon-btn" id="dark-toggle" aria-label="Toggle dark mode">🌙</button>
         <button class="icon-btn" id="help-btn" aria-label="Help">ℹ️</button>
     </div>
 </header>
+
+<!-- ══════ ACTION BAR ══════════════════════════════════════ -->
+<div class="action-bar" id="action-bar" style="display:none">
+    <button class="action-bar-btn settle" id="summary-btn">🏌️ Settle Up</button>
+    <button class="action-bar-btn new-game" id="new-game-action-btn">🔄 New Game</button>
+</div>
 
 <!-- ══════ MAIN ════════════════════════════════════════════ -->
 <main class="main" role="main" id="main-content"></main>
@@ -622,7 +616,7 @@
     <div class="drawer-body" id="help-body"></div>
 </div>
 
-<!-- ══════ NAME EDIT SHEET ════════════════════════════════ -->
+<!-- ══════ PLAYER NAME EDIT SHEET ═════════════════════════ -->
 <div class="overlay" id="name-overlay" role="dialog" aria-modal="true" aria-label="Edit player name" aria-hidden="true">
     <div class="sheet">
         <h3 id="name-sheet-title">Edit Player Name</h3>
@@ -631,6 +625,19 @@
         <div class="sheet-actions">
             <button class="btn btn-ghost" id="name-cancel">Cancel</button>
             <button class="btn btn-primary" id="name-save">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════ ANIMAL NAME EDIT SHEET ═════════════════════════ -->
+<div class="overlay" id="animal-name-overlay" role="dialog" aria-modal="true" aria-label="Name this animal" aria-hidden="true">
+    <div class="sheet">
+        <h3>🎲 Name This Animal</h3>
+        <input type="text" id="animal-name-input" maxlength="24"
+               autocomplete="off" autocorrect="off" spellcheck="false" placeholder="e.g. Ostrich, Platypus…">
+        <div class="sheet-actions">
+            <button class="btn btn-ghost" id="animal-name-cancel">Cancel</button>
+            <button class="btn btn-primary" id="animal-name-save">Save</button>
         </div>
     </div>
 </div>
@@ -644,7 +651,6 @@
         </div>
         <div class="modal-body" id="summary-body"></div>
         <div class="modal-foot">
-            <button class="btn btn-ghost" id="new-game-btn">New Game</button>
             <button class="btn btn-primary" id="copy-btn">Copy Results</button>
         </div>
     </div>
@@ -658,21 +664,23 @@
 
 /* ── Animal definitions ───────────────────────────────────── */
 const ANIMALS = [
-    { id: 'snake',     emoji: '🐍', name: 'Snake',     desc: 'Player three putts' },
-    { id: 'cobra',     emoji: '🐉', name: 'Cobra',     desc: 'Player four putts' },
-    { id: 'dolphin',   emoji: '🐬', name: 'Dolphin',   desc: 'Player loses ball in water' },
-    { id: 'camel',     emoji: '🐪', name: 'Camel',     desc: 'Player hits ball into a bunker' },
-    { id: 'armadillo', emoji: '🦔', name: 'Armadillo', desc: 'Player hits ball that hits the cart path' },
-    { id: 'woodpecker',emoji: '🦜', name: 'Woodpecker',desc: 'Player hits ball that hits a tree' },
-    { id: 'turtle',    emoji: '🐢', name: 'Turtle',    desc: "Player's drive does not pass the forward tees" },
-    { id: 'lonewolf',  emoji: '🐺', name: 'Lone Wolf', desc: "Player's drive lands in an adjacent fairway" },
-    { id: 'rhino',     emoji: '🦏', name: 'Rhino',     desc: 'Player loses ball (not in water)' },
-    { id: 'crane',     emoji: '🦩', name: 'Crane',     desc: 'Player hits a piece of construction equipment' },
-    { id: 'monkey',    emoji: '🐒', name: 'Monkey',    desc: 'Player hits ball off a fence' },
-    { id: 'robot',     emoji: '🤖', name: 'Robot',     desc: 'Player hits something metal (sprinkler box, sign, etc.)' }
+    { id: 'snake',      emoji: '🐍', name: 'Snake',      desc: 'Player three putts' },
+    { id: 'cobra',      emoji: '🐉', name: 'Cobra',      desc: 'Player four putts' },
+    { id: 'dolphin',    emoji: '🐬', name: 'Dolphin',    desc: 'Player loses ball in water' },
+    { id: 'camel',      emoji: '🐪', name: 'Camel',      desc: 'Player hits ball into a bunker' },
+    { id: 'armadillo',  emoji: '🦔', name: 'Armadillo',  desc: 'Player hits ball that hits the cart path' },
+    { id: 'woodpecker', emoji: '🦜', name: 'Woodpecker', desc: 'Player hits ball that hits a tree' },
+    { id: 'turtle',     emoji: '🐢', name: 'Turtle',     desc: "Player's drive does not pass the forward tees" },
+    { id: 'lonewolf',   emoji: '🐺', name: 'Lone Wolf',  desc: "Player's drive lands in an adjacent fairway" },
+    { id: 'rhino',      emoji: '🦏', name: 'Rhino',      desc: 'Player loses ball (not in water)' },
+    { id: 'crane',      emoji: '🦩', name: 'Crane',      desc: 'Player hits a piece of construction equipment' },
+    { id: 'monkey',     emoji: '🐒', name: 'Monkey',     desc: 'Player hits ball off a fence' },
+    { id: 'robot',      emoji: '🤖', name: 'Robot',      desc: 'Player hits something metal (sprinkler box, sign, etc.)' },
+    { id: 'wildcard',   emoji: '🎲', name: 'New Animal', desc: 'Something happened. Tap the row label to name it on the spot.' }
 ];
 
-const STORAGE_KEY = 'zooGame_v5';
+const WILDCARD_ID  = 'wildcard';
+const STORAGE_KEY  = 'zooGame_v6';
 
 /* ── State ────────────────────────────────────────────────── */
 const state = {
@@ -681,8 +689,9 @@ const state = {
     playerCount:    4,
     players:        [],
     darkMode:       false,
-    ownership:      {},   // { animalId: { playerId, holeAcquired } }
-    history:        [],   // [{ animalId, playerId, hole, action, prevPlayerId }]
+    ownership:      {},
+    history:        [],
+    wildcardName:   'New Animal',
     _editingPlayer: null,
 
     playerName(id) {
@@ -697,18 +706,20 @@ const state = {
         return s;
     },
     animalsHeldBy(playerId) {
-        return ANIMALS.filter(a => this.ownership[a.id]?.playerId === playerId);
+        return ANIMALS.filter(a => this.ownership[a.id]?.playerId === playerId)
+            .map(a => a.id === WILDCARD_ID ? { ...a, name: this.wildcardName } : a);
     },
 
     save() {
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                currentHole: this.currentHole,
-                players:     this.players,
-                darkMode:    this.darkMode,
-                ownership:   this.ownership,
-                history:     this.history,
-                savedAt:     Date.now()
+                currentHole:  this.currentHole,
+                players:      this.players,
+                darkMode:     this.darkMode,
+                ownership:    this.ownership,
+                history:      this.history,
+                wildcardName: this.wildcardName,
+                savedAt:      Date.now()
             }));
         } catch(e) { console.warn('Save failed', e); }
     },
@@ -719,13 +730,14 @@ const state = {
             if (!raw) return false;
             const d = JSON.parse(raw);
             if (Array.isArray(d.players) && d.players.length > 0) {
-                this.players     = d.players;
-                this.playerCount = d.players.length;
-                this.currentHole = d.currentHole || 1;
-                this.darkMode    = !!d.darkMode;
-                this.ownership   = d.ownership   || {};
-                this.history     = d.history     || [];
-                this.screen      = 'game';
+                this.players      = d.players;
+                this.playerCount  = d.players.length;
+                this.currentHole  = d.currentHole || 1;
+                this.darkMode     = !!d.darkMode;
+                this.ownership    = d.ownership   || {};
+                this.history      = d.history     || [];
+                this.wildcardName = d.wildcardName || 'New Animal';
+                this.screen       = 'game';
                 return true;
             }
         } catch(e) { console.warn('Load failed', e); }
@@ -733,23 +745,26 @@ const state = {
     },
 
     freshPlayers(count) {
-        this.players     = Array.from({ length: count }, (_, i) => ({ id: i + 1, name: `Player ${i + 1}` }));
-        this.ownership   = {};
-        this.history     = [];
-        this.currentHole = 1;
+        this.players      = Array.from({ length: count }, (_, i) => ({ id: i + 1, name: `Player ${i + 1}` }));
+        this.ownership    = {};
+        this.history      = [];
+        this.currentHole  = 1;
+        this.wildcardName = 'New Animal';
     }
 };
 
 /* ── DOM refs ─────────────────────────────────────────────── */
-const mainEl         = document.getElementById('main-content');
-const helpDrawer     = document.getElementById('help-drawer');
-const helpBody       = document.getElementById('help-body');
-const nameOverlay    = document.getElementById('name-overlay');
-const nameInput      = document.getElementById('name-input');
-const nameTitle      = document.getElementById('name-sheet-title');
-const summaryOverlay = document.getElementById('summary-overlay');
-const summaryBody    = document.getElementById('summary-body');
-const toastEl        = document.getElementById('toast');
+const mainEl            = document.getElementById('main-content');
+const helpDrawer        = document.getElementById('help-drawer');
+const helpBody          = document.getElementById('help-body');
+const nameOverlay       = document.getElementById('name-overlay');
+const nameInput         = document.getElementById('name-input');
+const nameTitle         = document.getElementById('name-sheet-title');
+const animalNameOverlay = document.getElementById('animal-name-overlay');
+const animalNameInput   = document.getElementById('animal-name-input');
+const summaryOverlay    = document.getElementById('summary-overlay');
+const summaryBody       = document.getElementById('summary-body');
+const toastEl           = document.getElementById('toast');
 let toastTimer = null;
 
 /* ── Utilities ────────────────────────────────────────────── */
@@ -776,26 +791,13 @@ function applyTheme() {
 /* ── Render ───────────────────────────────────────────────── */
 function render() {
     state.screen === 'setup' ? renderSetup() : renderGame();
-    updateHeaderBadges();
-}
-
-function updateHeaderBadges() {
-    const el = document.getElementById('header-badges');
-    if (!el) return;
-    if (state.screen !== 'game' || !state.players.length) { el.innerHTML = ''; return; }
-    el.innerHTML = state.players.map(p => {
-        const count = state.totalHeld(p.id);
-        const name = p.name.length > 6 ? p.name.slice(0,5) + '…' : p.name;
-        return `<div class="player-badge${count > 0 ? ' has-animals' : ''}">
-            <span class="badge-name">${esc(name)}</span>
-            <span class="badge-count">${count}</span>
-        </div>`;
-    }).join('');
+    const bar = document.getElementById('action-bar');
+    if (bar) bar.style.display = state.screen === 'game' ? 'flex' : 'none';
 }
 
 /* ── Setup ────────────────────────────────────────────────── */
 function renderSetup() {
-    const animalPreview = ANIMALS.map(a => a.emoji).join(' ');
+    const animalPreview = ANIMALS.filter(a => a.id !== WILDCARD_ID).map(a => a.emoji).join(' ');
     const playerEmojis = ['🏌️','🏌️‍♀️','🏌️','🏌️‍♀️'];
 
     function buildNameInputs(count) {
@@ -831,9 +833,7 @@ function renderSetup() {
         </div>`;
 
     function refreshNameInputs() {
-        const namesDiv = document.getElementById('setup-names');
-        namesDiv.outerHTML = buildNameInputs(state.playerCount);
-        // re-attach input listeners after rebuild
+        document.getElementById('setup-names').outerHTML = buildNameInputs(state.playerCount);
         document.querySelectorAll('.setup-name-input').forEach(inp => {
             inp.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('begin-btn').click(); });
         });
@@ -858,14 +858,12 @@ function renderSetup() {
         }
     });
 
-    // Enter key on any name input triggers begin
     document.querySelectorAll('.setup-name-input').forEach(inp => {
         inp.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('begin-btn').click(); });
     });
 
     document.getElementById('begin-btn').addEventListener('click', () => {
         state.freshPlayers(state.playerCount);
-        // Apply any names typed on setup screen
         document.querySelectorAll('.setup-name-input').forEach(inp => {
             const idx = parseInt(inp.dataset.pidx, 10);
             const val = inp.value.trim();
@@ -890,18 +888,27 @@ function renderGame() {
         dotsHtml += `<button class="${cls}" data-hole="${h}" aria-label="Hole ${h}">${h}</button>`;
     }
 
+    // Column headers — name + count, rename hint below
     let thPlayers = '';
     players.forEach(p => {
+        const count = state.totalHeld(p.id);
         thPlayers += `
             <th class="th-player" data-pid="${p.id}" title="Tap to rename">
-                <span class="player-name-display">${esc(p.name)}</span>
-                <span class="edit-hint">✏️ rename</span>
+                <div class="th-player-inner">
+                    <span class="player-name-display">${esc(p.name)}</span>
+                    <span class="th-player-count${count > 0 ? ' has-animals' : ''}">${count}</span>
+                    <span class="edit-hint">✏️ rename</span>
+                </div>
             </th>`;
     });
 
+    // Animal rows — no totals row
     let rowsHtml = '';
     ANIMALS.forEach(animal => {
         const own = ownership[animal.id];
+        const isWildcard = animal.id === WILDCARD_ID;
+        const displayName = isWildcard ? state.wildcardName : animal.name;
+
         let cells = '';
         players.forEach(p => {
             const isOwner = own && own.playerId === p.id;
@@ -909,28 +916,39 @@ function renderGame() {
                 <td class="td-cell">
                     <button class="cell-btn${isOwner ? ' owner' : ''}"
                         data-animal="${animal.id}" data-pid="${p.id}"
-                        aria-label="${esc(animal.name)} — ${esc(p.name)}"
+                        aria-label="${esc(displayName)} — ${esc(p.name)}"
                         aria-pressed="${isOwner}">
                         ${isOwner ? `<span class="cell-check">✓</span><span class="cell-hole">H${own.holeAcquired}</span>` : ''}
                     </button>
                 </td>`;
         });
 
-        rowsHtml += `
-            <tr class="animal-row">
-                <td class="td-animal" title="${esc(animal.desc)}">
-                    <div class="animal-label">
-                        <span class="animal-emoji">${animal.emoji}</span>
-                        <span class="animal-name-text">${animal.name}</span>
-                    </div>
-                </td>
-                ${cells}
-            </tr>`;
-    });
-
-    let totalCells = '';
-    players.forEach(p => {
-        totalCells += `<td class="td-total-val">${state.totalHeld(p.id)}</td>`;
+        if (isWildcard) {
+            rowsHtml += `
+                <tr class="animal-row">
+                    <td class="td-animal custom-animal" id="wildcard-label" title="Tap to name this animal">
+                        <div class="animal-label">
+                            <span class="animal-emoji">${animal.emoji}</span>
+                            <div>
+                                <span class="animal-name-text">${esc(displayName)}</span>
+                                <span class="custom-rename-hint">tap to rename</span>
+                            </div>
+                        </div>
+                    </td>
+                    ${cells}
+                </tr>`;
+        } else {
+            rowsHtml += `
+                <tr class="animal-row">
+                    <td class="td-animal" title="${esc(animal.desc)}">
+                        <div class="animal-label">
+                            <span class="animal-emoji">${animal.emoji}</span>
+                            <span class="animal-name-text">${esc(displayName)}</span>
+                        </div>
+                    </td>
+                    ${cells}
+                </tr>`;
+        }
     });
 
     mainEl.innerHTML = `
@@ -952,13 +970,7 @@ function renderGame() {
                 <thead>
                     <tr><th class="th-animal">Animal</th>${thPlayers}</tr>
                 </thead>
-                <tbody>
-                    ${rowsHtml}
-                    <tr class="totals-row">
-                        <td class="td-total-label">Current Hold</td>
-                        ${totalCells}
-                    </tr>
-                </tbody>
+                <tbody>${rowsHtml}</tbody>
             </table>
         </div>`;
 
@@ -971,6 +983,9 @@ function renderGame() {
     document.querySelectorAll('.th-player').forEach(th => {
         th.addEventListener('click', () => openNameEditor(parseInt(th.dataset.pid, 10)));
     });
+
+    const wcLabel = document.getElementById('wildcard-label');
+    if (wcLabel) wcLabel.addEventListener('click', openAnimalNameEditor);
 }
 
 /* ── Hole nav ─────────────────────────────────────────────── */
@@ -981,7 +996,7 @@ function changeHole(h) {
     render();
 }
 
-/* ── Animal toggle — single listener, no stacking ────────── */
+/* ── Cell click ───────────────────────────────────────────── */
 function handleCellClick(e) {
     const btn = e.target.closest('.cell-btn');
     if (!btn) return;
@@ -991,15 +1006,16 @@ function handleCellClick(e) {
 
     const animal  = ANIMALS.find(a => a.id === animalId);
     const player  = state.players.find(p => p.id === playerId);
-    if (!animal || !player) return; // guard against stale data
+    if (!animal || !player) return;
 
+    const displayName = animalId === WILDCARD_ID ? state.wildcardName : animal.name;
     const current = state.ownership[animalId];
 
     if (current && current.playerId === playerId) {
         delete state.ownership[animalId];
         state.history.push({ animalId, playerId, hole: state.currentHole, action: 'clear', prevPlayerId: null });
         vibrate(40);
-        showToast(`${animal.emoji} ${animal.name} cleared`);
+        showToast(`${animal.emoji} ${displayName} cleared`);
     } else {
         const prevPlayerId = current ? current.playerId : null;
         state.ownership[animalId] = { playerId, holeAcquired: state.currentHole };
@@ -1007,25 +1023,24 @@ function handleCellClick(e) {
         vibrate([20, 30, 20]);
         showToast(prevPlayerId
             ? `${animal.emoji} stolen by ${player.name}!`
-            : `${animal.emoji} ${animal.name} → ${player.name}`);
+            : `${animal.emoji} ${displayName} → ${player.name}`);
     }
 
     state.save();
     render();
 
-    // Flash the newly assigned cell after render
     requestAnimationFrame(() => {
         const assignedBtn = mainEl.querySelector(`.cell-btn.owner[data-animal="${animalId}"]`);
         if (assignedBtn) {
             assignedBtn.classList.remove('flash');
-            void assignedBtn.offsetWidth; // reflow to restart animation
+            void assignedBtn.offsetWidth;
             assignedBtn.classList.add('flash');
             setTimeout(() => assignedBtn.classList.remove('flash'), 450);
         }
     });
 }
 
-/* ── Name editor ──────────────────────────────────────────── */
+/* ── Player name editor ───────────────────────────────────── */
 function openNameEditor(playerId) {
     const player = state.players.find(p => p.id === playerId);
     if (!player) return;
@@ -1049,9 +1064,34 @@ function saveName() {
     if (player) {
         const val = nameInput.value.trim();
         if (val) player.name = val;
-        state.save();
     }
+    state.save();
     closeNameEditor();
+    render();
+}
+
+/* ── Wildcard animal name editor ──────────────────────────── */
+function openAnimalNameEditor() {
+    animalNameInput.value = state.wildcardName === 'New Animal' ? '' : state.wildcardName;
+    animalNameInput.placeholder = 'e.g. Ostrich, Platypus…';
+    animalNameOverlay.classList.add('open');
+    animalNameOverlay.setAttribute('aria-hidden', 'false');
+    setTimeout(() => { animalNameInput.focus(); animalNameInput.select(); }, 60);
+}
+
+function closeAnimalNameEditor() {
+    animalNameOverlay.classList.remove('open');
+    animalNameOverlay.setAttribute('aria-hidden', 'true');
+}
+
+function saveAnimalName() {
+    const val = animalNameInput.value.trim();
+    if (val) {
+        state.wildcardName = val;
+        state.save();
+        showToast(`🎲 Animal named: ${val}`);
+    }
+    closeAnimalNameEditor();
     render();
 }
 
@@ -1081,15 +1121,16 @@ function openSummary() {
         histItems = '<ul class="history-list">';
         history.forEach(h => {
             const animal = ANIMALS.find(a => a.id === h.animalId);
-            if (!animal) return; // skip entries from old animal lists
-            const name   = esc(state.playerName(h.playerId));
+            if (!animal) return;
+            const displayName = h.animalId === WILDCARD_ID ? state.wildcardName : animal.name;
+            const name = esc(state.playerName(h.playerId));
             let text;
             if (h.action === 'clear') {
-                text = `<span class="hi-clear">${animal.emoji} ${esc(animal.name)} cleared</span>`;
+                text = `<span class="hi-clear">${animal.emoji} ${esc(displayName)} cleared</span>`;
             } else if (h.prevPlayerId) {
-                text = `${animal.emoji} <strong>${esc(state.playerName(h.prevPlayerId))}</strong> → <strong>${name}</strong> (${esc(animal.name)})`;
+                text = `${animal.emoji} <strong>${esc(state.playerName(h.prevPlayerId))}</strong> → <strong>${name}</strong> (${esc(displayName)})`;
             } else {
-                text = `${animal.emoji} <strong>${name}</strong> picks up ${esc(animal.name)}`;
+                text = `${animal.emoji} <strong>${name}</strong> picks up ${esc(displayName)}`;
             }
             histItems += `<li class="history-item"><span class="hi-hole">H${h.hole}</span><span class="hi-text">${text}</span></li>`;
         });
@@ -1118,7 +1159,7 @@ function closeSummary() {
     summaryOverlay.setAttribute('aria-hidden', 'true');
 }
 
-/* ── Copy text — text-message format, no hole numbers ─────── */
+/* ── Copy ─────────────────────────────────────────────────── */
 function generateCopyText() {
     let lines = ['🏌️ Zoo Game'];
     state.players.forEach(p => {
@@ -1134,18 +1175,21 @@ function generateCopyText() {
 function renderHelp() {
     let defs = '';
     ANIMALS.forEach(a => {
+        const isWC = a.id === WILDCARD_ID;
         defs += `
             <div class="animal-def">
                 <span class="animal-def-emoji">${a.emoji}</span>
                 <div class="animal-def-text">
-                    <strong>${a.name}</strong>
-                    <span>${esc(a.desc)}</span>
+                    <strong>${isWC ? '🎲 New Animal (Wildcard)' : esc(a.name)}</strong>
+                    <span>${isWC
+                        ? 'Something happened on the course that needs a penalty. Tap the <strong>🎲 New Animal</strong> row label to name it on the spot — it then acts like any other animal for the rest of the round and resets to "New Animal" when a new game starts.'
+                        : esc(a.desc)}</span>
                 </div>
             </div>`;
     });
     helpBody.innerHTML = `
         <h3>How It Works</h3>
-        <p>Each animal is a penalty owned by one player at a time. Animals carry forward — if you pick up a Snake on hole 1, you hold it until someone else three-putts on a later hole and takes it from you.</p>
+        <p>Each animal is a penalty owned by one player at a time. Animals carry forward — if you pick up a Snake on hole 1, you hold it until someone else three-putts and takes it from you.</p>
         <h3>Playing</h3>
         <ol>
             <li>Use <strong>← →</strong> (or swipe) to move between holes.</li>
@@ -1153,12 +1197,27 @@ function renderHelp() {
             <li>Tap a player's cell to give them that animal. If someone else held it, they lose it.</li>
             <li>Tap the cell of the player who <em>already holds</em> an animal to clear it (undo a mistake).</li>
             <li>Tap any player's column header to rename them.</li>
+            <li>Need a new animal mid-round? Tap the <strong>🎲 New Animal</strong> row label to name it on the spot.</li>
         </ol>
         <h3>Animals</h3>${defs}`;
 }
 
 function openHelp()  { helpDrawer.classList.add('open');    helpDrawer.setAttribute('aria-hidden','false'); }
 function closeHelp() { helpDrawer.classList.remove('open'); helpDrawer.setAttribute('aria-hidden','true');  }
+
+/* ── New game ─────────────────────────────────────────────── */
+function confirmNewGame() {
+    if (!confirm('Start a new game? All data will be cleared.')) return;
+    closeSummary();
+    try { localStorage.removeItem(STORAGE_KEY); } catch(_) {}
+    state.ownership    = {};
+    state.history      = [];
+    state.players      = [];
+    state.screen       = 'setup';
+    state.playerCount  = 4;
+    state.wildcardName = 'New Animal';
+    render();
+}
 
 /* ── Init ─────────────────────────────────────────────────── */
 function init() {
@@ -1170,7 +1229,6 @@ function init() {
 }
 
 function setupGlobalListeners() {
-    /* Animal cells — attached once here, never in render() */
     mainEl.addEventListener('click', handleCellClick);
 
     document.getElementById('dark-toggle').addEventListener('click', () => {
@@ -1185,13 +1243,14 @@ function setupGlobalListeners() {
     document.getElementById('summary-btn').addEventListener('click', openSummary);
     document.getElementById('close-summary').addEventListener('click', closeSummary);
 
+    document.getElementById('new-game-action-btn').addEventListener('click', confirmNewGame);
+
     document.getElementById('copy-btn').addEventListener('click', async () => {
         const text = generateCopyText();
         try {
             await navigator.clipboard.writeText(text);
             showToast('📋 Copied — ready to paste!');
         } catch(e) {
-            /* Fallback for browsers that block clipboard API */
             const ta = document.createElement('textarea');
             ta.value = text;
             ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;width:1px;height:1px';
@@ -1203,40 +1262,34 @@ function setupGlobalListeners() {
         }
     });
 
-    document.getElementById('new-game-btn').addEventListener('click', () => {
-        if (!confirm('Start a new game? All data will be cleared.')) return;
-        closeSummary();
-        try { localStorage.removeItem(STORAGE_KEY); } catch(_) {}
-        state.ownership   = {};
-        state.history     = [];
-        state.players     = [];
-        state.screen      = 'setup';
-        state.playerCount = 4;
-        render();
-    });
-
+    // Player name sheet
     document.getElementById('name-save').addEventListener('click', saveName);
     document.getElementById('name-cancel').addEventListener('click', closeNameEditor);
     nameInput.addEventListener('keydown', e => { if (e.key === 'Enter') saveName(); });
-
     nameOverlay.addEventListener('click', e => { if (e.target === nameOverlay) closeNameEditor(); });
+
+    // Animal name sheet
+    document.getElementById('animal-name-save').addEventListener('click', saveAnimalName);
+    document.getElementById('animal-name-cancel').addEventListener('click', closeAnimalNameEditor);
+    animalNameInput.addEventListener('keydown', e => { if (e.key === 'Enter') saveAnimalName(); });
+    animalNameOverlay.addEventListener('click', e => { if (e.target === animalNameOverlay) closeAnimalNameEditor(); });
+
     summaryOverlay.addEventListener('click', e => { if (e.target === summaryOverlay) closeSummary(); });
 
     document.addEventListener('keydown', e => {
         if (e.key !== 'Escape') return;
-        if (nameOverlay.classList.contains('open'))         closeNameEditor();
-        else if (summaryOverlay.classList.contains('open')) closeSummary();
-        else if (helpDrawer.classList.contains('open'))     closeHelp();
+        if (nameOverlay.classList.contains('open'))             closeNameEditor();
+        else if (animalNameOverlay.classList.contains('open'))  closeAnimalNameEditor();
+        else if (summaryOverlay.classList.contains('open'))     closeSummary();
+        else if (helpDrawer.classList.contains('open'))         closeHelp();
     });
 
-    /* Persistence */
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'hidden') state.save();
     });
     window.addEventListener('pagehide',     () => state.save(), { capture: true });
     window.addEventListener('beforeunload', () => state.save());
 
-    /* Swipe to change holes */
     let touchStartX = 0;
     mainEl.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
     mainEl.addEventListener('touchend', e => {
