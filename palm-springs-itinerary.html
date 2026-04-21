@@ -127,6 +127,15 @@
       font-weight: 400;
     }
 
+    .header-logo {
+      margin-bottom: 28px;
+    }
+
+    .header-logo img {
+      height: 56px;
+      width: auto;
+    }
+
     /* NAV STRIP */
     nav {
       background: var(--white);
@@ -318,6 +327,39 @@
       margin-top: 6px;
     }
 
+    /* VENUE ADDRESS BLOCK */
+    .venue-address {
+      padding-left: 112px;
+      margin-bottom: 20px;
+    }
+
+    .venue-address-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--navy);
+      border-radius: 4px;
+      padding: 12px 18px;
+      flex-wrap: wrap;
+    }
+
+    .venue-address-text {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .venue-address-text strong {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    @media (max-width: 640px) {
+      .venue-address { padding-left: 0; }
+    }
+
     /* EVENTS WITHIN A DAY */
     .events {
       display: flex;
@@ -449,9 +491,9 @@
     }
 
     .footer-logo img {
-      height: 32px;
+      height: 80px;
       width: auto;
-      opacity: 0.55;
+      opacity: 1;
     }
 
     @media (max-width: 640px) {
@@ -471,6 +513,9 @@
 
   <header>
     <div class="header-inner">
+      <div class="header-logo">
+        <img src="/Wedhgoods-palmsprings-logo-navy.png" alt="Wedghoods Palm Springs">
+      </div>
       <div class="header-eyebrow">Wedghoods 2026 · Palm Springs</div>
       <h1>The <em>Desert</em><br>Itinerary</h1>
       <div class="header-meta">
@@ -492,6 +537,7 @@
 
   <nav>
     <div class="nav-inner">
+      <a href="/wedghoods/palm-springs.html" style="color: var(--accent); border-bottom-color: transparent;">← Trip Home</a>
       <a href="#houses">Houses</a>
       <a href="#day1">Thu 4/30</a>
       <a href="#day2">Fri 5/1</a>
@@ -543,27 +589,20 @@
             <div class="day-number">01</div>
             <div class="day-title-block">
               <div class="day-date">Thursday · April 30</div>
-              <div class="day-title">Arrival & First Round</div>
-              <div class="day-subtitle">Touch down, get to the house, get to the tee.</div>
+              <div class="day-title">First Round</div>
+              <div class="day-subtitle">Time to get going — everyone check in on text when you arrive and make arrangements to head to the course.</div>
+            </div>
+          </div>
+          <div class="venue-address">
+            <div class="venue-address-inner">
+              <div class="venue-address-text"><strong>Indian Wells Golf Resort</strong> · 44500 Indian Wells Ln, Indian Wells, CA 92210</div>
+              <a href="https://maps.google.com/?q=Indian+Wells+Celebrity+Course,+44500+Indian+Wells+Ln,+Indian+Wells,+CA+92210" target="_blank" class="map-link">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                Directions
+              </a>
             </div>
           </div>
           <div class="events">
-            <div class="event">
-              <div class="event-type">
-                <span class="event-tag tag-travel">Travel</span>
-                <span class="event-time">Morning</span>
-              </div>
-              <div class="event-body">
-                <div class="event-name">Arrive Palm Springs</div>
-                <div class="event-detail">Palm Springs International Airport · 3400 E Tahquitz Canyon Way, Palm Springs, CA 92262</div>
-                <div class="event-links">
-                  <a href="https://maps.google.com/?q=Palm+Springs+International+Airport,+3400+E+Tahquitz+Canyon+Way,+Palm+Springs,+CA+92262" target="_blank" class="map-link">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
-                    Directions
-                  </a>
-                </div>
-              </div>
-            </div>
             <div class="event">
               <div class="event-type">
                 <span class="event-tag tag-food">Lunch</span>
@@ -571,7 +610,7 @@
               </div>
               <div class="event-body">
                 <div class="event-name">Lunch at the Course</div>
-                <div class="event-detail">Indian Wells Golf Resort · grab a bite before the round</div>
+                <div class="event-detail">Grab a bite before the round</div>
               </div>
             </div>
             <div class="event">
@@ -581,13 +620,7 @@
               </div>
               <div class="event-body">
                 <div class="event-name">Indian Wells Celebrity Course</div>
-                <div class="event-detail">44500 Indian Wells Ln, Indian Wells, CA 92210 · Rated 4.7 ★</div>
-                <div class="event-links">
-                  <a href="https://maps.google.com/?q=Indian+Wells+Celebrity+Course,+44500+Indian+Wells+Ln,+Indian+Wells,+CA+92210" target="_blank" class="map-link">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
-                    Directions
-                  </a>
-                </div>
+                <div class="event-detail">Rated 4.7 ★</div>
               </div>
             </div>
             <div class="event">
@@ -614,6 +647,15 @@
               <div class="day-subtitle">Early start. Two courses, one resort. 30-minute drive to Palm Desert.</div>
             </div>
           </div>
+          <div class="venue-address">
+            <div class="venue-address-inner">
+              <div class="venue-address-text"><strong>Desert Willow Golf Resort</strong> · 38-995 Desert Willow Dr, Palm Desert, CA 92260</div>
+              <a href="https://maps.google.com/?q=Desert+Willow+Golf+Resort,+38995+Desert+Willow+Dr,+Palm+Desert,+CA+92260" target="_blank" class="map-link">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                Directions
+              </a>
+            </div>
+          </div>
           <div class="events">
             <div class="event">
               <div class="event-type">
@@ -622,13 +664,7 @@
               </div>
               <div class="event-body">
                 <div class="event-name">Cook's Cantina</div>
-                <div class="event-detail">Desert Willow Golf Resort · breakfast at the course before the round</div>
-                <div class="event-links">
-                  <a href="https://maps.google.com/?q=Desert+Willow+Golf+Resort,+38995+Desert+Willow+Dr,+Palm+Desert,+CA+92260" target="_blank" class="map-link">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
-                    Directions
-                  </a>
-                </div>
+                <div class="event-detail">Breakfast at the course before the round</div>
               </div>
             </div>
             <div class="event">
@@ -638,13 +674,7 @@
               </div>
               <div class="event-body">
                 <div class="event-name">Desert Willow — Firecliff Course</div>
-                <div class="event-detail">38-995 Desert Willow Dr, Palm Desert, CA 92260 · Rated 4.5 ★</div>
-                <div class="event-links">
-                  <a href="https://maps.google.com/?q=Desert+Willow+Golf+Resort,+38995+Desert+Willow+Dr,+Palm+Desert,+CA+92260" target="_blank" class="map-link">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
-                    Directions
-                  </a>
-                </div>
+                <div class="event-detail">Rated 4.5 ★</div>
               </div>
             </div>
             <div class="event">
@@ -654,7 +684,7 @@
               </div>
               <div class="event-body">
                 <div class="event-name">Lunch at the Course · Nap</div>
-                <div class="event-detail">Rest up between rounds at Desert Willow</div>
+                <div class="event-detail">Rest up between rounds</div>
               </div>
             </div>
             <div class="event">
@@ -664,13 +694,7 @@
               </div>
               <div class="event-body">
                 <div class="event-name">Desert Willow — Mountain View Course</div>
-                <div class="event-detail">38-995 Desert Willow Dr, Palm Desert, CA 92260 · Rated 4.5 ★</div>
-                <div class="event-links">
-                  <a href="https://maps.google.com/?q=Desert+Willow+Golf+Resort,+38995+Desert+Willow+Dr,+Palm+Desert,+CA+92260" target="_blank" class="map-link">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
-                    Directions
-                  </a>
-                </div>
+                <div class="event-detail">Rated 4.5 ★</div>
               </div>
             </div>
             <div class="event">
@@ -702,6 +726,15 @@
               <div class="day-subtitle">Two rounds. Big day. 12 min to Eagle Falls, 20–30 min between courses, 12 min home.</div>
             </div>
           </div>
+          <div class="venue-address">
+            <div class="venue-address-inner">
+              <div class="venue-address-text"><strong>Eagle Falls Golf Course</strong> · 84-245 Indio Springs Dr, Indio, CA 92203</div>
+              <a href="https://maps.google.com/?q=Eagle+Falls+Golf+Course,+84245+Indio+Springs+Dr,+Indio,+CA+92203" target="_blank" class="map-link">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                Directions
+              </a>
+            </div>
+          </div>
           <div class="events">
             <div class="event">
               <div class="event-type">
@@ -711,12 +744,6 @@
               <div class="event-body">
                 <div class="event-name">Course Snack Bar · Eagle Falls</div>
                 <div class="event-detail">Breakfast and lunch sandwiches available from 6 am</div>
-                <div class="event-links">
-                  <a href="https://maps.google.com/?q=Eagle+Falls+Golf+Course,+84245+Indio+Springs+Dr,+Indio,+CA+92203" target="_blank" class="map-link">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
-                    Directions
-                  </a>
-                </div>
               </div>
             </div>
             <div class="event">
@@ -726,13 +753,7 @@
               </div>
               <div class="event-body">
                 <div class="event-name">Eagle Falls Golf Course</div>
-                <div class="event-detail">84-245 Indio Springs Dr, Indio, CA 92203 · Rated 4.5 ★</div>
-                <div class="event-links">
-                  <a href="https://maps.google.com/?q=Eagle+Falls+Golf+Course,+84245+Indio+Springs+Dr,+Indio,+CA+92203" target="_blank" class="map-link">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
-                    Directions
-                  </a>
-                </div>
+                <div class="event-detail">Rated 4.5 ★</div>
               </div>
             </div>
             <div class="event">
@@ -745,6 +766,17 @@
                 <div class="event-detail">Quick bite between rounds — on the move</div>
               </div>
             </div>
+          </div>
+          <div class="venue-address" style="margin-top: 20px;">
+            <div class="venue-address-inner">
+              <div class="venue-address-text"><strong>SilverRock Resort</strong> · 79179 Ahmanson Ln, La Quinta, CA 92253</div>
+              <a href="https://maps.google.com/?q=SilverRock+Resort,+79179+Ahmanson+Ln,+La+Quinta,+CA+92253" target="_blank" class="map-link">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                Directions
+              </a>
+            </div>
+          </div>
+          <div class="events">
             <div class="event">
               <div class="event-type">
                 <span class="event-tag tag-golf">Golf PM</span>
@@ -752,13 +784,7 @@
               </div>
               <div class="event-body">
                 <div class="event-name">SilverRock Resort</div>
-                <div class="event-detail">79179 Ahmanson Ln, La Quinta, CA 92253 · Arnold Palmer Design · Rated 4.2 ★</div>
-                <div class="event-links">
-                  <a href="https://maps.google.com/?q=SilverRock+Resort,+79179+Ahmanson+Ln,+La+Quinta,+CA+92253" target="_blank" class="map-link">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
-                    Directions
-                  </a>
-                </div>
+                <div class="event-detail">Arnold Palmer Design · Rated 4.2 ★</div>
               </div>
             </div>
             <div class="event">
@@ -843,7 +869,7 @@
 
   <footer>
     <div class="footer-text">missitnoonan.com · Palm Springs 2026</div>
-    <div class="footer-logo"><img src="/Wedhgoods-palmsprings-logo.png" alt="Wedghoods Palm Springs"></div>
+    <div class="footer-logo"><img src="/Wedhgoods-palmsprings-logo-navy.png" alt="Wedghoods Palm Springs"></div>
   </footer>
 
 </body>
