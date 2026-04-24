@@ -1315,6 +1315,115 @@ footer p {
   color: rgba(255,255,255,0.2);
 }
 
+/* ---- MESSAGE BOARD SECTION ---- */
+#board-section {
+  background: var(--cream);
+  max-width: 100%;
+  padding: 5rem 2rem;
+  border-top: 1px solid rgba(45,74,130,0.1);
+}
+#board-section .inner { max-width: 1100px; margin: 0 auto; }
+
+.board-headline {
+  background: var(--surface-2);
+  border: 1px solid rgba(201,138,44,0.2);
+  border-left: 4px solid var(--gold);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.4s ease both;
+}
+.board-headline-kicker {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin-bottom: 0.4rem;
+}
+.board-headline-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.board-headline-body {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.82);
+  white-space: pre-wrap;
+}
+.board-headline-date {
+  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  color: rgba(255,255,255,0.4);
+  margin-top: 0.6rem;
+  letter-spacing: 0.06em;
+}
+
+.board-list { display: flex; flex-direction: column; gap: 1px; }
+
+.board-post {
+  background: var(--white);
+  border: 1px solid rgba(45,74,130,0.1);
+  padding: 1.25rem 1.5rem;
+  transition: background 0.15s;
+}
+.board-post:hover { background: var(--gold-tint); }
+
+.board-post-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.board-post-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  background: rgba(201,138,44,0.12);
+  color: var(--gold-dark);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1px solid rgba(201,138,44,0.25);
+}
+.board-post-date {
+  font-size: 0.6rem;
+  font-family: var(--font-mono);
+  color: var(--mist);
+  letter-spacing: 0.04em;
+}
+.board-post-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--navy-dark);
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
+}
+.board-post-body {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: #333;
+  white-space: pre-wrap;
+}
+
+.board-empty {
+  padding: 3rem;
+  text-align: center;
+  color: var(--mist);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(45,74,130,0.1);
+  background: var(--white);
+}
+
 /* ---- UTILS ---- */
 .mt-1 { margin-top: 1rem; }
 .text-muted { color: var(--mist); font-size: 0.7rem; }
@@ -1499,7 +1608,7 @@ body.has-banner .nav-drawer { top: 102px; }
     <li><a href="/birdie-draw.html">🎰 Draw Wheel</a></li>
     <li><a href="#schedule">Schedule</a></li>
     <li><a href="#rules">Rules</a></li>
-  </ul>
+    <li><a href="#board-section">📋 Board</a></li>
   <button class="hamburger" id="hamburger" onclick="toggleHamburger()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -1512,7 +1621,7 @@ body.has-banner .nav-drawer { top: 102px; }
   <a href="/birdie-draw.html" onclick="closeHamburger()">🎰 Spin Wheel</a>
   <a href="#schedule" onclick="closeHamburger()">Schedule</a>
   <a href="#rules" onclick="closeHamburger()">Rules</a>
-</div>
+  <a href="#board-section" onclick="closeHamburger()">📋 Board</a>
 
 <!-- ============================================================
   HERO
@@ -1617,6 +1726,20 @@ body.has-banner .nav-drawer { top: 102px; }
 
 
 
+
+<!-- ============================================================
+  MESSAGE BOARD
+============================================================ -->
+<div id="board-section">
+  <div class="inner">
+    <div class="section-label">Commissioner Updates</div>
+    <div class="section-title">Message Board</div>
+    <div class="section-rule"></div>
+    <div id="board-content">
+      <div class="board-empty">Loading updates…</div>
+    </div>
+  </div>
+</div>
 
 <!-- ============================================================
   FOOTER
@@ -2426,11 +2549,121 @@ function dismissBanner() {
   }, 300);
 }
 
+// ---- MESSAGE BOARD ----
+const SCRIPT_URL_BOARD = 'https://script.google.com/macros/s/AKfycbwdxc7RSlKTfEuNuADB1Wu7rNklcU1VhsbKU2Bek4O-x4gO7cKBeRcoGFG1_ALVGgQi/exec';
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fmtBoardDate(val) {
+  if (!val) return '';
+  const s = String(val).trim();
+  // ISO timestamp from Apps Script
+  const d = new Date(s);
+  if (!isNaN(d)) {
+    return d.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  }
+  return s;
+}
+
+async function loadBoard() {
+  const root = document.getElementById('board-content');
+  try {
+    const res  = await fetch(SCRIPT_URL_BOARD + '?sheet=Messages&_=' + Date.now());
+    const raw  = await res.json();
+    buildBoard(raw, root);
+  } catch(e) {
+    root.innerHTML = '<div class="board-empty">Could not load message board.</div>';
+  }
+}
+
+function buildBoard(raw, root) {
+  if (!Array.isArray(raw) || !raw.length) {
+    root.innerHTML = '<div class="board-empty">No posts yet — check back once the trip begins.</div>';
+    return;
+  }
+
+  const rows = raw.map(r => Array.isArray(r) ? r.map(v => String(v ?? '').trim()) : []);
+
+  // ── Section 1: Headline (rows 0–5, cols B–E = indices 1–4)
+  // Row 4 (index 4) = the headline entry: [date, type, title, body]
+  const headlineRow = rows[4] || [];
+  const hlDate  = headlineRow[1] || '';
+  const hlType  = headlineRow[2] || '';
+  const hlTitle = headlineRow[3] || '';
+  const hlBody  = headlineRow[4] || '';
+
+  // Skip if it looks like placeholder/label text
+  const isLabel = s => /^(header|headline|title|body|date|update|recap|admin|short|full|goes here)/i.test(s);
+  const hasHeadline = hlTitle && !isLabel(hlTitle) && hlBody && !isLabel(hlBody);
+
+  // ── Section 2: Archive messages (rows 9+ = index 9+)
+  // Header row at index 7: SHOW? | DATE/TIME | (blank) | TYPE | TITLE | MESSAGE BODY
+  // Data starts at index 9
+  const archiveRows = rows.slice(9).filter(r => r.some(Boolean));
+
+  const messages = [];
+  for (const r of archiveRows) {
+    const show    = String(r[1] || '').trim().toUpperCase(); // col B = SHOW?
+    const date    = r[3]  || '';   // col D = DATE/TIME
+    const type    = r[5]  || '';   // col F = TYPE
+    const title   = r[7]  || '';   // col H = TITLE
+    const body    = r[9]  || r[8] || '';  // col J = MESSAGE BODY (fallback col I)
+
+    // Only show rows with Y in show column
+    if (show !== 'Y' && show !== 'YES') continue;
+    if (!body || isLabel(body)) continue;
+
+    messages.push({ date, type, title, body });
+  }
+
+  // ── Build HTML
+  let html = '';
+
+  // Headline card
+  if (hasHeadline) {
+    html += `
+      <div class="board-headline">
+        <div class="board-headline-kicker">${escHtml(hlType) || 'Commissioner Note'}</div>
+        ${hlTitle ? `<div class="board-headline-title">${escHtml(hlTitle)}</div>` : ''}
+        <div class="board-headline-body">${escHtml(hlBody)}</div>
+        ${hlDate ? `<div class="board-headline-date">${escHtml(fmtBoardDate(hlDate))}</div>` : ''}
+      </div>`;
+  }
+
+  // Archive posts (newest first)
+  if (messages.length) {
+    html += '<div class="board-list">';
+    html += [...messages].reverse().map(post => {
+      const badge = post.type ? `<span class="board-post-badge">${escHtml(post.type)}</span>` : '';
+      const date  = post.date ? `<span class="board-post-date">${escHtml(fmtBoardDate(post.date))}</span>` : '';
+      const title = post.title && !isLabel(post.title)
+        ? `<div class="board-post-title">${escHtml(post.title)}</div>` : '';
+      return `
+        <div class="board-post">
+          <div class="board-post-head">
+            <div>${badge}</div>
+            ${date}
+          </div>
+          ${title}
+          <div class="board-post-body">${escHtml(post.body)}</div>
+        </div>`;
+    }).join('');
+    html += '</div>';
+  } else if (!hasHeadline) {
+    html = '<div class="board-empty">No posts yet — check back once the trip begins.</div>';
+  }
+
+  root.innerHTML = html;
+}
+
 // ---- INIT ----
 renderSchedule();
 renderRules();
 renderPrizes();
 loadBanner();
+loadBoard();
 
 // ── HAMBURGER ──
 function toggleHamburger() {
