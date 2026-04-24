@@ -646,15 +646,34 @@ async function loadCSV() {
       text = await res.text();
     }
 
-    const rows  = text.trim().split('\n');
-    const hdrs  = rows[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-    const col   = hdrs.findIndex(h => h.replace(/\s+/g,'').toLowerCase() === 'birdietickets');
+    // Proper CSV parser — handles quoted fields with embedded newlines
+    function parseCSV(str) {
+      const rows = [];
+      let row = [], cur = '', inQ = false;
+      for (let i = 0; i < str.length; i++) {
+        const ch = str[i], next = str[i+1];
+        if (ch === '"') {
+          if (inQ && next === '"') { cur += '"'; i++; }
+          else { inQ = !inQ; }
+        } else if (ch === ',' && !inQ) {
+          row.push(cur.trim()); cur = '';
+        } else if ((ch === '\n' || (ch === '\r' && next === '\n')) && !inQ) {
+          if (ch === '\r') i++;
+          row.push(cur.trim()); rows.push(row); row = []; cur = '';
+        } else { cur += ch; }
+      }
+      if (cur || row.length) { row.push(cur.trim()); rows.push(row); }
+      return rows;
+    }
+
+    const rows  = parseCSV(text);
+    const hdrs  = rows[0].map(h => h.replace(/\s+/g,'').toLowerCase());
+    const col   = hdrs.findIndex(h => h === 'birdietickets');
     if (col === -1) throw new Error('BirdieTickets column not found');
 
     const data = {};
     rows.slice(1).forEach(row => {
-      const cols = row.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
-      if (PLAYERS.includes(cols[0])) data[cols[0]] = parseInt(cols[col]) || 0;
+      if (PLAYERS.includes(row[0])) data[row[0]] = parseInt(row[col]) || 0;
     });
 
     const raw = PLAYERS.map((name, i) => ({
