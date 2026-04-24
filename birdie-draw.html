@@ -215,21 +215,35 @@ body::before {
 .status-bar.err { color: #e07070; }
 
 /* ---- LEGEND ---- */
-.legend {
-  width: 100%;
+.legend-wrap { width: 100%; margin-top: 1.25rem; }
+.legend-header {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 10px 1fr auto auto;
+  gap: 10px;
+  padding: 0 11px 5px;
+}
+.legend-hcell {
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.22);
+}
+.legend-hcell.right { text-align: right; }
+
+.legend {
+  display: flex;
+  flex-direction: column;
   gap: 5px;
-  margin-top: 1.25rem;
 }
 .legend-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 10px 1fr auto auto;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: rgba(255,255,255,0.025);
   border: 1px solid rgba(255,255,255,0.06);
   border-radius: 3px;
-  padding: 8px 10px;
+  padding: 9px 11px;
   transition: border-color 0.3s, background 0.3s;
 }
 .legend-item.winner {
@@ -237,30 +251,41 @@ body::before {
   background: rgba(201,168,76,0.09);
   animation: winnerPulse 1.1s ease-in-out infinite;
 }
+.legend-item.winner .legend-range { color: var(--gold); }
 @keyframes winnerPulse {
   0%,100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.3); }
   50%      { box-shadow: 0 0 0 5px rgba(201,168,76,0); }
 }
-.legend-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .legend-name {
   font-family: var(--font-d);
-  font-size: 0.88rem;
+  font-size: 0.92rem;
   font-weight: 400;
   color: var(--white);
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
-.legend-tickets {
+.legend-range {
+  font-family: var(--font-m);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: rgba(245,240,232,0.38);
+  text-align: right;
+}
+.legend-count {
   font-family: var(--font-d);
   font-size: 1rem;
   color: var(--gold);
+  min-width: 18px;
+  text-align: right;
 }
+.legend-total {
+  text-align: right;
+  padding: 5px 11px 0;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.22);
+}
+.legend-total span { color: var(--gold); }
 
 /* ---- DRAW BUTTON ---- */
 .draw-btn {
@@ -443,7 +468,7 @@ body::before {
 <body>
 
 <div class="header">
-  <a class="header-back" href="/">← Wedghoods</a>
+  <a class="header-back" href="/wedghood2026.html">← Wedghoods</a>
   <div class="header-title">Birdie Draw</div>
   <div class="header-sub">2026</div>
 </div>
@@ -456,12 +481,7 @@ body::before {
     <div class="flaps-row">
       <div class="flap" id="f0"><span class="flap-char" id="c0">—</span></div>
       <div class="flap" id="f1"><span class="flap-char" id="c1">—</span></div>
-      <div class="flap-sep">·</div>
       <div class="flap" id="f2"><span class="flap-char" id="c2">—</span></div>
-      <div class="flap" id="f3"><span class="flap-char" id="c3">—</span></div>
-      <div class="flap-sep">·</div>
-      <div class="flap" id="f4"><span class="flap-char" id="c4">—</span></div>
-      <div class="flap" id="f5"><span class="flap-char" id="c5">—</span></div>
     </div>
   </div>
 
@@ -469,7 +489,16 @@ body::before {
   <div class="status-bar" id="status-bar">Loading ticket data…</div>
 
   <!-- LEGEND -->
-  <div class="legend" id="legend"></div>
+  <div class="legend-wrap">
+    <div class="legend-header">
+      <div></div>
+      <div class="legend-hcell">Player</div>
+      <div class="legend-hcell right">Tickets</div>
+      <div class="legend-hcell right">#</div>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="legend-total" id="legend-total"></div>
+  </div>
 
   <!-- DRAW BUTTON -->
   <button class="draw-btn" id="draw-btn" disabled onclick="runDraw()">Draw</button>
@@ -503,14 +532,33 @@ const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSqbVI6yCwYknOs
 
 const PLAYERS = ['Cake','Wise','Macias','Langley','Murphy','Festor','Angell','Wohnoutka'];
 const COLORS  = ['#4B9CD3','#C9A84C','#5BAD72','#D4614A','#9B7FD4','#D4955A','#4ABBC4','#C46FAA'];
-const CHARS   = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+const DIGITS  = '0123456789';
 
 /* ============================================================
    STATE
    ============================================================ */
-let players    = [];
-let isRunning  = false;
-let lastWinner = -1;
+let players   = []; // [{name, tickets, color, ticketStart, ticketEnd}]
+let isRunning = false;
+
+/* ============================================================
+   TICKET ASSIGNMENT — sequential, starting at 001
+   ============================================================ */
+function assignTickets(raw) {
+  let counter = 1;
+  return raw.map(p => {
+    const start = counter;
+    const end   = counter + p.tickets - 1;
+    counter    += p.tickets;
+    return { ...p, ticketStart: start, ticketEnd: end };
+  });
+}
+
+function fmtRange(p) {
+  if (p.tickets === 0) return '—';
+  const s = String(p.ticketStart).padStart(3, '0');
+  const e = String(p.ticketEnd).padStart(3, '0');
+  return p.ticketStart === p.ticketEnd ? '#' + s : '#' + s + ' – ' + e;
+}
 
 /* ============================================================
    FLAP HELPERS
@@ -521,10 +569,7 @@ function setFlap(i, ch, spin) {
   char.textContent = ch;
   spin ? flap.classList.add('spinning') : flap.classList.remove('spinning');
 }
-
-function randChar() {
-  return CHARS[Math.floor(Math.random() * CHARS.length)];
-}
+function randDigit() { return DIGITS[Math.floor(Math.random() * 10)]; }
 
 /* ============================================================
    STATUS
@@ -539,16 +584,17 @@ function setStatus(msg, type) {
    LEGEND
    ============================================================ */
 function buildLegend() {
-  const el    = document.getElementById('legend');
   const total = players.reduce((s, p) => s + p.tickets, 0);
+  const el    = document.getElementById('legend');
   el.innerHTML = players.map((p, i) => `
     <div class="legend-item" id="leg${i}">
       <div class="legend-dot" style="background:${p.color}"></div>
       <div class="legend-name">${p.name}</div>
-      <div class="legend-tickets">${p.tickets}</div>
+      <div class="legend-range">${fmtRange(p)}</div>
+      <div class="legend-count">${p.tickets}</div>
     </div>`).join('');
-  document.getElementById('total-badge').innerHTML =
-    total > 0 ? `<span>${total}</span> total tickets in the draw` : '';
+  document.getElementById('legend-total').innerHTML = total > 0
+    ? `<span>${total}</span> total tickets in the draw` : '';
 }
 
 /* ============================================================
@@ -569,11 +615,12 @@ function toggleManual() {
 }
 
 function applyManual() {
-  players = PLAYERS.map((name, i) => ({
+  const raw = PLAYERS.map((name, i) => ({
     name,
     tickets: parseInt(document.getElementById('mi-' + i)?.value) || 0,
     color: COLORS[i]
   }));
+  players = assignTickets(raw);
   buildLegend();
   const total = players.reduce((s, p) => s + p.tickets, 0);
   setStatus('Manual data applied · ' + total + ' tickets', 'ok');
@@ -587,7 +634,6 @@ function applyManual() {
    ============================================================ */
 async function loadCSV() {
   try {
-    // Try Netlify proxy first (works when deployed), fall back to corsproxy for local dev
     let text;
     try {
       const proxyUrl = '/.netlify/functions/fetch-csv?url=' + encodeURIComponent(CSV_URL + '&_=' + Date.now());
@@ -611,21 +657,23 @@ async function loadCSV() {
       if (PLAYERS.includes(cols[0])) data[cols[0]] = parseInt(cols[col]) || 0;
     });
 
-    players = PLAYERS.map((name, i) => ({
+    const raw = PLAYERS.map((name, i) => ({
       name,
       tickets: data[name] ?? 0,
       color: COLORS[i]
     }));
+    players = assignTickets(raw);
 
     const total = players.reduce((s, p) => s + p.tickets, 0);
     setStatus(total > 0
-      ? 'Live data loaded · ' + total + ' tickets'
+      ? 'Live data loaded · ' + total + ' tickets in the draw'
       : 'Data loaded — no tickets yet', total > 0 ? 'ok' : '');
 
     ready();
   } catch (e) {
     setStatus('Could not load live data — enter tickets manually', 'err');
-    players = PLAYERS.map((name, i) => ({ name, tickets: 0, color: COLORS[i] }));
+    const raw = PLAYERS.map((name, i) => ({ name, tickets: 0, color: COLORS[i] }));
+    players   = assignTickets(raw);
     ready(false);
   }
 }
@@ -654,35 +702,26 @@ async function runDraw() {
   document.getElementById('winner-reveal').classList.remove('show');
   document.querySelectorAll('.legend-item').forEach(e => e.classList.remove('winner'));
 
-  // Weighted random pick
-  const rand = Math.random() * total;
-  let cumulative = 0, chosen = 0;
-  for (let i = 0; i < players.length; i++) {
-    cumulative += players[i].tickets;
-    if (rand < cumulative) { chosen = i; break; }
-  }
-  lastWinner = chosen;
+  // Draw a random ticket number from 1..total
+  const drawnTicket = Math.floor(Math.random() * total) + 1;
 
-  // Generate a 6-char display "ticket number"
-  const seed   = (chosen + 1) * 137 + Math.floor(Math.random() * 500);
-  const num    = (seed % 900) + 100; // 3-digit 100–999
-  const target = (String(Math.floor(Math.random()*9)+1) + String(num)).padStart(6, '0').slice(0, 6).split('');
+  // Find the owner
+  const winner    = players.find(p => p.tickets > 0 && drawnTicket >= p.ticketStart && drawnTicket <= p.ticketEnd);
+  const winnerIdx = players.indexOf(winner);
+
+  // 3-digit zero-padded target for the board
+  const target = String(drawnTicket).padStart(3, '0').split('');
 
   // Reset flaps
-  for (let i = 0; i < 6; i++) setFlap(i, '—', false);
+  for (let i = 0; i < 3; i++) setFlap(i, '—', false);
 
-  // Spin animation — staggered stops
-  const TOTAL_DUR = 2800;
-  const STAGGER   = 210;
-  const INTERVAL  = 55;
-
-  const promises = [0, 1, 2, 3, 4, 5].map(idx => new Promise(resolve => {
+  // Staggered spin
     const startDelay = idx * STAGGER;
     const spinDur    = TOTAL_DUR - startDelay;
     let elapsed      = 0;
 
     setTimeout(() => {
-      setFlap(idx, randChar(), true);
+      setFlap(idx, randDigit(), true);
       const ticker = setInterval(() => {
         elapsed += INTERVAL;
         const remaining = spinDur - elapsed;
@@ -691,10 +730,9 @@ async function runDraw() {
           setFlap(idx, target[idx], false);
           resolve();
         } else {
-          // Slow down near the end
-          const slowFactor = remaining < 500 ? Math.floor((500 - remaining) / 90) : 0;
+          const slowFactor = remaining < 550 ? Math.floor((550 - remaining) / 90) : 0;
           if (slowFactor === 0 || elapsed % (INTERVAL * (slowFactor + 1)) < INTERVAL) {
-            setFlap(idx, randChar(), true);
+            setFlap(idx, randDigit(), true);
           }
         }
       }, INTERVAL);
@@ -705,17 +743,16 @@ async function runDraw() {
 
   // Reveal winner
   setTimeout(() => {
-    const p   = players[chosen];
-    const pct = ((p.tickets / total) * 100).toFixed(0);
-
-    document.getElementById('winner-name').textContent   = p.name;
+    const pct = ((winner.tickets / total) * 100).toFixed(0);
+    document.getElementById('winner-name').textContent = winner.name;
     document.getElementById('winner-detail').textContent =
-      p.tickets + ' ticket' + (p.tickets !== 1 ? 's' : '') + ' · ' + pct + '% draw probability';
-
+      'Ticket #' + String(drawnTicket).padStart(3, '0') +
+      ' — ' + winner.name + ' holds #' + String(winner.ticketStart).padStart(3,'0') +
+      (winner.tickets > 1 ? ' – #' + String(winner.ticketEnd).padStart(3,'0') : '') +
+      ' (' + winner.tickets + ' ticket' + (winner.tickets !== 1 ? 's' : '') + ' · ' + pct + '% odds)';
     document.getElementById('winner-reveal').classList.add('show');
     document.getElementById('reset-btn').classList.add('show');
-    document.getElementById('leg' + chosen).classList.add('winner');
-
+    document.getElementById('leg' + winnerIdx).classList.add('winner');
     isRunning = false;
   }, 380);
 }
@@ -728,7 +765,7 @@ function resetDraw() {
   document.getElementById('reset-btn').classList.remove('show');
   document.getElementById('draw-btn').disabled = false;
   document.querySelectorAll('.legend-item').forEach(e => e.classList.remove('winner'));
-  for (let i = 0; i < 6; i++) setFlap(i, '—', false);
+  for (let i = 0; i < 3; i++) setFlap(i, '—', false);
 }
 
 /* ============================================================
@@ -736,5 +773,6 @@ function resetDraw() {
    ============================================================ */
 loadCSV();
 </script>
+
 </body>
 </html>
