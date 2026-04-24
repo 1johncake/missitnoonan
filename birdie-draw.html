@@ -648,7 +648,7 @@ async function loadCSV() {
 
     const rows  = text.trim().split('\n');
     const hdrs  = rows[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-    const col   = hdrs.findIndex(h => h === 'BirdieTickets');
+    const col   = hdrs.findIndex(h => h.replace(/\s+/g,'').toLowerCase() === 'birdietickets');
     if (col === -1) throw new Error('BirdieTickets column not found');
 
     const data = {};
