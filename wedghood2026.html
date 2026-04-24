@@ -2589,7 +2589,7 @@ function buildBoard(raw, root) {
   }
 
   const rows = raw.map(r => Array.isArray(r) ? r.map(v => String(v ?? '').trim()) : []);
-  const isLabel = s => /^(header|headline|title|body|date|update|recap|admin|short|full|goes here|date\s*\/\s*time|message body|short headline|full recap)/i.test(s.trim());
+  const isLabel = s => /^(short headline|full recap|date\s*\/\s*time|update\s*\/\s*recap|y\s*=\s*show|alt\+enter|goes here|for this post)/i.test(s.trim());
 
   // ── Section 1: Headline
   // Find the row that contains the headline data — it's the first data row
@@ -2623,34 +2623,25 @@ function buildBoard(raw, root) {
   const hasHeadline = headline && headline.body && !isLabel(headline.body);
 
   // ── Section 2: Archive messages
-  // Find the archive header row — it contains SHOW? and DATE/TIME and MESSAGE BODY
+  // Find the archive header row — it contains "SHOW?" (not "Y = Show")
   let archiveHeaderIdx = -1;
   for (let i = 0; i < rows.length; i++) {
-    const lower = rows[i].map(v => v.toLowerCase());
-    const hasShow = lower.some(v => v.includes('show'));
-    const hasMsg  = lower.some(v => v.includes('message') || v.includes('body'));
-    if (hasShow && hasMsg) { archiveHeaderIdx = i; break; }
+    const hasShowHeader = rows[i].some(v => v.toUpperCase() === 'SHOW?');
+    if (hasShowHeader) { archiveHeaderIdx = i; break; }
   }
 
   const messages = [];
   if (archiveHeaderIdx !== -1) {
-    const header = rows[archiveHeaderIdx].map(v => v.toLowerCase());
-    // Find column indices by header name
-    const colShow  = header.findIndex(h => h.includes('show'));
-    const colDate  = header.findIndex(h => h.includes('date') || h.includes('time'));
-    const colType  = header.findIndex(h => h.includes('type') || h.includes('category'));
-    const colTitle = header.findIndex(h => h.includes('title') || h.includes('headline') || h.includes('subject'));
-    const colBody  = header.findIndex(h => h.includes('message') || h.includes('body') || h.includes('note'));
-
-    for (let i = archiveHeaderIdx + 1; i < rows.length; i++) {
+    // Confirmed layout from sheet: col 1=SHOW?, 3=DATE/TIME, 5=TYPE, 7=TITLE, 9=MESSAGE BODY
+    for (let i = archiveHeaderIdx + 2; i < rows.length; i++) { // +2 to skip instruction row
       const r = rows[i];
       if (!r.some(Boolean)) continue;
 
-      const show  = colShow  !== -1 ? r[colShow].toUpperCase()  : 'Y';
-      const body  = colBody  !== -1 ? r[colBody]  : '';
-      const date  = colDate  !== -1 ? r[colDate]  : '';
-      const type  = colType  !== -1 ? r[colType]  : '';
-      const title = colTitle !== -1 ? r[colTitle] : '';
+      const show  = (r[1] || '').toUpperCase();
+      const date  = r[3] || '';
+      const type  = r[5] || '';
+      const title = r[7] || '';
+      const body  = r[9] || '';
 
       if (show !== 'Y' && show !== 'YES') continue;
       if (!body || isLabel(body)) continue;
