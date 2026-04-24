@@ -716,6 +716,11 @@ async function runDraw() {
   for (let i = 0; i < 3; i++) setFlap(i, '—', false);
 
   // Staggered spin
+  const TOTAL_DUR = 2900;
+  const STAGGER   = 210;
+  const INTERVAL  = 55;
+
+  const promises = [0,1,2].map(idx => new Promise(resolve => {
     const startDelay = idx * STAGGER;
     const spinDur    = TOTAL_DUR - startDelay;
     let elapsed      = 0;
