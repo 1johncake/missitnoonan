@@ -1604,13 +1604,12 @@ body.has-banner .nav-drawer { top: 102px; }
   </div>
   <ul class="nav-links">
     <li><a href="/palm-springs-itinerary.html">Itinerary</a></li>
+    <li><a href="#board-section">📋 Board</a></li>
     <li><a href="#standings-section">Standings</a></li>
     <li><a href="#standings-section" onclick="setTimeout(()=>switchTab('results'),100)">Results</a></li>
-    <li><a href="#standings-section" onclick="setTimeout(()=>switchTab('birdie'),100)">Birdie</a></li>
-    <li><a href="/birdie-draw.html">🎰 Draw Wheel</a></li>
     <li><a href="#schedule">Schedule</a></li>
     <li><a href="#rules">Rules</a></li>
-    <li><a href="#board-section">📋 Board</a></li>
+    <li><a href="/birdie-draw.html">🎰 Birdie Draw</a></li>
   </ul>
   <button class="hamburger" id="hamburger" onclick="toggleHamburger()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -1618,13 +1617,12 @@ body.has-banner .nav-drawer { top: 102px; }
 </nav>
 <div class="nav-drawer" id="nav-drawer">
   <a href="/palm-springs-itinerary.html" onclick="closeHamburger()">Itinerary</a>
+  <a href="#board-section" onclick="closeHamburger()">📋 Board</a>
   <a href="#standings-section" onclick="closeHamburger()">Standings</a>
   <a href="#standings-section" onclick="setTimeout(()=>switchTab('results'),100);closeHamburger()">Results</a>
-  <a href="#standings-section" onclick="setTimeout(()=>switchTab('birdie'),100);closeHamburger()">Birdie Draw</a>
-  <a href="/birdie-draw.html" onclick="closeHamburger()">🎰 Spin Wheel</a>
   <a href="#schedule" onclick="closeHamburger()">Schedule</a>
   <a href="#rules" onclick="closeHamburger()">Rules</a>
-  <a href="#board-section" onclick="closeHamburger()">📋 Board</a>
+  <a href="/birdie-draw.html" onclick="closeHamburger()">🎰 Birdie Draw</a>
 </div>
 
 <!-- ============================================================
@@ -2421,7 +2419,7 @@ function renderResults(data) {
         <div class="results-day-header">
           <span class="results-day-label">${meta.day}</span>
           <span class="results-day-title">${meta.label || matchKey}</span>
-          <span class="results-day-units">${totalUnits} units deployed</span>
+          <span class="results-day-units">${totalUnits} shells deployed</span>
           <span class="results-day-chevron">▼</span>
         </div>
         <div class="results-body">
