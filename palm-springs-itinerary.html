@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palm Springs · April 30 – May 3</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:         #2E4A82;
+      --navy-dark:    #1C2639;
+      --navy-mid:     #4A6BAD;
+      --gold:         #C98A2C;
+      --gold-dark:    #A86C1A;
+      --gold-bright:  #E0A84A;
+      --sage:         #7A9E82;
+      --sage-deep:    #4A6E52;
+      --sand:         #FAF4EA;
+      --sand-mid:     #EDD9BA;
+      --sand-dark:    #DBBF95;
+      --cream:        #FAF0D7;
+      --ink:          #1A1A2E;
+      --ink-soft:     #3D4F6B;
+      --ink-muted:    #7A9E82;
+      --accent:       #C98A2C;
+      --accent-light: #E0A84A;
+      --accent-pale:  #FAF0D7;
+      --white:        #FFFFFF;
+      --rule:         #DBBF95;
+      --surface-2:    #1C2639;
+      --font-display: 'Fraunces', serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+      --font-mono:    'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--sand);  /* FAF4EA cream */
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(160deg, #C8A878 0%, #DBBF95 30%, #EDD9BA 65%, #FAF0D7 100%);
+      color: var(--ink);
+      padding: 72px 40px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(201,138,44,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .header-eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(52px, 8vw, 88px);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+      color: var(--navy-dark);
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold-dark);
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(176,128,80,0.25);
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      color: rgba(28,38,57,0.5);
+    }
+
+    .meta-value {
+      font-size: 14px;
+      color: var(--navy-dark);
+      font-weight: 400;
+    }
+
+    .header-logo {
+      margin-bottom: 28px;
+    }
+
+    .header-logo img {
+      height: 280px;
+      width: auto;
+      mix-blend-mode: multiply;
+    }
+
+    /* NAV STRIP */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--rule);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      animation: fadeDown 0.6s 0.3s ease both;
+    }
+
+    .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-inner::-webkit-scrollbar { display: none; }
+
+    nav a {
+      display: block;
+      padding: 16px 20px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--ink);
+      border-bottom-color: var(--gold);
+    }
+
+    /* MAIN */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    /* SECTION: HOUSES */
+    .section {
+      padding: 64px 0 0;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .section-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    /* HOUSE CARDS */
+    .house-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .house-card {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 28px 28px 24px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .house-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px rgba(193,123,58,0.08);
+    }
+
+    .house-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .house-address {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .map-link:hover { color: var(--accent-light); }
+
+    .map-link svg { width: 12px; height: 12px; }
+
+    /* DAY CARDS */
+    .days {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .day-card {
+      border-top: 1px solid var(--rule);
+      padding: 48px 0;
+    }
+
+    .day-card:last-child {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .day-header {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 32px;
+      align-items: start;
+      margin-bottom: 36px;
+    }
+
+    .day-number {
+      font-family: var(--font-display);
+      font-size: 72px;
+      font-weight: 300;
+      line-height: 1;
+      color: var(--rule);
+      line-height: 0.9;
+    }
+
+    .day-title-block {}
+
+    .day-date {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .day-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 300;
+      line-height: 1.1;
+    }
+
+    .day-subtitle {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin-top: 6px;
+    }
+
+    /* VENUE ADDRESS BLOCK */
+    .venue-address {
+      padding-left: 112px;
+      margin-bottom: 20px;
+    }
+
+    .venue-address-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-left: 3px solid var(--navy);
+      border-radius: 4px;
+      padding: 12px 18px;
+      flex-wrap: wrap;
+    }
+
+    .venue-address-text {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.4;
+    }
+
+    .venue-address-text strong {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    @media (max-width: 640px) {
+      .venue-address { padding-left: 0; }
+    }
+
+    /* EVENTS WITHIN A DAY */
+    .events {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-left: 112px;
+    }
+
+    .event {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 20px;
+      align-items: start;
+      transition: border-color 0.2s;
+    }
+
+    .event:hover {
+      border-color: var(--accent);
+    }
+
+    .event-type {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .event-tag {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 2px;
+      width: fit-content;
+    }
+
+    .tag-golf {
+      background: var(--sage-deep);
+      color: #fff;
+    }
+
+    .tag-travel {
+      background: var(--navy-dark);
+      color: #fff;
+    }
+
+    .tag-dinner {
+      background: var(--accent-pale);
+      color: var(--accent);
+    }
+
+    .tag-arrival {
+      background: var(--ink-soft);
+      color: #fff;
+    }
+
+    .tag-food {
+      background: var(--sand-dark);
+      color: var(--ink-soft);
+    }
+
+    .event-time {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .event-body {}
+
+    .event-name {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .event-detail {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .event-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .placeholder-note {
+      font-size: 12px;
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 32px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+
+    .footer-logo img {
+      height: 400px;
+      width: auto;
+      opacity: 1;
+      mix-blend-mode: multiply;
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 48px 24px 40px; }
+      main { padding: 0 24px 60px; }
+      .house-grid { grid-template-columns: 1fr; }
+      .day-header { grid-template-columns: 1fr; gap: 8px; }
+      .day-number { font-size: 48px; }
+      .events { padding-left: 0; }
+      .event { grid-template-columns: 1fr; gap: 10px; }
+      .nav-inner { padding: 0 16px; }
+      footer { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-logo">
+        <img src="/wedghoods-pslogo-navy.png" alt="Wedghoods Palm Springs">
+      </div>
+      <div class="header-eyebrow">Wedghoods 2026 · Palm Springs</div>
+      <h1>The <em>Desert</em><br>Itinerary</h1>
+      <div class="header-meta">
+        <div class="meta-item">
+          <span class="meta-label">Dates</span>
+          <span class="meta-value">April 30 – May 3, 2026</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Rounds</span>
+          <span class="meta-value">6 rounds · 4 days</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="/wedghoods/palm-springs.html" style="color: var(--accent); border-bottom-color: transparent;">← Trip Home</a>
+      <a href="#houses">Houses</a>
+      <a href="#day1">Thu 4/30</a>
+      <a href="#day2">Fri 5/1</a>
+      <a href="#day3">Sat 5/2</a>
+      <a href="#day4">Sun 5/3</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- HOUSES -->
+    <section id="houses" class="section">
+      <div class="section-header">
+        <span class="section-label">Accommodations</span>
+        <div class="section-rule"></div>
+      </div>
+      <div class="house-grid">
+        <div class="house-card">
+          <div class="house-name">House One <span style="font-size: 13px; font-weight: 400; opacity: 0.65;">(Wed–Sun)</span></div>
+          <div class="house-address">48539 Anastacia Ct<br>Indio, CA 92201</div>
+          <a href="https://maps.google.com/?q=48539+Anastacia+Ct,+Indio,+CA+92201" target="_blank" class="map-link">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+            Open in Maps
+          </a>
+        </div>
+        <div class="house-card">
+          <div class="house-name">House Two <span style="font-size: 13px; font-weight: 400; opacity: 0.65;">(Thu–Sun)</span></div>
+          <div class="house-address">48593 Anastacia Ct<br>Indio, CA 92201</div>
+          <a href="https://maps.google.com/?q=48593+Anastacia+Ct,+Indio,+CA+92201" target="_blank" class="map-link">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+            Open in Maps
+          </a>
+        </div>
+      </div>
+      <p style="margin-top: 16px; font-size: 13px; color: var(--ink-soft); font-family: var(--font-body);">Text Festor to see if early check-in is available.</p>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section id="schedule" class="section">
+      <div class="section-header">
+        <span class="section-label">Schedule</span>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="days">
+
+        <!-- DAY 1 -->
+        <div class="day-card" id="day1">
+          <div class="day-header">
+            <div class="day-number">01</div>
+            <div class="day-title-block">
+              <div class="day-date">Thursday · April 30</div>
+              <div class="day-title">First Round</div>
+              <div class="day-subtitle">Time to get going — everyone check in on text when you arrive and make arrangements to head to the course.</div>
+            </div>
+          </div>
+          <div class="venue-address">
+            <div class="venue-address-inner">
+              <div class="venue-address-text"><strong>Indian Wells Golf Resort</strong> · 44500 Indian Wells Ln, Indian Wells, CA 92210</div>
+              <a href="https://maps.google.com/?q=Indian+Wells+Celebrity+Course,+44500+Indian+Wells+Ln,+Indian+Wells,+CA+92210" target="_blank" class="map-link">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                Directions
+              </a>
+            </div>
+          </div>
+          <div class="events">
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-food">Lunch</span>
+                <span class="event-time">Midday</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Lunch at the Course</div>
+                <div class="event-detail">Grab a bite before the round</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-golf">Golf</span>
+                <span class="event-time">1:30 pm</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Indian Wells Celebrity Course</div>
+                <div class="event-detail">Rated 4.7 ★</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-dinner">Dinner</span>
+                <span class="event-time">6:30 / 7 pm</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Dinner · Night One</div>
+                <div class="event-detail">Direct from the course</div>
+                <div class="placeholder-note">Deciding between La Casa Del Mariachi or Casa Mendoza — TBD</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 2 -->
+        <div class="day-card" id="day2">
+          <div class="day-header">
+            <div class="day-number">02</div>
+            <div class="day-title-block">
+              <div class="day-date">Friday · May 1</div>
+              <div class="day-title">Desert Willow — Morning & Afternoon</div>
+              <div class="day-subtitle">Early start. Two courses, one resort. 30-minute drive to Palm Desert.</div>
+            </div>
+          </div>
+          <div class="venue-address">
+            <div class="venue-address-inner">
+              <div class="venue-address-text"><strong>Desert Willow Golf Resort</strong> · 38-995 Desert Willow Dr, Palm Desert, CA 92260</div>
+              <a href="https://maps.google.com/?q=Desert+Willow+Golf+Resort,+38995+Desert+Willow+Dr,+Palm+Desert,+CA+92260" target="_blank" class="map-link">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                Directions
+              </a>
+            </div>
+          </div>
+          <div class="events">
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-food">Breakfast</span>
+                <span class="event-time">From 6 am</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Cook's Cantina</div>
+                <div class="event-detail">Breakfast at the course before the round</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-golf">Golf AM</span>
+                <span class="event-time">6:40 am</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Desert Willow — Firecliff Course</div>
+                <div class="event-detail">Rated 4.5 ★</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-food">Lunch</span>
+                <span class="event-time">Midday</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Lunch at the Course · Nap</div>
+                <div class="event-detail">Rest up between rounds</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-golf">Golf PM</span>
+                <span class="event-time">2:05 pm</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Desert Willow — Mountain View Course</div>
+                <div class="event-detail">Rated 4.5 ★</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-dinner">Dinner</span>
+                <span class="event-time">Evening</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Ciro's Pizza · Takeout at the House</div>
+                <div class="event-detail">Pick up on the way home — eat at the house</div>
+                <div class="event-links">
+                  <a href="https://maps.google.com/?q=Ciro's+Pizza,+Palm+Desert,+CA" target="_blank" class="map-link">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                    Directions
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 3 -->
+        <div class="day-card" id="day3">
+          <div class="day-header">
+            <div class="day-number">03</div>
+            <div class="day-title-block">
+              <div class="day-date">Saturday · May 2</div>
+              <div class="day-title">Eagle Falls & SilverRock</div>
+              <div class="day-subtitle">Two rounds. Big day. 12 min to Eagle Falls, 20–30 min between courses, 12 min home.</div>
+            </div>
+          </div>
+          <div class="venue-address">
+            <div class="venue-address-inner">
+              <div class="venue-address-text"><strong>Eagle Falls Golf Course</strong> · 84-245 Indio Springs Dr, Indio, CA 92203</div>
+              <a href="https://maps.google.com/?q=Eagle+Falls+Golf+Course,+84245+Indio+Springs+Dr,+Indio,+CA+92203" target="_blank" class="map-link">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                Directions
+              </a>
+            </div>
+          </div>
+          <div class="events">
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-food">Breakfast</span>
+                <span class="event-time">From 6 am</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Course Snack Bar · Eagle Falls</div>
+                <div class="event-detail">Breakfast and lunch sandwiches available from 6 am</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-golf">Golf AM</span>
+                <span class="event-time">7:00 am</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Eagle Falls Golf Course</div>
+                <div class="event-detail">Rated 4.5 ★</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-food">Lunch</span>
+                <span class="event-time">Midday</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Grab and Go</div>
+                <div class="event-detail">Quick bite between rounds — on the move</div>
+              </div>
+            </div>
+          </div>
+          <div class="venue-address" style="margin-top: 20px;">
+            <div class="venue-address-inner">
+              <div class="venue-address-text"><strong>SilverRock Resort</strong> · 79179 Ahmanson Ln, La Quinta, CA 92253</div>
+              <a href="https://maps.google.com/?q=SilverRock+Resort,+79179+Ahmanson+Ln,+La+Quinta,+CA+92253" target="_blank" class="map-link">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                Directions
+              </a>
+            </div>
+          </div>
+          <div class="events">
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-golf">Golf PM</span>
+                <span class="event-time">1:00 pm</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">SilverRock Resort</div>
+                <div class="event-detail">Arnold Palmer Design · Rated 4.2 ★</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-dinner">Dinner</span>
+                <span class="event-time">Evening</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Indio Taphouse</div>
+                <div class="event-detail">After showers — dinner out to cap the big day</div>
+                <div class="event-links">
+                  <a href="https://maps.google.com/?q=Indio+Taphouse,+Indio,+CA" target="_blank" class="map-link">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                    Directions
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 4 -->
+        <div class="day-card" id="day4">
+          <div class="day-header">
+            <div class="day-number">04</div>
+            <div class="day-title-block">
+              <div class="day-date">Sunday · May 3</div>
+              <div class="day-title">Indian Canyon & Departure</div>
+              <div class="day-subtitle">Send it home. 35 minutes to the course, 10 minutes to the airport.</div>
+            </div>
+          </div>
+          <div class="events">
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-golf">Golf</span>
+                <span class="event-time">9:00 am</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Indian Canyon Golf Resort — South Course</div>
+                <div class="event-detail">1097 Murray Canyon Dr, Palm Springs, CA 92264</div>
+                <div class="event-links">
+                  <a href="https://maps.google.com/?q=Indian+Canyon+Golf+Resort,+1097+Murray+Canyon+Dr,+Palm+Springs,+CA+92264" target="_blank" class="map-link">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                    Directions
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-food">Lunch</span>
+                <span class="event-time">Midday</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Lunch</div>
+                <div class="event-detail">Last meal in the desert — details TBD</div>
+              </div>
+            </div>
+            <div class="event">
+              <div class="event-type">
+                <span class="event-tag tag-travel">Travel</span>
+                <span class="event-time">Afternoon</span>
+              </div>
+              <div class="event-body">
+                <div class="event-name">Depart Palm Springs</div>
+                <div class="event-detail">Palm Springs International Airport · 3400 E Tahquitz Canyon Way, Palm Springs, CA 92262</div>
+                <div class="event-links">
+                  <a href="https://maps.google.com/?q=Palm+Springs+International+Airport,+3400+E+Tahquitz+Canyon+Way,+Palm+Springs,+CA+92262" target="_blank" class="map-link">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1.5C5.51 1.5 3.5 3.51 3.5 6c0 3.75 4.5 8.5 4.5 8.5S12.5 9.75 12.5 6c0-2.49-2.01-4.5-4.5-4.5z"/><circle cx="8" cy="6" r="1.5"/></svg>
+                    Directions
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-text">missitnoonan.com · Palm Springs 2026</div>
+    <div class="footer-logo"><img src="/wedghoods-pslogo-navy.png" alt="Wedghoods Palm Springs"></div>
+  </footer>
+
+</body>
+</html>
