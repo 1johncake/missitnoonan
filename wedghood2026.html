@@ -1772,7 +1772,7 @@ body.has-banner .nav-drawer { top: 102px; }
 //   (BirdieTickets = running total of draw tickets earned)
 //
 // RESULTS tab structure:
-//   Match,Award,Winner,Units,Halved
+//   Match,Award,Winner,Shells,Halved
 //   M1,Front 9 — Group 1,Cake / Langley,8,
 //   M1,Back 9 — Group 1,Wise / Macias,8,
 //   M1,Total — Group 1,Halved,,8,YES
@@ -1795,17 +1795,17 @@ const MATCHES = [
     time: '1:30 & 1:40 PM',
     format: '2-Man Net Better Ball',
     type: 'Match Play + Individual Net Stroke Play',
-    description: 'Full handicaps, no adjustments. Team: low net score wins hole, no tiebreaks, no carryovers — separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split units. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
+    description: 'Full handicaps, no adjustments. Team: low net score wins hole, no tiebreaks, no carryovers — separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split shells. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
       { group: 1, teams: ['Cake (5) / Langley (14)', 'Wise (8) / Macias (12)'] },
       { group: 2, teams: ['Murphy (15) / Wohnoutka (27)', 'Festor (22) / Angell (26)'] },
     ],
     payouts: [
-      { desc: 'Front Winning Team (within foursome)', amt: '8 units (4/team · 2/player)' },
-      { desc: 'Back Winning Team (within foursome)', amt: '8 units (4/team · 2/player)' },
-      { desc: 'Total Winning Team (within foursome)', amt: '14 units (7/team · 3.5/player)' },
-      { desc: 'Low Net 18 (within foursome)', amt: '10 units (5/winner)' },
+      { desc: 'Front Winning Team (within foursome)', amt: '8 shells (4/team · 2/player)' },
+      { desc: 'Back Winning Team (within foursome)', amt: '8 shells (4/team · 2/player)' },
+      { desc: 'Total Winning Team (within foursome)', amt: '14 shells (7/team · 3.5/player)' },
+      { desc: 'Low Net 18 (within foursome)', amt: '10 shells (5/winner)' },
     ],
     tiebreak: 'Individual low net: matched scorecards from Hole 3'
   },
@@ -1823,9 +1823,9 @@ const MATCHES = [
       { group: 2, teams: ['Langley (14)', 'Murphy (15)', 'Wise (8)', 'Wohnoutka (27)'] },
     ],
     payouts: [
-      { desc: '1st Place', amt: '20 units' },
-      { desc: '2nd Place', amt: '12 units' },
-      { desc: '3rd Place', amt: '8 units' },
+      { desc: '1st Place', amt: '20 shells' },
+      { desc: '2nd Place', amt: '12 shells' },
+      { desc: '3rd Place', amt: '8 shells' },
     ],
     tiebreak: '1st: on-course playoff if possible, else matched scorecards from Hole 17 · 2nd/3rd tied: split · 3+ tied for 2nd: match from Hole 2, final two split'
   },
@@ -1843,9 +1843,9 @@ const MATCHES = [
       { group: 2, teams: ['Macias (10ph) / Wohnoutka (18ph)', 'Langley (11ph) / Angell (18ph)'] },
     ],
     payouts: [
-      { desc: 'Front Winning Team — most points (all teams)', amt: '10 units (5/player)' },
-      { desc: 'Back Winning Team — most points (all teams)', amt: '10 units (5/player)' },
-      { desc: 'Total Winning Team — most points (all teams)', amt: '20 units (10/player)' },
+      { desc: 'Front Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
+      { desc: 'Back Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
+      { desc: 'Total Winning Team — most points (all teams)', amt: '20 shells (10/player)' },
     ],
     tiebreak: 'Front: Hole 6 · Back: Hole 14 · Total: Hole 18'
   },
@@ -1856,17 +1856,17 @@ const MATCHES = [
     time: 'Morning',
     format: '2-Man Best Ball with High Tiebreakers',
     type: 'w/ High-Ball Tiebreak · Match Play',
-    description: 'Full handicaps, no adjustments. Team: low net score wins hole — if tied, high score is the tiebreak. No carryovers. Separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split units. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
+    description: 'Full handicaps, no adjustments. Team: low net score wins hole — if tied, high score is the tiebreak. No carryovers. Separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split shells. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
       { group: 1, teams: ['Cake (5) / Angell (26)', 'Langley (14) / Murphy (15)'] },
       { group: 2, teams: ['Wise (8) / Wohnoutka (27)', 'Macias (12) / Festor (22)'] },
     ],
     payouts: [
-      { desc: 'Front Winning Team (within foursome)', amt: '4 units (2/player)' },
-      { desc: 'Back Winning Team (within foursome)', amt: '4 units (2/player)' },
-      { desc: 'Total Winning Team (within foursome)', amt: '7 units (3.5/player)' },
-      { desc: 'Low Net 18 Side (within foursome)', amt: '10 units (5/winner)' },
+      { desc: 'Front Winning Team (within foursome)', amt: '4 shells (2/player)' },
+      { desc: 'Back Winning Team (within foursome)', amt: '4 shells (2/player)' },
+      { desc: 'Total Winning Team (within foursome)', amt: '7 shells (3.5/player)' },
+      { desc: 'Low Net 18 Side (within foursome)', amt: '10 shells (5/winner)' },
     ],
     tiebreak: 'Individual low net: matched scorecards from Hole 13'
   },
@@ -1884,9 +1884,9 @@ const MATCHES = [
       { group: 2, teams: ['Wise (8) / Angell (26) [Team HCP 15]', 'Langley (14) / Festor (22) [Team HCP 17]'] },
     ],
     payouts: [
-      { desc: 'Front Winning Team — most points (all teams)', amt: '10 units (5/player)' },
-      { desc: 'Back Winning Team — most points (all teams)', amt: '10 units (5/player)' },
-      { desc: 'Total Winning Team — most points (all teams)', amt: '20 units (10/player)' },
+      { desc: 'Front Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
+      { desc: 'Back Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
+      { desc: 'Total Winning Team — most points (all teams)', amt: '20 shells (10/player)' },
     ],
     tiebreak: 'Front: Hole 5 · Back: Hole 15 · Total: Hole 11'
   },
@@ -1904,8 +1904,8 @@ const MATCHES = [
       { group: 2, teams: ['Festor (22) [Q:14]', 'Langley (14) [Q:22]', 'Macias (12) [Q:24]', 'Murphy (15) [Q:21]'] },
     ],
     payouts: [
-      { desc: 'Low Score of Foursome (within foursome)', amt: '28 units (14/winner)' },
-      { desc: 'Wild Cards — 3rd & 4th best score across all foursomes', amt: '12 units (6/wild card)' },
+      { desc: 'Low Score of Foursome (within foursome)', amt: '28 shells (14/winner)' },
+      { desc: 'Wild Cards — 3rd & 4th best score across all foursomes', amt: '12 shells (6/wild card)' },
     ],
     tiebreak: 'TBD — matched scorecards'
   }
@@ -1913,7 +1913,7 @@ const MATCHES = [
 
 // ---- WEEK GAMES ----
 const WEEK_GAMES = [
-  { name: 'Race to Seattle', desc: 'Cumulative units over the week. Pays 1st, 2nd, 3rd.', units: 56 },
+  { name: 'Race to Seattle', desc: 'Cumulative shells over the week. Pays 1st, 2nd, 3rd.', units: 56 },
   { name: 'Birdie Draw', desc: 'Net birdies = 1 ticket · Net eagles = 3 tickets · Random draw winner.', units: 24 },
 ];
 
@@ -2051,7 +2051,7 @@ function buildMatchHTML(matches) {
         </div>
         <div class="match-panel-col">
           <h4>Summary</h4>
-          <p><strong>${m.units} units</strong> in play</p>
+          <p><strong>${m.units} shells</strong> in play</p>
           <p>${m.type}</p>
         </div>
       </div>
@@ -2172,7 +2172,7 @@ function renderPrizes() {
         <div class="game-row-name">${g.name}</div>
         ${g.desc ? `<div style="font-size:0.62rem;color:var(--mist);margin-top:0.2rem;">${g.desc}</div>` : ''}
       </div>
-      <div class="game-row-units">${g.units} units</div>
+      <div class="game-row-units">${g.units} shells</div>
     </div>`).join('');
 }
 
@@ -2229,9 +2229,9 @@ async function fetchCSV(url, mode) {
     const headerRowIdx = rows.findIndex(r => r.some(c => c.trim() === 'Match'));
     if (headerRowIdx === -1) throw new Error('Could not find Match column in Results tab');
     const headers = rows[headerRowIdx].map(h => h.replace(/\n.*/s, '').trim());
-    const WANTED = ['Match','Award','Winner','Units','Halved?'];
-    // Normalise header — sheet may have 'Units /' or similar typo
-    const headersNorm = headers.map(h => h.replace(/^Units.*/, 'Units'));
+    const WANTED = ['Match','Award','Winner','Shells','Halved?'];
+    // Normalise header — sheet may have 'Shells /' or similar typo
+    const headersNorm = headers.map(h => h.replace(/^Shells.*/, 'Shells'));
     const wantedIdx = WANTED.map(w => headersNorm.indexOf(w));
     return rows.slice(headerRowIdx + 1)
       .map(r => {
@@ -2251,11 +2251,11 @@ async function fetchCSV(url, mode) {
     // Strip embedded newlines from headers, collapsing across them:
     // "M1\nThu" -> "M1" (take only first part)
     // "Birdie\nTickets" -> "BirdieTickets" (join both parts, no space)
-    // "Total\nUnits" -> "Total"
+    // "Total\nShells" -> "Total"
     const headers = rows[headerRowIdx].map(h => {
       const parts = h.split(/\n|\\n/).map(p => p.trim()).filter(Boolean);
       // If first part is a known standalone key, use it alone
-      const SOLO = ['Player','HCP','M1','M2','M3','M4','M5','M6','Total','Match','Award','Winner','Units'];
+      const SOLO = ['Player','HCP','M1','M2','M3','M4','M5','M6','Total','Match','Award','Winner','Shells'];
       if (parts.length <= 1 || SOLO.includes(parts[0])) return parts[0] || '';
       // Otherwise join all parts (handles "Birdie"+"Tickets" -> "BirdieTickets")
       return parts.join('');
@@ -2330,7 +2330,7 @@ function renderStandings(data) {
 
   const table = `
     <div class="lb-card">
-      <div class="lb-card-header">🏆 Race to Seattle — Cumulative Units</div>
+      <div class="lb-card-header">🏆 Race to Seattle — Cumulative Shells</div>
       <table class="lb-table">
         <thead><tr>
           <th></th><th>Player</th>
@@ -2360,13 +2360,13 @@ function renderStandings(data) {
 }
 
 /* ============================================================
-   RENDER: RESULTS (Unit Deployment Ledger)
+   RENDER: RESULTS (Shell Deployment Ledger)
 
-   Expected CSV columns: Match, Award, Winner, Units, Halved
+   Expected CSV columns: Match, Award, Winner, Shells, Halved
    - Match:  e.g. "M1" or "M1 — Thu Apr 30"
    - Award:  e.g. "Front 9 — Group 1"
    - Winner: e.g. "Cake / Langley" or blank if halved
-   - Units:  number, e.g. "8"
+   - Shells:  number, e.g. "8"
    - Halved: "YES" if split, blank otherwise
    ============================================================ */
 function renderResults(data) {
@@ -2400,7 +2400,7 @@ function renderResults(data) {
   const html = [...new Set(matchOrder)].map(matchKey => {
     const rows = byMatch[matchKey];
     const meta = dayMeta[matchKey] || { day: matchKey, label: '' };
-    const totalUnits = rows.reduce((sum, r) => sum + (parseFloat(r.Units)||0), 0);
+    const totalUnits = rows.reduce((sum, r) => sum + (parseFloat(r.Shells)||0), 0);
 
     const tableRows = rows.map(r => {
       const isHalved = r.Halved && r.Halved.toUpperCase() === 'YES';
@@ -2408,11 +2408,11 @@ function renderResults(data) {
         <td class="award-col">${r.Award || ''}</td>
         <td class="winner-col">
           ${isHalved
-            ? `<span class="halved">Halved — ${r.Units} units split</span>`
+            ? `<span class="halved">Halved — ${r.Shells} shells split</span>`
             : r.Winner || '—'
           }
         </td>
-        <td class="units-col">${isHalved ? '' : (r.Units ? r.Units + ' u' : '—')}</td>
+        <td class="units-col">${isHalved ? '' : (r.Shells ? r.Shells + ' sh' : '—')}</td>
       </tr>`;
     }).join('');
 
@@ -2429,7 +2429,7 @@ function renderResults(data) {
             <thead><tr>
               <th>Award</th>
               <th>Winner</th>
-              <th style="text-align:right;">Units</th>
+              <th style="text-align:right;">Shells</th>
             </tr></thead>
             <tbody>${tableRows}</tbody>
           </table>
@@ -2480,7 +2480,7 @@ function renderBirdieDraw(data) {
     <div style="margin-bottom:1rem;font-size:0.68rem;color:rgba(255,255,255,0.65);line-height:1.7;">
       <strong style="color:var(--gold-bright);">${totalTickets} total tickets</strong> in the draw &mdash;
       net birdie = 1 ticket &bull; net eagle = 3 tickets &bull;
-      winner drawn at end of trip &bull; prize: <strong style="color:var(--sage);">24 units ($72)</strong>
+      winner drawn at end of trip &bull; prize: <strong style="color:var(--sage);">24 shells ($72)</strong>
     </div>`;
 
   const winnerBanner = winnerName ? `
@@ -2494,7 +2494,7 @@ function renderBirdieDraw(data) {
     ">
       <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;">🎟 Birdie Draw Winner</div>
       <div style="font-family:var(--font-display);font-size:2rem;font-weight:400;font-style:italic;color:var(--gold-bright);letter-spacing:0.04em;">${winnerName}</div>
-      <div style="font-size:0.65rem;color:rgba(255,255,255,0.65);margin-top:0.3rem;">24 units · $72</div>
+      <div style="font-size:0.65rem;color:rgba(255,255,255,0.65);margin-top:0.3rem;">24 shells · $72</div>
     </div>` : '';
 
   const wheelLink = `
