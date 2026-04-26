@@ -1198,6 +1198,15 @@ footer p {
   position: relative;
   border-bottom: 1px solid rgba(0,0,0,0.04);
 }
+.rules-subsection-label {
+  font-family: 'Fraunces', serif;
+  font-size: 1.15rem;
+  color: var(--gold-dark);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  margin-top: 0.25rem;
+}
 .rule-card li:last-child { border-bottom: none; }
 .rule-card li::before {
   content: '';
@@ -1718,6 +1727,9 @@ body.has-banner .nav-drawer { top: 102px; }
     <div class="section-label">Governing Play</div>
     <div class="section-title">Governing Rules of Play</div>
     <div class="section-rule"></div>
+    <div class="rules-subsection-label">Game Rules</div>
+    <div class="rules-grid" id="game-rules-grid"></div>
+    <div class="rules-subsection-label" style="margin-top:2.5rem;">Course Rules</div>
     <div class="rules-grid" id="rules-grid"></div>
   </div>
 </div>
@@ -1780,7 +1792,7 @@ const CSV_URL_RESULTS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkYlib
 
 // ---- PLAYERS ----
 const PLAYERS = ['Cake','Wise','Macias','Langley','Murphy','Festor','Angell','Wohnoutka'];
-const HANDICAPS = { Cake:5, Wise:8, Macias:12, Langley:14, Murphy:15, Festor:22, Angell:26, Wohnoutka:27 };
+const HANDICAPS = { Cake:1, Wise:6, Macias:10, Langley:12, Murphy:12, Festor:21, Angell:26, Wohnoutka:25 };
 
 // ---- MATCHES ----
 const MATCHES = [
@@ -1794,8 +1806,8 @@ const MATCHES = [
     description: 'Full handicaps, no adjustments. Team: low net score wins hole, no tiebreaks, no carryovers — separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split shells. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (5) / Langley (14)', 'Wise (8) / Macias (12)'] },
-      { group: 2, teams: ['Murphy (15) / Wohnoutka (27)', 'Festor (22) / Angell (26)'] },
+      { group: 1, teams: ['Cake (1) / Langley (12)', 'Wise (6) / Macias (10)'] },
+      { group: 2, teams: ['Murphy (12) / Wohnoutka (25)', 'Festor (21) / Angell (26)'] },
     ],
     payouts: [
       { desc: 'Front Winning Team (within foursome)', amt: '8 shells (4/team · 2/player)' },
@@ -1815,8 +1827,8 @@ const MATCHES = [
     description: 'Full handicaps, no adjustments. All putts must be holed — no gimmes. Maximum score: Net Double Bogey. Winner retains the trophy for one year. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (5)', 'Angell (26)', 'Festor (22)', 'Macias (12)'] },
-      { group: 2, teams: ['Langley (14)', 'Murphy (15)', 'Wise (8)', 'Wohnoutka (27)'] },
+      { group: 1, teams: ['Cake (3)', 'Angell (29)', 'Festor (24)', 'Macias (12)'] },
+      { group: 2, teams: ['Langley (15)', 'Murphy (15)', 'Wise (7)', 'Wohnoutka (28)'] },
     ],
     payouts: [
       { desc: '1st Place', amt: '20 shells' },
@@ -1835,8 +1847,8 @@ const MATCHES = [
     description: 'Playing HCP: 80% of course handicap. Shamble: both tee off, team selects best drive, each plays own ball in — team scores better net ball and applies Stableford points. Poison holes (6 & 15): team must take the HIGH net score. Drive quota: 3 per player. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 3 · Eagle = 5 · Albatross = 8. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (2ph) / Festor (18ph)', 'Wise (6ph) / Murphy (12ph)'] },
-      { group: 2, teams: ['Macias (10ph) / Wohnoutka (18ph)', 'Langley (11ph) / Angell (18ph)'] },
+      { group: 1, teams: ['Cake (2ph) / Festor (18ph)', 'Wise (6ph) / Murphy (11ph)'] },
+      { group: 2, teams: ['Macias (9ph) / Wohnoutka (21ph)', 'Langley (11ph) / Angell (22ph)'] },
     ],
     payouts: [
       { desc: 'Front Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
@@ -1855,8 +1867,8 @@ const MATCHES = [
     description: 'Full handicaps, no adjustments. Team: low net score wins hole — if tied, high score is the tiebreak. No carryovers. Separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split shells. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (5) / Angell (26)', 'Langley (14) / Murphy (15)'] },
-      { group: 2, teams: ['Wise (8) / Wohnoutka (27)', 'Macias (12) / Festor (22)'] },
+      { group: 1, teams: ['Cake (3) / Angell (29)', 'Langley (15) / Murphy (14)'] },
+      { group: 2, teams: ['Wise (7) / Wohnoutka (27)', 'Macias (12) / Festor (23)'] },
     ],
     payouts: [
       { desc: 'Front Winning Team (within foursome)', amt: '4 shells (2/player)' },
@@ -1876,8 +1888,8 @@ const MATCHES = [
     description: 'Team HCP = 60% of low + 40% of high handicap. Both players hit drives, switch balls for 2nd shots, then pick best ball and play alternate shot to hole. Par 3s: potentially two putts for birdie. One gross/net team score per hole. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 3 · Eagle = 5 · Albatross = 8. No halves.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (5) / Wohnoutka (27) [Team HCP 13]', 'Macias (12) / Murphy (15) [Team HCP 13]'] },
-      { group: 2, teams: ['Wise (8) / Angell (26) [Team HCP 15]', 'Langley (14) / Festor (22) [Team HCP 17]'] },
+      { group: 1, teams: ['Cake (2) / Wohnoutka (26) [Team HCP 12]', 'Macias (11) / Murphy (13) [Team HCP 12]'] },
+      { group: 2, teams: ['Wise (6) / Angell (27) [Team HCP 14]', 'Langley (13) / Festor (22) [Team HCP 17]'] },
     ],
     payouts: [
       { desc: 'Front Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
@@ -1896,8 +1908,8 @@ const MATCHES = [
     description: 'Individual stroke play scored on Modified Stableford. Each player\'s quota = 36 minus handicap. Winner = highest points-minus-quota score. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 4 · Eagle = 8 · Albatross = 10. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (5) [Q:31]', 'Wise (8) [Q:28]', 'Angell (26) [Q:10]', 'Wohnoutka (27) [Q:9]'] },
-      { group: 2, teams: ['Festor (22) [Q:14]', 'Langley (14) [Q:22]', 'Macias (12) [Q:24]', 'Murphy (15) [Q:21]'] },
+      { group: 1, teams: ['Cake (2) [Q:34]', 'Wise (6) [Q:30]', 'Angell (26) [Q:10]', 'Wohnoutka (25) [Q:11]'] },
+      { group: 2, teams: ['Festor (21) [Q:15]', 'Langley (13) [Q:23]', 'Macias (11) [Q:25]', 'Murphy (13) [Q:23]'] },
     ],
     payouts: [
       { desc: 'Low Score of Foursome (within foursome)', amt: '28 shells (14/winner)' },
@@ -1911,6 +1923,27 @@ const MATCHES = [
 const WEEK_GAMES = [
   { name: 'Race to Seattle', desc: 'Cumulative shells over the week. Pays 1st, 2nd, 3rd.', units: 56 },
   { name: 'Birdie Draw', desc: 'Net birdies = 1 ticket · Net eagles = 3 tickets · Random draw winner.', units: 24 },
+];
+
+// ---- GAME RULES ----
+const GAME_RULES = [
+  {
+    title: 'Prize Pool',
+    items: [
+      'Each player will contribute $120 to the prize pool for a total pool of $960.',
+      'The prize pool will be divided into 320 shells ($3.00/shell) that will be awarded in every match and week-long game.',
+      'There will be six matches. Each match will split 40 shells across the main and side games. The weights for the matches will skew towards the team match each day, but to keep everyone in the action, there will be individual awards on the non-Scramble/Shambles rounds and during the week-long games.'
+    ]
+  },
+  {
+    title: 'Handicaps',
+    items: [
+      'Base handicaps will be set at the beginning of the trip and will not change during the week.',
+      'Unless otherwise stated in a specific match format, players will compete using their full course handicap rather than playing off the low man.',
+      'Certain formats may apply their own handicap adjustment formula, which will govern for that match.',
+      'Handicaps for each match will be adjusted slightly to account for the game and max scores.'
+    ]
+  }
 ];
 
 // ---- LOCAL RULES ----
@@ -2107,6 +2140,14 @@ function handleModalClick(e) {
 // ---- RULES ----
 function renderRules() {
   document.getElementById('rules-grid').innerHTML = RULES.map(r => `
+    <div class="rule-card">
+      <h3>${r.title}</h3>
+      <ul>${r.items.map(i => `<li>${i}</li>`).join('')}</ul>
+    </div>`).join('');
+}
+
+function renderGameRules() {
+  document.getElementById('game-rules-grid').innerHTML = GAME_RULES.map(r => `
     <div class="rule-card">
       <h3>${r.title}</h3>
       <ul>${r.items.map(i => `<li>${i}</li>`).join('')}</ul>
@@ -2687,6 +2728,7 @@ function buildBoard(raw, root) {
 // ---- INIT ----
 renderSchedule();
 renderRules();
+renderGameRules();
 renderPrizes();
 loadBanner();
 loadBoard();
