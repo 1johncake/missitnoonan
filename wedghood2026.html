@@ -2694,104 +2694,70 @@ function buildBoard(raw, root) {
   }
 
   const rows = raw.map(r => Array.isArray(r) ? r.map(v => String(v ?? '').trim()) : []);
+
+  // ── Section 1: Headline — row index 4 (row 5 in sheet)
+  // Cols: D=3, F=5, H=7, J=9
+  const hr = rows[4] || [];
+  const headline = {
+    date:  hr[3] || '',
+    type:  hr[5] || '',
+    title: hr[7] || '',
+    body:  hr[9] || ''
+  };
   const isLabel = s => /^(short headline|full recap|date\s*\/\s*time|update\s*\/\s*recap|y\s*=\s*show|alt\+enter|goes here|for this post)/i.test(s.trim());
+  const hasHeadline = headline.body && !isLabel(headline.body);
 
-  // ── Section 1: Headline
-  // Find the row that contains the headline data — it's the first data row
-  // under "SECTION 1 · HEADLINE MESSAGE". Scan rows 0–6 for a non-header data row
-  // by looking for the first row that has a non-empty cell that isn't a label/header.
-  let headline = null;
-  for (let i = 0; i < Math.min(7, rows.length); i++) {
-    const r = rows[i];
-    // Find cols by scanning for date-like or meaningful content
-    // The headline row has: DATE/TIME | TYPE | TITLE | MESSAGE BODY in adjacent cols
-    const nonEmpty = r.map((v, idx) => ({ v, idx })).filter(x => x.v && !isLabel(x.v));
-    if (nonEmpty.length >= 2) {
-      // Likely a data row — pick up to 4 meaningful values as date, type, title, body
-      const vals = nonEmpty.map(x => x.v);
-      // Heuristic: if any cell looks like a date/timestamp, treat as headline row
-      const hasDate = nonEmpty.some(x => /\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}|\d{1,2}:\d{2}/.test(x.v));
-      if (hasDate || vals.length >= 2) {
-        headline = {
-          date:  vals[0] || '',
-          type:  vals[1] || '',
-          title: vals[2] || '',
-          body:  vals[3] || vals[2] || ''
-        };
-        // If only 2 values, treat as type + body
-        if (vals.length === 2) { headline = { date:'', type: vals[0], title:'', body: vals[1] }; }
-        if (vals.length === 3) { headline = { date: vals[0], type: vals[1], title:'', body: vals[2] }; }
-        break;
-      }
-    }
-  }
-  const hasHeadline = headline && headline.body && !isLabel(headline.body);
-
-  // ── Section 2: Archive messages
-  // Find the archive header row — it contains "SHOW?" (not "Y = Show")
-  let archiveHeaderIdx = -1;
-  for (let i = 0; i < rows.length; i++) {
-    const hasShowHeader = rows[i].some(v => v.toUpperCase() === 'SHOW?');
-    if (hasShowHeader) { archiveHeaderIdx = i; break; }
-  }
-
+  // ── Section 2: Archive — headers row 7 (index 7), labels row 8 (index 8), data from row 9 (index 9)
+  // Cols: B=1 (SHOW?), D=3 (DATE), F=5 (TYPE), H=7 (TITLE), J=9 (MESSAGE BODY)
   const messages = [];
-  if (archiveHeaderIdx !== -1) {
-    // Confirmed layout from sheet: col 1=SHOW?, 3=DATE/TIME, 5=TYPE, 7=TITLE, 9=MESSAGE BODY
-    for (let i = archiveHeaderIdx + 2; i < rows.length; i++) { // +2 to skip instruction row
-      const r = rows[i];
-      if (!r.some(Boolean)) continue;
-
-      const show  = (r[1] || '').toUpperCase();
-      const date  = r[3] || '';
-      const type  = r[5] || '';
-      const title = r[7] || '';
-      const body  = r[9] || '';
-
-      if (show !== 'Y' && show !== 'YES') continue;
-      if (!body || isLabel(body)) continue;
-
-      messages.push({ date, type, title, body });
-    }
+  for (let i = 9; i < rows.length; i++) {
+    const r = rows[i];
+    const show  = r[1] || '';
+    const date  = r[3] || '';
+    const type  = r[5] || '';
+    const title = r[7] || '';
+    const body  = r[9] || '';
+    if (!date && !title && !body) continue;
+    if (isLabel(title) || isLabel(body)) continue;
+    messages.push({ show, date, type, title, body });
   }
 
-  // ── Build HTML — sheet order = newest at top, so show as-is (no reverse)
-  let html = '';
+  // ── Render headline
+  const headlineHtml = hasHeadline ? `
+    <div class="board-headline">
+      <div class="board-headline-kicker">${escHtml(headline.type) || 'Commissioner Note'}</div>
+      ${headline.title && !isLabel(headline.title) ? `<div class="board-headline-title">${escHtml(headline.title)}</div>` : ''}
+      <div class="board-headline-body">${escHtml(headline.body)}</div>
+      ${headline.date ? `<div class="board-headline-date">${fmtBoardDate(headline.date)}</div>` : ''}
+    </div>` : '';
 
-  if (hasHeadline) {
-    html += `
-      <div class="board-headline">
-        <div class="board-headline-kicker">${escHtml(headline.type) || 'Commissioner Note'}</div>
-        ${headline.title && !isLabel(headline.title) ? `<div class="board-headline-title">${escHtml(headline.title)}</div>` : ''}
-        <div class="board-headline-body">${escHtml(headline.body)}</div>
-        ${headline.date ? `<div class="board-headline-date">${escHtml(fmtBoardDate(headline.date))}</div>` : ''}
-      </div>`;
-  }
+  // ── Render archive messages — show all with a date or body, sorted newest first
+  const shown = messages
+    .filter(p => p.show.toUpperCase() === 'Y' || p.body || p.title)
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  if (messages.length) {
-    html += '<div class="board-list">';
-    html += messages.map(post => {
-      const badge = post.type ? `<span class="board-post-badge">${escHtml(post.type)}</span>` : '';
-      const date  = post.date ? `<span class="board-post-date">${escHtml(fmtBoardDate(post.date))}</span>` : '';
-      const title = post.title && !isLabel(post.title)
-        ? `<div class="board-post-title">${escHtml(post.title)}</div>` : '';
-      return `
-        <div class="board-post">
-          <div class="board-post-head">
-            <div>${badge}</div>
-            ${date}
-          </div>
-          ${title}
-          <div class="board-post-body">${escHtml(post.body)}</div>
-        </div>`;
-    }).join('');
-    html += '</div>';
-  } else if (!hasHeadline) {
-    html = '<div class="board-empty">No posts yet — check back once the trip begins.</div>';
-  }
+  const listHtml = shown.length ? `
+    <div class="board-list">
+      ${shown.map(post => {
+        const badge = post.type ? `<span class="board-post-badge">${escHtml(post.type)}</span>` : '';
+        const title = post.title && !isLabel(post.title)
+          ? `<div class="board-post-title">${escHtml(post.title)}</div>` : '';
+        return `
+          <div class="board-post">
+            <div class="board-post-head">
+              ${badge}
+              <span class="board-post-date">${fmtBoardDate(post.date)}</span>
+            </div>
+            ${title}
+            <div class="board-post-body">${escHtml(post.body)}</div>
+          </div>`;
+      }).join('')}
+    </div>` : '';
 
-  root.innerHTML = html;
+  root.innerHTML = headlineHtml + listHtml ||
+    '<div class="board-empty">No posts yet — check back once the trip begins.</div>';
 }
+
 
 // ---- INIT ----
 renderSchedule();
