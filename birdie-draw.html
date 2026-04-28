@@ -528,9 +528,9 @@ body::before {
 /* ============================================================
    CONFIG
    ============================================================ */
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkYlibJDpNW7AMJvwVYN3JmUN7ZD-tsaqG0edBagxvhTE2IxCS3kbEcmnZbbA6cQztta-3gqFossZX/pub?gid=1728014820&single=true&output=csv';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtjUS0Y1uWFqSGIc53F_Od684F4wBrI4twT3yKiwnBZ8uIb6cOd4xXWo_LztMei_E2/exec';
 
-const PLAYERS = ['Cake','Wise','Macias','Langley','Murphy','Festor','Angell','Wohnoutka'];
+const PLAYERS = ['Cake','Wise','Langley','Murphy','Festor','Angell','Wohnoutka'];
 const COLORS  = ['#4B9CD3','#C9A84C','#5BAD72','#D4614A','#9B7FD4','#D4955A','#4ABBC4','#C46FAA'];
 const DIGITS  = '0123456789';
 
@@ -634,46 +634,16 @@ function applyManual() {
    ============================================================ */
 async function loadCSV() {
   try {
-    let text;
-    try {
-      const proxyUrl = '/.netlify/functions/fetch-csv?url=' + encodeURIComponent(CSV_URL + '&_=' + Date.now());
-      const res = await fetch(proxyUrl);
-      if (!res.ok) throw new Error('proxy failed');
-      text = await res.text();
-    } catch {
-      const res = await fetch('https://corsproxy.io/?' + encodeURIComponent(CSV_URL + '&_=' + Date.now()));
-      if (!res.ok) throw new Error('corsproxy failed');
-      text = await res.text();
-    }
+    const res = await fetch(APPS_SCRIPT_URL + '?_=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    const birdieData = json.BirdieDraw || [];
+    if (!birdieData.length) throw new Error('No BirdieDraw data');
 
-    // Proper CSV parser — handles quoted fields with embedded newlines
-    function parseCSV(str) {
-      const rows = [];
-      let row = [], cur = '', inQ = false;
-      for (let i = 0; i < str.length; i++) {
-        const ch = str[i], next = str[i+1];
-        if (ch === '"') {
-          if (inQ && next === '"') { cur += '"'; i++; }
-          else { inQ = !inQ; }
-        } else if (ch === ',' && !inQ) {
-          row.push(cur.trim()); cur = '';
-        } else if ((ch === '\n' || (ch === '\r' && next === '\n')) && !inQ) {
-          if (ch === '\r') i++;
-          row.push(cur.trim()); rows.push(row); row = []; cur = '';
-        } else { cur += ch; }
-      }
-      if (cur || row.length) { row.push(cur.trim()); rows.push(row); }
-      return rows;
-    }
-
-    const rows  = parseCSV(text);
-    const hdrs  = rows[0].map(h => h.replace(/\s+/g,'').toLowerCase());
-    const col   = hdrs.findIndex(h => h === 'birdietickets');
-    if (col === -1) throw new Error('BirdieTickets column not found');
-
+    const ticketKey = 'Total TIckets'; // note: sheet has typo "TIckets"
     const data = {};
-    rows.slice(1).forEach(row => {
-      if (PLAYERS.includes(row[0])) data[row[0]] = parseInt(row[col]) || 0;
+    birdieData.forEach(row => {
+      if (row.Player) data[row.Player] = parseInt(row[ticketKey]) || 0;
     });
 
     const raw = PLAYERS.map((name, i) => ({
