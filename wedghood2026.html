@@ -451,6 +451,18 @@ section {
   font-family: var(--font-mono);
   color: rgba(255,255,255,0.55);
 }
+.lb-table .units-pos {
+  text-align: center;
+  font-family: var(--font-mono);
+  color: var(--sage);
+  font-weight: 600;
+}
+.lb-table .units-neg {
+  text-align: center;
+  font-family: var(--font-mono);
+  color: #E07070;
+  font-weight: 600;
+}
 
 /* Day scores table */
 .day-scores-wrap { overflow-x: auto; margin-bottom: 1rem; }
@@ -1645,8 +1657,8 @@ body.has-banner .nav-drawer { top: 102px; }
       class="hero-logo-img"
       onerror="this.style.display='none';document.getElementById('hero-fallback').style.display='block'">
     <div id="hero-fallback" style="display:none;">
-      <div class="hero-title">Wedghoods</div>
-      <div class="hero-year">2026</div>
+      <div class="hero-title">Welcome to the</div>
+      <div class="hero-year">Spring 2026 Outing</div>
     </div>
     <div class="hero-divider"></div>
     <div class="hero-meta">Palm Springs, California</div>
@@ -1678,27 +1690,27 @@ body.has-banner .nav-drawer { top: 102px; }
 
     <!-- TABS -->
     <div class="tab-bar">
-      <button class="tab-btn active" onclick="switchTab('standings')">Race to Seattle</button>
+      <button class="tab-btn active" onclick="switchTab('rts')">Race to Seattle</button>
+      <button class="tab-btn" onclick="switchTab('canyon')">Canyon Cup</button>
+      <button class="tab-btn" onclick="switchTab('matches')">Matches</button>
       <button class="tab-btn" onclick="switchTab('results')">Results</button>
       <button class="tab-btn" onclick="switchTab('birdie')">🎟 Birdie Draw</button>
     </div>
 
-    <div id="tab-standings" class="tab-panel active">
-      <div id="standings-content">
-        <div class="loading-state">Click Refresh once your CSV is connected</div>
-      </div>
+    <div id="tab-rts" class="tab-panel active">
+      <div id="rts-content"><div class="loading-state">Loading…</div></div>
     </div>
-
+    <div id="tab-canyon" class="tab-panel">
+      <div id="canyon-content"><div class="loading-state">Loading…</div></div>
+    </div>
+    <div id="tab-matches" class="tab-panel">
+      <div id="matches-content"><div class="loading-state">Loading…</div></div>
+    </div>
     <div id="tab-results" class="tab-panel">
-      <div id="results-content">
-        <div class="loading-state">Click Refresh once your CSV is connected</div>
-      </div>
+      <div id="results-content"><div class="loading-state">Loading…</div></div>
     </div>
-
     <div id="tab-birdie" class="tab-panel">
-      <div id="birdie-content">
-        <div class="loading-state">Click Refresh once your CSV is connected</div>
-      </div>
+      <div id="birdie-content"><div class="loading-state">Loading…</div></div>
     </div>
 
   </div>
@@ -1724,12 +1736,12 @@ body.has-banner .nav-drawer { top: 102px; }
 ============================================================ -->
 <div id="rules">
   <div class="inner">
-    <div class="section-label">Governing Play</div>
-    <div class="section-title">Governing Rules of Play</div>
+    <div class="section-label">Games &amp; Governing Play</div>
+    <div class="section-title">Games and Governing Rules of Play</div>
     <div class="section-rule"></div>
-    <div class="rules-subsection-label">Game Rules</div>
-    <div class="rules-grid" id="game-rules-grid"></div>
-    <div class="rules-subsection-label" style="margin-top:2.5rem;">Course Rules</div>
+    <div class="rules-subsection-label">Games</div>
+    <div id="game-rules-grid"></div>
+    <div class="rules-subsection-label" style="margin-top:2.5rem;">Rules Governing Play</div>
     <div class="rules-grid" id="rules-grid"></div>
   </div>
 </div>
@@ -1787,12 +1799,11 @@ body.has-banner .nav-drawer { top: 102px; }
 //   M1,Low Net — Group 1,Cake,10,
 //   (Halved column: put YES if the game was halved, leave blank if there was a winner)
 
-const CSV_URL_SCORES  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkYlibJDpNW7AMJvwVYN3JmUN7ZD-tsaqG0edBagxvhTE2IxCS3kbEcmnZbbA6cQztta-3gqFossZX/pub?gid=1728014820&single=true&output=csv';
-const CSV_URL_RESULTS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkYlibJDpNW7AMJvwVYN3JmUN7ZD-tsaqG0edBagxvhTE2IxCS3kbEcmnZbbA6cQztta-3gqFossZX/pub?gid=415732827&single=true&output=csv';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtjUS0Y1uWFqSGIc53F_Od684F4wBrI4twT3yKiwnBZ8uIb6cOd4xXWo_LztMei_E2/exec';
 
 // ---- PLAYERS ----
-const PLAYERS = ['Cake','Wise','Macias','Langley','Murphy','Festor','Angell','Wohnoutka'];
-const HANDICAPS = { Cake:1, Wise:6, Macias:10, Langley:12, Murphy:12, Festor:21, Angell:26, Wohnoutka:25 };
+const PLAYERS = ['Cake','Wise','Langley','Murphy','Festor','Angell','Wohnoutka'];
+const HANDICAPS = { Cake:1, Wise:6, Langley:12, Murphy:12, Festor:21, Angell:26, Wohnoutka:25 };
 
 // ---- MATCHES ----
 const MATCHES = [
@@ -1806,8 +1817,8 @@ const MATCHES = [
     description: 'Full handicaps, no adjustments. Team: low net score wins hole, no tiebreaks, no carryovers — separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split shells. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (1) / Langley (12)', 'Wise (6) / Macias (10)'] },
-      { group: 2, teams: ['Murphy (12) / Wohnoutka (25)', 'Festor (21) / Angell (26)'] },
+      { group: 1, teams: ['Cake · Wise · Angell · Wohnoutka', 'Canyon Cup — F9: Cake vs Wise · B9: Cake vs Angell'] },
+      { group: 2, teams: ['Festor · Murphy · Langley', 'Canyon Cup — F9: Festor vs Murphy · B9: Festor vs Langley'] },
     ],
     payouts: [
       { desc: 'Front Winning Team (within foursome)', amt: '8 shells (4/team · 2/player)' },
@@ -1827,8 +1838,8 @@ const MATCHES = [
     description: 'Full handicaps, no adjustments. All putts must be holed — no gimmes. Maximum score: Net Double Bogey. Winner retains the trophy for one year. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (3)', 'Angell (29)', 'Festor (24)', 'Macias (12)'] },
-      { group: 2, teams: ['Langley (15)', 'Murphy (15)', 'Wise (7)', 'Wohnoutka (28)'] },
+      { group: 1, teams: ['Cake · Wise · Murphy · Langley', 'Canyon Cup — F9: Wise vs Murphy · B9: Wise vs Langley'] },
+      { group: 2, teams: ['Festor · Angell · Wohnoutka', 'Canyon Cup — F9: Angell vs Wohnoutka · B9: Festor vs Wohnoutka'] },
     ],
     payouts: [
       { desc: '1st Place', amt: '20 shells' },
@@ -1847,8 +1858,8 @@ const MATCHES = [
     description: 'Playing HCP: 80% of course handicap. Shamble: both tee off, team selects best drive, each plays own ball in — team scores better net ball and applies Stableford points. Poison holes (6 & 15): team must take the HIGH net score. Drive quota: 3 per player. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 3 · Eagle = 5 · Albatross = 8. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (2ph) / Festor (18ph)', 'Wise (6ph) / Murphy (11ph)'] },
-      { group: 2, teams: ['Macias (9ph) / Wohnoutka (21ph)', 'Langley (11ph) / Angell (22ph)'] },
+      { group: 1, teams: ['Cake · Festor · Angell · Murphy', 'Canyon Cup — F9: Cake vs Murphy · B9: Festor vs Angell'] },
+      { group: 2, teams: ['Wise · Wohnoutka · Langley', 'Canyon Cup — F9: Wohnoutka vs Langley · B9: Wise vs Wohnoutka'] },
     ],
     payouts: [
       { desc: 'Front Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
@@ -1867,8 +1878,8 @@ const MATCHES = [
     description: 'Full handicaps, no adjustments. Team: low net score wins hole — if tied, high score is the tiebreak. No carryovers. Separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split shells. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (3) / Angell (29)', 'Langley (15) / Murphy (14)'] },
-      { group: 2, teams: ['Wise (7) / Wohnoutka (27)', 'Macias (12) / Festor (23)'] },
+      { group: 1, teams: ['Wise · Festor · Wohnoutka · Murphy', 'Canyon Cup — F9: Wise vs Festor · B9: Wohnoutka vs Murphy'] },
+      { group: 2, teams: ['Cake · Angell · Langley', 'Canyon Cup — F9: Cake vs Langley · B9: Angell vs Langley'] },
     ],
     payouts: [
       { desc: 'Front Winning Team (within foursome)', amt: '4 shells (2/player)' },
@@ -1881,15 +1892,15 @@ const MATCHES = [
   {
     id: 5,
     day: 'Day 3', dayLabel: 'Saturday', date: 'May 2 PM',
-    course: 'Silver Rock', tees: 'Blue · 6,313 yds · Rating 70.6 · Slope 129',
+    course: 'SilverRock', tees: 'Blue · 6,313 yds · Rating 70.6 · Slope 129',
     time: 'Afternoon',
     format: '2-Man Chapman',
     type: 'Net Stableford',
     description: 'Team HCP = 60% of low + 40% of high handicap. Both players hit drives, switch balls for 2nd shots, then pick best ball and play alternate shot to hole. Par 3s: potentially two putts for birdie. One gross/net team score per hole. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 3 · Eagle = 5 · Albatross = 8. No halves.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (2) / Wohnoutka (26) [Team HCP 12]', 'Macias (11) / Murphy (13) [Team HCP 12]'] },
-      { group: 2, teams: ['Wise (6) / Angell (27) [Team HCP 14]', 'Langley (13) / Festor (22) [Team HCP 17]'] },
+      { group: 1, teams: ['Cake · Festor · Wohnoutka · Langley', 'Canyon Cup — F9: Cake vs Festor · B9: Cake vs Wohnoutka'] },
+      { group: 2, teams: ['Wise · Angell · Murphy', 'Canyon Cup — F9: Wise vs Angell · B9: Angell vs Murphy'] },
     ],
     payouts: [
       { desc: 'Front Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
@@ -1908,8 +1919,8 @@ const MATCHES = [
     description: 'Individual stroke play scored on Modified Stableford. Each player\'s quota = 36 minus handicap. Winner = highest points-minus-quota score. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 4 · Eagle = 8 · Albatross = 10. Birdie Draw tickets earned on individual net score.',
     units: 40,
     pairings: [
-      { group: 1, teams: ['Cake (2) [Q:34]', 'Wise (6) [Q:30]', 'Angell (26) [Q:10]', 'Wohnoutka (25) [Q:11]'] },
-      { group: 2, teams: ['Festor (21) [Q:15]', 'Langley (13) [Q:23]', 'Macias (11) [Q:25]', 'Murphy (13) [Q:23]'] },
+      { group: 1, teams: ['Angell · Wohnoutka · Murphy · Langley', 'Canyon Cup — F9: Murphy vs Langley'] },
+      { group: 2, teams: ['Cake · Wise · Festor', ''] },
     ],
     payouts: [
       { desc: 'Low Score of Foursome (within foursome)', amt: '28 shells (14/winner)' },
@@ -1928,20 +1939,79 @@ const WEEK_GAMES = [
 // ---- GAME RULES ----
 const GAME_RULES = [
   {
-    title: 'Prize Pool',
+    id: 'race',
+    title: 'Race to Seattle',
+    tagline: 'Individual Quota · All Six Rounds',
     items: [
-      'Each player will contribute $120 to the prize pool for a total pool of $960.',
-      'The prize pool will be divided into 320 shells ($3.00/shell) that will be awarded in every match and week-long game.',
-      'There will be six matches. Each match will split 40 shells across the main and side games. The weights for the matches will skew towards the team match each day, but to keep everyone in the action, there will be individual awards on the non-Scramble/Shambles rounds and during the week-long games.'
+      '<strong>Format:</strong> Quota scoring across all six rounds. Each player\'s quota is 36 minus course handicap. Points earned on gross scores: Double bogey or worse = 0pts, Bogey = 1pt, Par = 2pts, Birdie = 4pts, Eagle = 8pts, Albatross = 12pts.',
+      '<strong>Scoring:</strong> Each round, score = total points earned minus quota. Cumulative +/− against quota across all six rounds determines final standings. The player who most exceeds their quota over the trip wins.',
+      '<strong>Max score per hole:</strong> Net double bogey or worse scores zero. No further damage.',
+      '<strong>Payout (58 shells):</strong> 1st — 30 shells &nbsp;·&nbsp; 2nd — 17 shells &nbsp;·&nbsp; 3rd — 11 shells'
     ]
   },
   {
-    title: 'Handicaps',
+    id: 'championship',
+    title: 'Wedghood Championship',
+    tagline: 'Net Stroke Play · Round 2 · Desert Willow Firecliff',
     items: [
-      'Base handicaps will be set at the beginning of the trip and will not change during the week.',
-      'Unless otherwise stated in a specific match format, players will compete using their full course handicap rather than playing off the low man.',
-      'Certain formats may apply their own handicap adjustment formula, which will govern for that match.',
-      'Handicaps for each match will be adjusted slightly to account for the game and max scores.'
+      '<strong>Format:</strong> Individual net stroke play, Friday morning (Round 2), Desert Willow Firecliff. Gross score minus full course handicap. Lowest net score wins.',
+      '<strong>Max score per hole:</strong> Net triple bogey. Score is capped; no further damage to the card.',
+      '<strong>Note:</strong> The same round also contributes to Race to Seattle quota scoring. One scorecard, two competitions.',
+      '<strong>Payout (24 shells):</strong> 1st — 12 shells &nbsp;·&nbsp; 2nd — 7 shells &nbsp;·&nbsp; 3rd — 5 shells'
+    ]
+  },
+  {
+    id: 'canyon',
+    title: 'The Canyon Cup',
+    tagline: 'Net Match Play Round Robin · All Six Rounds',
+    canyonCup: true,
+    items: [
+      '<strong>Format:</strong> Net match play, 9-hole matches. Every player faces every other player exactly once across 21 scheduled matches. Groups stay together all 18 holes — matches happen within your group on the Front 9 or Back 9 as drawn. Some nines have no match and are played as skins/stableford.',
+      '<strong>Match points:</strong> Win = 2pts &nbsp;·&nbsp; Halve = 1pt &nbsp;·&nbsp; Loss = 0pts',
+      '<strong>Tiebreaker:</strong> Head-to-head result, then most wins, then aggregate net score across all matches.',
+      '<strong>Payout (58 shells):</strong> 1st — 30 shells &nbsp;·&nbsp; 2nd — 17 shells &nbsp;·&nbsp; 3rd — 11 shells'
+    ]
+  },
+  {
+    id: 'birdie',
+    title: 'The Birdie Draw',
+    tagline: 'Raffle · Net Birdies &amp; Eagles · All Six Rounds',
+    items: [
+      '<strong>Format:</strong> A raffle pool funded at the start of the trip. Every player receives one ticket simply for participating. Additional tickets are earned throughout all six rounds based on net scores.',
+      '<strong>Tickets:</strong> Participation — 1 ticket (automatic) &nbsp;·&nbsp; Net Birdie — 1 ticket &nbsp;·&nbsp; Net Eagle — 3 tickets',
+      '<strong>Draw:</strong> At the closing dinner, tickets are drawn from the pool. Everyone has a chance. The more birdies and eagles you make, the better your odds. One winner takes the pot.',
+      '<strong>Payout: 16 shells</strong>'
+    ]
+  },
+  {
+    id: 'daily',
+    title: 'Daily Group Winners',
+    tagline: 'High Quota Within Group · Every Round',
+    items: [
+      '<strong>Format:</strong> Each round, the player with the highest quota score within their group wins the daily prize. One winner per group, paid out at the end of each round.',
+      '<strong>Foursome win:</strong> 8 shells — 1-in-4 odds (5 rounds)',
+      '<strong>Threesome win:</strong> 6 shells — 1-in-3 odds (5 rounds)',
+      '<strong>Tiebreaker:</strong> Back nine quota score. If still tied, back six, then back three, then 18th hole.'
+    ]
+  },
+  {
+    id: 'skins',
+    title: 'Daily Skins',
+    tagline: 'Net Skins · All Seven Players · Every Round',
+    items: [
+      '<strong>Format:</strong> Net skins across all seven players each round. A skin is won when one player posts the lowest net score on a hole outright. Ties carry to the next hole.',
+      '<strong>Payout:</strong> 9 shells per round. At the end of each round: pot ÷ total skins won = value per skin.',
+      '<strong>No skins won:</strong> In the unlikely event no skins are claimed, all seven players participate in a 90-foot putting contest on the 18th green. Closest to the hole wins the full pot.'
+    ]
+  },
+  {
+    id: 'prize',
+    title: 'Prize Pool',
+    tagline: 'Total Pot · Distribution',
+    items: [
+      'Each player will contribute $120 to the prize pool for a total pool of $840.',
+      'The prize pool will be divided into 280 shells ($3.00/shell) awarded across all matches and week-long games.',
+      '<strong>Race to Seattle</strong> — Cumulative Quota — 58 shells: 1st 30 · 2nd 17 · 3rd 11<br><strong>The Canyon Cup</strong> — Round Robin Match Play — 58 shells: 1st 30 · 2nd 17 · 3rd 11<br><strong>Wedghood Championship</strong> — 24 shells: 1st 12 · 2nd 7 · 3rd 5<br><strong>Daily Low — Foursome</strong> — 8 shells (5 rounds)<br><strong>Daily Low — Threesome</strong> — 6 shells (5 rounds)<br><strong>Daily Skins Pool</strong> — 9 shells per round<br><strong>Birdie Draw</strong> — 16 shells'
     ]
   }
 ];
@@ -1969,7 +2039,7 @@ const RULES = [
     title: 'Maximum Scores',
     items: [
       'Max score varies by format — see each match section.',
-      'In Stableford and Quota formats, pick up once no additional points can be earned.',
+      'In Quota formats, pick up once no additional points can be earned.',
       'Play ready golf. Pick up promptly when out of the hole.'
     ]
   },
@@ -1985,14 +2055,14 @@ const RULES = [
     title: 'Scorecards',
     items: [
       'Use provided pre-dotted scorecards for each round.',
-      'During team rounds, record each player\'s individual gross and net score (e.g., 5/4) on every hole.',
+      'During rounds, record each player\'s individual gross and net score (e.g., 5/4) on every hole.',
       'Turn all cards in to Cake at end of round. Scores entered into leaderboard after each round.'
     ]
   },
   {
     title: 'Ties',
     items: [
-      'Team matches may end in a halve — prize pool split equally.',
+      'Canyon Cup matches may end in a halve — points split (1pt each).',
       'Individual side games: tied by matching scorecards starting at designated tiebreak hole.',
       'Championship ties for 1st: on-course playoff if practical; otherwise scorecard tiebreak.'
     ]
@@ -2002,26 +2072,24 @@ const RULES = [
 // ---- PAIRING MATRIX DATA ----
 // Format: 'PARTNER-M#' or 'GROUP-M#,M#' or 'SELF'
 const MATRIX = {
-  Cake:      { Cake:'SELF', Wise:'GROUP-M1,M3,M6', Macias:'GROUP-M1,M2,M5', Langley:'PARTNER-M1', Murphy:'GROUP-M3,M4,M5', Festor:'PARTNER-M3', Angell:'PARTNER-M4', Wohnoutka:'PARTNER-M5' },
-  Wise:      { Cake:'GROUP-M1,M3,M6', Wise:'SELF', Macias:'PARTNER-M1', Langley:'GROUP-M1,M2,M5', Murphy:'PARTNER-M3', Festor:'GROUP-M3,M4,M5', Angell:'PARTNER-M5', Wohnoutka:'PARTNER-M4' },
-  Macias:    { Cake:'GROUP-M1,M2,M5', Wise:'PARTNER-M1', Macias:'SELF', Langley:'GROUP-M1,M3,M6', Murphy:'PARTNER-M5', Festor:'PARTNER-M4', Angell:'GROUP-M2,M3', Wohnoutka:'PARTNER-M3' },
-  Langley:   { Cake:'PARTNER-M1', Wise:'GROUP-M1,M2,M5', Macias:'GROUP-M1,M3,M6', Langley:'SELF', Murphy:'PARTNER-M4', Festor:'PARTNER-M5', Angell:'PARTNER-M3', Wohnoutka:'GROUP-M2,M3' },
-  Murphy:    { Cake:'GROUP-M3,M4,M5', Wise:'PARTNER-M3', Macias:'PARTNER-M5', Langley:'PARTNER-M4', Murphy:'SELF', Festor:'GROUP-M1,M3,M6', Angell:'GROUP-M1,M4', Wohnoutka:'PARTNER-M1' },
-  Festor:    { Cake:'PARTNER-M3', Wise:'GROUP-M3,M4,M5', Macias:'PARTNER-M4', Langley:'PARTNER-M5', Murphy:'GROUP-M1,M3,M6', Festor:'SELF', Angell:'PARTNER-M1', Wohnoutka:'GROUP-M1,M4' },
-  Angell:    { Cake:'PARTNER-M4', Wise:'PARTNER-M5', Macias:'GROUP-M2,M3', Langley:'PARTNER-M3', Murphy:'GROUP-M1,M4', Festor:'PARTNER-M1', Angell:'SELF', Wohnoutka:'GROUP-M1,M3,M6' },
-  Wohnoutka: { Cake:'PARTNER-M5', Wise:'PARTNER-M4', Macias:'PARTNER-M3', Langley:'GROUP-M2,M3', Murphy:'PARTNER-M1', Festor:'GROUP-M1,M4', Angell:'GROUP-M1,M3,M6', Wohnoutka:'SELF' }
+  Cake:      { Cake:'SELF',          Wise:'GROUP-M1,M2,M6',   Langley:'GROUP-M2,M4,M6', Murphy:'GROUP-M3,M4,M5',   Festor:'GROUP-M3,M5,M6',   Angell:'GROUP-M1,M4,M5',   Wohnoutka:'GROUP-M1,M3,M5' },
+  Wise:      { Cake:'GROUP-M1,M2,M6', Wise:'SELF',            Langley:'GROUP-M2,M3,M6', Murphy:'GROUP-M2,M3,M5',   Festor:'GROUP-M4,M5,M6',   Angell:'GROUP-M1,M4,M5',   Wohnoutka:'GROUP-M3,M4,M6' },
+  Langley:   { Cake:'GROUP-M2,M4,M6', Wise:'GROUP-M2,M3,M6', Langley:'SELF',            Murphy:'GROUP-M1,M4,M6',   Festor:'GROUP-M5,M6',      Angell:'GROUP-M3,M4,M6',   Wohnoutka:'GROUP-M3,M5,M6' },
+  Murphy:    { Cake:'GROUP-M3,M4,M5', Wise:'GROUP-M2,M3,M5', Langley:'GROUP-M1,M4,M6', Murphy:'SELF',              Festor:'GROUP-M1,M4,M6',   Angell:'GROUP-M1,M5,M6',   Wohnoutka:'GROUP-M4,M5,M6' },
+  Festor:    { Cake:'GROUP-M3,M5,M6', Wise:'GROUP-M4,M5,M6', Langley:'GROUP-M5,M6',    Murphy:'GROUP-M1,M4,M6',   Festor:'SELF',              Angell:'GROUP-M3,M4,M6',   Wohnoutka:'GROUP-M2,M3,M5' },
+  Angell:    { Cake:'GROUP-M1,M4,M5', Wise:'GROUP-M1,M4,M5', Langley:'GROUP-M3,M4,M6', Murphy:'GROUP-M1,M5,M6',   Festor:'GROUP-M3,M4,M6',   Angell:'SELF',              Wohnoutka:'GROUP-M2,M5,M6' },
+  Wohnoutka: { Cake:'GROUP-M1,M3,M5', Wise:'GROUP-M3,M4,M6', Langley:'GROUP-M3,M5,M6', Murphy:'GROUP-M4,M5,M6',   Festor:'GROUP-M2,M3,M5',   Angell:'GROUP-M2,M5,M6',   Wohnoutka:'SELF' },
 };
 
 // ---- PLAYER SCHEDULE ----
 const PLAYER_SCHEDULE = {
-  Cake:      { M1:'+ Langley (G1)', M2:'Grp 1', M3:'+ Festor (G1)',     M4:'+ Angell (G1)',    M5:'+ Wohnoutka (G1)', M6:'Grp 1' },
-  Wise:      { M1:'+ Macias (G1)',  M2:'Grp 2', M3:'+ Murphy (G1)',     M4:'+ Wohnoutka (G2)', M5:'+ Angell (G2)',    M6:'Grp 1' },
-  Macias:    { M1:'+ Wise (G1)',    M2:'Grp 1', M3:'+ Wohnoutka (G2)',  M4:'+ Festor (G2)',    M5:'+ Murphy (G1)',    M6:'Grp 2' },
-  Langley:   { M1:'+ Cake (G1)',    M2:'Grp 2', M3:'+ Angell (G2)',     M4:'+ Murphy (G1)',    M5:'+ Festor (G2)',    M6:'Grp 2' },
-  Murphy:    { M1:'+ Wohnoutka (G2)', M2:'Grp 2', M3:'+ Wise (G1)',    M4:'+ Langley (G1)',   M5:'+ Macias (G1)',    M6:'Grp 2' },
-  Festor:    { M1:'+ Angell (G2)', M2:'Grp 1',  M3:'+ Cake (G1)',      M4:'+ Macias (G2)',    M5:'+ Langley (G2)',   M6:'Grp 2' },
-  Angell:    { M1:'+ Festor (G2)', M2:'Grp 1',  M3:'+ Langley (G2)',   M4:'+ Cake (G1)',      M5:'+ Wise (G2)',      M6:'Grp 1' },
-  Wohnoutka: { M1:'+ Murphy (G2)', M2:'Grp 2',  M3:'+ Macias (G2)',    M4:'+ Wise (G2)',      M5:'+ Cake (G1)',      M6:'Grp 1' },
+  Cake:      { M1:'G1 (vs Wise F9, vs Angell B9)',       M2:'G1',                                   M3:'G1 (vs Murphy F9)',          M4:'G2 (vs Langley F9)',         M5:'G1 (vs Festor F9, vs Wohnoutka B9)', M6:'G2' },
+  Wise:      { M1:'G1 (vs Cake F9)',                     M2:'G1 (vs Murphy F9, vs Langley B9)',     M3:'G2 (vs Wohnoutka B9)',       M4:'G1 (vs Festor F9)',          M5:'G2 (vs Angell F9)',                  M6:'G2' },
+  Langley:   { M1:'G2',                                  M2:'G1 (vs Wise B9)',                      M3:'G2 (vs Wohnoutka F9)',       M4:'G2 (vs Cake F9, vs Angell B9)', M5:'G1',                              M6:'G1 (vs Murphy F9)' },
+  Murphy:    { M1:'G2 (vs Festor F9)',                   M2:'G1 (vs Wise F9)',                      M3:'G1 (vs Cake F9)',            M4:'G1 (vs Wohnoutka B9)',       M5:'G2 (vs Angell B9)',                  M6:'G1 (vs Langley F9)' },
+  Festor:    { M1:'G2 (vs Murphy F9, vs Langley B9)',    M2:'G2 (vs Wohnoutka B9)',                 M3:'G1 (vs Angell B9)',          M4:'G1 (vs Wise F9)',            M5:'G1 (vs Cake F9)',                    M6:'G2' },
+  Angell:    { M1:'G1 (vs Cake B9)',                     M2:'G2 (vs Wohnoutka F9)',                 M3:'G1 (vs Festor B9)',          M4:'G2 (vs Langley B9)',         M5:'G2 (vs Wise F9, vs Murphy B9)',      M6:'G1' },
+  Wohnoutka: { M1:'G1',                                  M2:'G2 (vs Angell F9, vs Festor B9)',      M3:'G2 (vs Langley F9, vs Wise B9)', M4:'G1 (vs Murphy B9)',      M5:'G1 (vs Cake B9)',                    M6:'G1' },
 };
 
 
@@ -2033,59 +2101,94 @@ const PLAYER_SCHEDULE = {
 function renderSchedule() {
   const grid = document.getElementById('schedule-grid');
   const days = [
-    { label: 'Day 1', date: 'Thursday Apr 30', course: 'Indian Wells', matches: ['M1 — Better Net Ball'] },
-    { label: 'Day 2', date: 'Friday May 1', course: 'Desert Willow', matches: ['M2 — Championship (AM)', 'M3 — Net Shamble (PM)'] },
-    { label: 'Day 3', date: 'Saturday May 2', course: 'Eagle Falls / Silver Rock', matches: ['M4 — Low Net (AM)', 'M5 — Chapman (PM)'] },
-    { label: 'Day 4', date: 'Sunday May 3', course: 'Indian Canyon South', matches: ['M6 — Quota'] },
+    { label: 'Day 1', date: 'Thursday Apr 30', courses: ['Indian Wells Celebrity'], championship: false },
+    { label: 'Day 2', date: 'Friday May 1',    courses: ['Desert Willow Firecliff (AM)', 'Desert Willow Mountain View (PM)'], championship: true },
+    { label: 'Day 3', date: 'Saturday May 2',  courses: ['Eagle Falls (AM)', 'SilverRock (PM)'], championship: false },
+    { label: 'Day 4', date: 'Sunday May 3',    courses: ['Indian Canyon South'], championship: false },
   ];
   grid.innerHTML = days.map((d, i) => `
     <div class="day-card" data-day="${i}" onclick="toggleDay(${i})">
       <div class="day-num">${d.label}</div>
       <div class="day-date">${d.date}</div>
-      <div class="day-course">${d.course}</div>
       <div class="day-matches">
-        ${d.matches.map(m => `<div class="match-pill">${m}</div>`).join('')}
+        ${d.courses.map((c, ci) => `
+          <div class="match-pill">${c}</div>
+          ${d.championship && ci === 0 ? `<div style="font-size:0.58rem;font-weight:600;letter-spacing:0.1em;color:var(--gold-dark);padding-left:0.1rem;margin-top:-0.1rem;margin-bottom:0.25rem;">Wedghood Championship</div>` : ''}
+        `).join('')}
       </div>
     </div>`).join('');
 }
 
 function buildMatchHTML(matches) {
-  return matches.map(m => `
+  return matches.map(m => {
+    // Split pairings: group members (first team line) vs canyon cup lines (second team line)
+    const groupPairings = m.pairings.map(pg => ({
+      group: pg.group,
+      members: pg.teams[0],
+      canyon: pg.teams[1] || null
+    }));
+
+    return `
     <div style="margin-bottom:${matches.length > 1 ? '2.5rem' : '0'};">
-      <div style="display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:0.3rem;">
-        <span style="font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-bright);">Match ${m.id}</span>
-        <span style="font-family:var(--font-body);font-size:1.4rem;font-weight:300;color:white;">${m.format}</span>
-        <span style="font-size:0.7rem;color:rgba(255,255,255,0.7);font-style:italic;">${m.type}</span>
+      <div style="margin-bottom:1.2rem;">
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:0.3rem;">Round ${m.id}</div>
+        <div style="font-family:var(--font-display);font-size:2.2rem;font-weight:300;color:white;line-height:1;">${m.course}</div>
+        <div style="font-size:0.68rem;color:rgba(255,255,255,0.5);margin-top:0.4rem;letter-spacing:0.06em;">${m.tees} &bull; ${m.time}</div>
       </div>
-      <div style="font-size:0.68rem;color:rgba(255,255,255,0.65);margin-bottom:0.8rem;letter-spacing:0.06em;">
-        ${m.course} &bull; ${m.tees} &bull; ${m.time}
-      </div>
-      <div style="font-size:0.75rem;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:1.2rem;max-width:700px;">${m.description}</div>
       <div class="match-panel-grid">
+
         <div class="match-panel-col">
           <h4>Pairings</h4>
-          ${m.pairings.map(pg => `
+          ${groupPairings.map(pg => `
             <div style="margin-bottom:0.8rem;">
               <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:0.4rem;">Group ${pg.group}</div>
-              ${pg.teams.map(t => `<div class="pairing-team" style="margin-bottom:0.3rem;">&#x2022; ${t}</div>`).join('')}
+              <div class="pairing-team">${pg.members}</div>
             </div>`).join('')}
         </div>
+
+        ${m.id === 2 ? `
+        <div class="match-panel-col" style="grid-column: 1 / -1; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1.5rem; margin-bottom: 0.5rem;">
+          <h4>Wedghood Championship</h4>
+          <ul style="list-style:none;padding:0;margin:0;">
+            <li style="font-size:0.75rem;color:rgba(255,255,255,0.82);line-height:1.75;padding:0.25rem 0 0.25rem 1rem;position:relative;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="position:absolute;left:0;top:0.6rem;width:5px;height:5px;background:var(--gold);border-radius:50%;display:inline-block;"></span>Individual stroke play, net. No handicap adjustments — everyone plays with their full strokes.</li>
+            <li style="font-size:0.75rem;color:rgba(255,255,255,0.82);line-height:1.75;padding:0.25rem 0 0.25rem 1rem;position:relative;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="position:absolute;left:0;top:0.6rem;width:5px;height:5px;background:var(--gold);border-radius:50%;display:inline-block;"></span>All putts must be holed. No gimmes.</li>
+            <li style="font-size:0.75rem;color:rgba(255,255,255,0.82);line-height:1.75;padding:0.25rem 0 0.25rem 1rem;position:relative;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="position:absolute;left:0;top:0.6rem;width:5px;height:5px;background:var(--gold);border-radius:50%;display:inline-block;"></span>Maximum score: triple bogey gross.</li>
+            <li style="font-size:0.75rem;color:rgba(255,255,255,0.82);line-height:1.75;padding:0.25rem 0 0.25rem 1rem;position:relative;"><span style="position:absolute;left:0;top:0.6rem;width:5px;height:5px;background:var(--gold);border-radius:50%;display:inline-block;"></span>Tiebreaker — 1st place: playoff if possible; otherwise matched scorecards from hole 17. 2nd &amp; 3rd tied: split the prize. 3+ tied for 2nd: match scorecards from hole 2 until two remain, then split 2nd and 3rd between them.</li>
+          </ul>
+        </div>` : ''}
+
         <div class="match-panel-col">
-          <h4>Payouts</h4>
-          ${m.payouts.map(p => `
-            <div class="payout-row">
-              <span class="payout-desc">${p.desc}</span>
-              <span class="payout-amt">${p.amt}</span>
+          <h4>Canyon Cup</h4>
+          ${groupPairings.map(pg => `
+            <div style="margin-bottom:0.8rem;">
+              <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:0.4rem;">Group ${pg.group}</div>
+              ${pg.canyon
+                ? pg.canyon.replace('Canyon Cup — ','').split(' · ').map(match =>
+                    `<div class="pairing-team" style="margin-bottom:0.3rem;">&#x2022; ${match}</div>`
+                  ).join('')
+                : '<div style="font-size:0.7rem;color:rgba(255,255,255,0.35);font-style:italic;">No match this round</div>'
+              }
             </div>`).join('')}
-          <div style="margin-top:0.75rem;font-size:0.65rem;color:rgba(255,255,255,0.55);font-style:italic;">Tiebreak: ${m.tiebreak}</div>
+          <div style="margin-top:0.5rem;font-size:0.65rem;color:rgba(255,255,255,0.4);font-style:italic;border-top:1px solid rgba(255,255,255,0.07);padding-top:0.6rem;">Win 2pts &bull; Half 1pt &bull; Loss 0pts</div>
         </div>
+
         <div class="match-panel-col">
-          <h4>Summary</h4>
-          <p><strong>${m.units} shells</strong> in play</p>
-          <p>${m.type}</p>
+          <h4>Side Games</h4>
+          <div class="payout-row">
+            <span class="payout-desc">Individual Low — Foursome</span>
+            <span class="payout-amt">8 shells</span>
+          </div>
+          <div class="payout-row">
+            <span class="payout-desc">Individual Low — Threesome</span>
+            <span class="payout-amt">6 shells</span>
+          </div>
+          <div style="margin-top:0.75rem;font-size:0.68rem;color:rgba(255,255,255,0.5);">Skins Game eligible</div>
+          <div style="margin-top:0.3rem;font-size:0.68rem;color:rgba(255,255,255,0.5);">Birdie Draw tickets eligible</div>
         </div>
+
       </div>
-    </div>`).join('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:0 0 2rem;">');
+    </div>`;
+  }).join('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:0 0 2rem;">');
 }
 
 function toggleDay(dayIdx) {
@@ -2148,11 +2251,40 @@ function renderRules() {
 }
 
 function renderGameRules() {
-  document.getElementById('game-rules-grid').innerHTML = GAME_RULES.map(r => `
-    <div class="rule-card">
-      <h3>${r.title}</h3>
-      <ul>${r.items.map(i => `<li>${i}</li>`).join('')}</ul>
-    </div>`).join('');
+  const canyonSchedule = [
+    { round: 'Round 1', course: 'Indian Wells Celebrity',     matches: ['F9: Cake vs Wise', 'B9: Cake vs Angell', 'F9: Festor vs Murphy', 'B9: Festor vs Langley'] },
+    { round: 'Round 2', course: 'Desert Willow Firecliff',    matches: ['F9: Wise vs Murphy', 'B9: Wise vs Langley', 'F9: Angell vs Wohnoutka', 'B9: Festor vs Wohnoutka'] },
+    { round: 'Round 3', course: 'Desert Willow Mountain View',matches: ['F9: Cake vs Murphy', 'B9: Festor vs Angell', 'F9: Wohnoutka vs Langley', 'B9: Wise vs Wohnoutka'] },
+    { round: 'Round 4', course: 'Eagle Falls',                matches: ['F9: Wise vs Festor', 'B9: Wohnoutka vs Murphy', 'F9: Cake vs Langley', 'B9: Angell vs Langley'] },
+    { round: 'Round 5', course: 'SilverRock',                 matches: ['F9: Cake vs Festor', 'B9: Cake vs Wohnoutka', 'F9: Wise vs Angell', 'B9: Angell vs Murphy'] },
+    { round: 'Round 6', course: 'Indian Canyon South',        matches: ['F9: Murphy vs Langley', 'B9: skins / stableford', 'F9: skins / stableford', 'B9: skins / stableford'] },
+  ];
+
+  const canyonDropdown = `
+    <div style="margin-top:1rem;">
+      <button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block';this.querySelector('.cc-chevron').style.transform=this.nextElementSibling.style.display==='block'?'rotate(180deg)':'rotate(0deg)';"
+        style="width:100%;background:rgba(201,138,44,0.1);border:1px solid rgba(201,138,44,0.25);color:var(--gold-bright);font-family:var(--font-body);font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:0.55rem 0.9rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+        Full Match Schedule
+        <span class="cc-chevron" style="transition:transform 0.2s;font-size:0.7rem;">▾</span>
+      </button>
+      <div style="display:none;border:1px solid rgba(255,255,255,0.07);border-top:none;">
+        ${canyonSchedule.map(r => `
+          <div style="padding:0.6rem 0.9rem;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.3rem;">${r.round} — ${r.course}</div>
+            ${r.matches.map(m => `<div style="font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.7;">&#x2022; ${m}</div>`).join('')}
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  document.getElementById('game-rules-grid').innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">` +
+    GAME_RULES.map(r => `
+      <div class="rule-card" ${r.id === 'prize' ? 'style="grid-column:1/-1;"' : ''}>
+        <h3>${r.title}</h3>
+        <div style="font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:0.9rem;">${r.tagline}</div>
+        <ul>${r.items.map(i => `<li>${i}</li>`).join('')}</ul>
+        ${r.canyonCup ? '' : ''}
+      </div>`).join('') +
+    `</div>`;
 }
 
 // ---- MATRIX ----
@@ -2218,332 +2350,267 @@ function renderPrizes() {
    TAB SWITCHER
    ============================================================ */
 function switchTab(name) {
-  document.querySelectorAll('.tab-btn').forEach((b,i) => {
-    b.classList.toggle('active', ['standings','results','birdie'][i] === name);
-  });
+  const tabs = ['rts','canyon','matches','results','birdie'];
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', tabs[i] === name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById(`tab-${name}`).classList.add('active');
 }
 
 /* ============================================================
-   CSV LOADERS
+   APPS SCRIPT DATA LOADER
    ============================================================ */
-
-async function fetchCSV(url, mode) {
-  const bustUrl = url + (url.includes('?') ? '&' : '?') + 'cb' + Math.random().toString(36).slice(2) + '=' + Date.now();
-  const proxyUrl = '/.netlify/functions/fetch-csv?url=' + encodeURIComponent(bustUrl);
-  const res = await fetch(proxyUrl);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const text = await res.text();
-
-  // Full CSV parser — handles quoted fields with embedded commas and newlines
-  function parseCSV(str) {
-    const rows = [];
-    let row = [], cur = '', inQ = false;
-    for (let i = 0; i < str.length; i++) {
-      const ch = str[i], next = str[i+1];
-      if (ch === '"') {
-        if (inQ && next === '"') { cur += '"'; i++; }
-        else { inQ = !inQ; }
-      } else if (ch === ',' && !inQ) {
-        row.push(cur.trim()); cur = '';
-      } else if ((ch === '\n' || (ch === '\r' && next === '\n')) && !inQ) {
-        if (ch === '\r') i++;
-        row.push(cur.trim()); rows.push(row);
-        row = []; cur = '';
-      } else {
-        cur += ch;
-      }
-    }
-    if (cur || row.length) { row.push(cur.trim()); rows.push(row); }
-    return rows;
-  }
-
-  const rows = parseCSV(text);
-  if (rows.length < 2) throw new Error('Sheet appears empty');
-
-  if (mode === 'results') {
-    // Results sheet: find header row containing "Match"
-    const headerRowIdx = rows.findIndex(r => r.some(c => c.trim() === 'Match'));
-    if (headerRowIdx === -1) throw new Error('Could not find Match column in Results tab');
-    const headers = rows[headerRowIdx].map(h => h.replace(/\n.*/s, '').trim());
-    const WANTED = ['Match','Award','Winner','Shells','Halved?'];
-    // Normalise header — sheet may have 'Shells /' or similar typo
-    const headersNorm = headers.map(h => h.replace(/^Shells.*/, 'Shells'));
-    const wantedIdx = WANTED.map(w => headersNorm.indexOf(w));
-    return rows.slice(headerRowIdx + 1)
-      .map(r => {
-        const obj = {};
-        WANTED.forEach((key, i) => {
-          obj[key] = wantedIdx[i] !== -1 ? (r[wantedIdx[i]] || '') : '';
-        });
-        // Normalise key: site uses row.Halved, sheet header is Halved?
-        obj.Halved = obj['Halved?'];
-        return obj;
-      })
-      .filter(row => row.Match && row.Match.trim());
-  } else {
-    // Scores sheet: find header row containing "Player"
-    const headerRowIdx = rows.findIndex(r => r.some(c => c.trim() === 'Player'));
-    if (headerRowIdx === -1) throw new Error('Could not find Player column in Scores tab');
-    // Strip embedded newlines from headers, collapsing across them:
-    // "M1\nThu" -> "M1" (take only first part)
-    // "Birdie\nTickets" -> "BirdieTickets" (join both parts, no space)
-    // "Total\nShells" -> "Total"
-    const headers = rows[headerRowIdx].map(h => {
-      const parts = h.split(/\n|\\n/).map(p => p.trim()).filter(Boolean);
-      // If first part is a known standalone key, use it alone
-      const SOLO = ['Player','HCP','M1','M2','M3','M4','M5','M6','Total','Match','Award','Winner','Shells'];
-      if (parts.length <= 1 || SOLO.includes(parts[0])) return parts[0] || '';
-      // Otherwise join all parts (handles "Birdie"+"Tickets" -> "BirdieTickets")
-      return parts.join('');
-    });
-    const WANTED = ['Player','HCP','M1','M2','M3','M4','M5','M6','Total','BirdieTickets','BirdieWinner'];
-    const wantedIdx = WANTED.map(w => headers.indexOf(w));
-    return rows.slice(headerRowIdx + 1)
-      .map(r => {
-        const obj = {};
-        WANTED.forEach((key, i) => {
-          obj[key] = wantedIdx[i] !== -1 ? (r[wantedIdx[i]] || '') : '';
-        });
-        return obj;
-      })
-      .filter(row => row.Player && !row.Player.match(/TOTAL|HOW TO USE|•/));
-  }
-}
-
 async function loadAll() {
-  if (!CSV_URL_SCORES && !CSV_URL_RESULTS) {
-    ['standings-content','results-content','birdie-content'].forEach(id => {
-      document.getElementById(id).innerHTML =
-        `<div class="loading-state">No CSV URLs configured yet — see setup instructions above.</div>`;
-    });
-    return;
-  }
   const btn = document.getElementById('refresh-btn');
   btn.classList.add('spinning');
-  const errors = [];
 
-  if (CSV_URL_SCORES) {
-    try {
-      const data = await fetchCSV(CSV_URL_SCORES, 'scores');
-      if (!data.length) throw new Error('Sheet returned no rows — check tab is published correctly');
-      renderStandings(data);
-      renderBirdieDraw(data);
-    } catch(e) {
-      document.getElementById('standings-content').innerHTML =
-        `<div class="error-state">Scores error: ${e.message}</div>`;
-      document.getElementById('birdie-content').innerHTML =
-        `<div class="error-state">Scores error: ${e.message}</div>`;
-      errors.push(`Scores: ${e.message}`);
-    }
-  }
+  try {
+    const url = APPS_SCRIPT_URL + '?_=' + Date.now();
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
 
-  if (CSV_URL_RESULTS) {
-    try {
-      const data = await fetchCSV(CSV_URL_RESULTS, 'results');
-      renderResults(data);
-    } catch(e) {
-      document.getElementById('results-content').innerHTML =
-        `<div class="error-state">Results error: ${e.message}</div>`;
-      errors.push(`Results: ${e.message}`);
-    }
+    renderRaceToSeattle(data.RaceToSeattle || []);
+    renderCanyonCupStandings(data.CanyonCupStandings || []);
+    renderMatches(data.Matches || []);
+    renderResults(data.Results || []);
+    renderBirdieDraw(data.BirdieDraw || []);
+
+    document.getElementById('last-updated-label').textContent =
+      `Last updated: ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+  } catch(e) {
+    document.getElementById('last-updated-label').textContent = `Error: ${e.message}`;
+    ['rts','canyon','matches','results','birdie'].forEach(id => {
+      const el = document.getElementById(`${id}-content`);
+      if (el && el.innerHTML.includes('Loading')) el.innerHTML = `<div class="error-state">Failed to load: ${e.message}</div>`;
+    });
   }
 
   btn.classList.remove('spinning');
-  const now = new Date();
-  document.getElementById('last-updated-label').textContent =
-    errors.length
-      ? `Error — ${errors.join(' | ')}`
-      : `Last updated: ${now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
 }
 
 /* ============================================================
-   RENDER: STANDINGS (Race to Seattle)
+   RENDER: RACE TO SEATTLE
    ============================================================ */
-function renderStandings(data) {
-  data.sort((a,b) => (parseFloat(b.Total)||0) - (parseFloat(a.Total)||0));
-  const matchCols = ['M1','M2','M3','M4','M5','M6'].filter(m => data.some(r => r[m]));
-  const dayLabels = { M1:'Thu', M2:'Fri AM', M3:'Fri PM', M4:'Sat AM', M5:'Sat PM', M6:'Sun' };
+function renderRaceToSeattle(data) {
+  const rounds = ['R1\nThu','R2\nFri AM','R3\nFri PM','R4\nSat AM','R5\nSat PM','R6\nSun'];
+  const labels = ['R1<br><span>Thu</span>','R2<br><span>Fri AM</span>','R3<br><span>Fri PM</span>','R4<br><span>Sat AM</span>','R5<br><span>Sat PM</span>','R6<br><span>Sun</span>'];
 
-  const table = `
+  const sorted = [...data].sort((a,b) => (parseFloat(b['Total vs. Quota'])||0) - (parseFloat(a['Total vs. Quota'])||0));
+
+  document.getElementById('rts-content').innerHTML = `
     <div class="lb-card">
-      <div class="lb-card-header">🏆 Race to Seattle — Cumulative Shells</div>
+      <div class="lb-card-header">🏆 Race to Seattle — Cumulative Quota</div>
       <table class="lb-table">
         <thead><tr>
           <th></th><th>Player</th>
-          ${matchCols.map(m => `<th>${m}<br><span style="font-weight:400;opacity:0.5;font-size:0.55rem;">${dayLabels[m]||''}</span></th>`).join('')}
+          ${labels.map(l => `<th style="font-size:0.6rem;">${l}</th>`).join('')}
           <th style="text-align:right;">Total</th>
+          <th style="text-align:center;">Place</th>
         </tr></thead>
         <tbody>
-          ${data.map((row, i) => {
-            const rankClass = i < 3 ? 'rank-'+(i+1) : '';
+          ${sorted.map((row, i) => {
+            const place = row['Place'] || (i+1);
+            const rankClass = place == 1 ? 'rank-1' : place == 2 ? 'rank-2' : place == 3 ? 'rank-3' : '';
             return `<tr>
-              <td class="rank ${rankClass}">${i+1}</td>
+              <td class="rank ${rankClass}">${place}</td>
               <td class="player-name">${row.Player}</td>
-
-              ${matchCols.map(m => {
-                const v = row[m];
-                const empty = !v || v === '0';
-                return `<td class="${empty?'units-dim':'units'}">${empty?'—':v}</td>`;
+              ${rounds.map(r => {
+                const v = row[r];
+                const empty = v === '' || v === 0 || v === '-';
+                const num = parseFloat(v);
+                const cls = empty ? 'units-dim' : num > 0 ? 'units-pos' : num < 0 ? 'units-neg' : 'units-dim';
+                const display = empty ? '—' : (num > 0 ? '+'+num : num);
+                return `<td class="${cls}">${display}</td>`;
               }).join('')}
-              <td class="units" style="text-align:right;font-size:0.9rem;">${row.Total||'—'}</td>
+              <td class="units" style="text-align:right;font-size:0.9rem;">${row['Total vs. Quota'] !== '' && row['Total vs. Quota'] !== 0 ? (row['Total vs. Quota'] > 0 ? '+'+row['Total vs. Quota'] : row['Total vs. Quota']) : '—'}</td>
+              <td class="units" style="text-align:center;">${place}</td>
             </tr>`;
           }).join('')}
         </tbody>
       </table>
     </div>`;
-
-  document.getElementById('standings-content').innerHTML = table;
 }
 
 /* ============================================================
-   RENDER: RESULTS (Shell Deployment Ledger)
-
-   Expected CSV columns: Match, Award, Winner, Shells, Halved
-   - Match:  e.g. "M1" or "M1 — Thu Apr 30"
-   - Award:  e.g. "Front 9 — Group 1"
-   - Winner: e.g. "Cake / Langley" or blank if halved
-   - Shells:  number, e.g. "8"
-   - Halved: "YES" if split, blank otherwise
+   RENDER: CANYON CUP STANDINGS
    ============================================================ */
-function renderResults(data) {
-  if (!data.length) {
-    document.getElementById('results-content').innerHTML =
-      `<div class="loading-state">No results recorded yet — check back after round 1.</div>`;
-    return;
+function renderCanyonCupStandings(data) {
+  const rounds = ['R1\nThu','R2\nFri AM','R3\nFri PM','R4\nSat AM','R5\nSat PM','R6\nSun'];
+  const labels = ['R1<br><span>Thu</span>','R2<br><span>Fri AM</span>','R3<br><span>Fri PM</span>','R4<br><span>Sat AM</span>','R5<br><span>Sat PM</span>','R6<br><span>Sun</span>'];
+
+  const sorted = [...data].sort((a,b) => (parseFloat(b.Points)||0) - (parseFloat(a.Points)||0));
+
+  document.getElementById('canyon-content').innerHTML = `
+    <div class="lb-card">
+      <div class="lb-card-header">🏔 The Canyon Cup — Round Robin Standings</div>
+      <table class="lb-table">
+        <thead><tr>
+          <th></th><th>Player</th>
+          ${labels.map(l => `<th style="font-size:0.6rem;">${l}</th>`).join('')}
+          <th style="text-align:right;">Pts</th>
+          <th style="text-align:center;">Place</th>
+        </tr></thead>
+        <tbody>
+          ${sorted.map((row, i) => {
+            const place = row['Place'] || (i+1);
+            const rankClass = place == 1 ? 'rank-1' : place == 2 ? 'rank-2' : place == 3 ? 'rank-3' : '';
+            return `<tr>
+              <td class="rank ${rankClass}">${place}</td>
+              <td class="player-name">${row.Player}</td>
+              ${rounds.map(r => {
+                const v = row[r];
+                const isBye = String(v).toUpperCase() === 'BYE';
+                const empty = v === '' || v === '-';
+                const cls = isBye ? 'units-dim' : v === 2 ? 'units-pos' : v === 1 ? 'units' : empty ? 'units-dim' : 'units-neg';
+                return `<td class="${cls}" style="${isBye?'font-style:italic;font-size:0.6rem;':''}">${isBye ? 'BYE' : empty ? '—' : v}</td>`;
+              }).join('')}
+              <td class="units" style="text-align:right;font-size:0.9rem;font-weight:600;">${row.Points !== '' ? row.Points : '—'}</td>
+              <td class="units" style="text-align:center;">${place}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+      <div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.07);">Win 2pts &bull; Half 1pt &bull; Loss 0pts &bull; BYE = no match this round</div>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: CANYON CUP MATCHES
+   ============================================================ */
+function renderMatches(data) {
+  // Pair up two-row matches
+  const matches = [];
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].Match !== '') {
+      const m = { ...data[i] };
+      if (data[i+1] && data[i+1].Match === '') {
+        m.Player2 = data[i+1].Players;
+        m.Points2 = data[i+1].Points;
+        i++;
+      }
+      matches.push(m);
+    }
   }
 
-  // Group by match
-  const byMatch = {};
-  const matchOrder = [];
-  // Filter out summary/footer rows from the sheet
-  const cleanData = data.filter(r => r.Match && /^M\d$/.test(r.Match.trim()));
-  cleanData.forEach(row => {
-    const key = row.Match.trim();
-    if (!byMatch[key]) { byMatch[key] = []; matchOrder.push(key); }
-    byMatch[key].push(row);
+  // Group by round
+  const rounds = {};
+  const roundNames = { 1:'Round 1 — Indian Wells', 2:'Round 2 — Desert Willow Firecliff', 3:'Round 3 — Desert Willow Mountain View', 4:'Round 4 — Eagle Falls', 5:'Round 5 — SilverRock', 6:'Round 6 — Indian Canyon South' };
+  matches.forEach(m => {
+    const r = m.Round;
+    if (!rounds[r]) rounds[r] = [];
+    rounds[r].push(m);
   });
 
-  // Map match keys to day labels
-  const dayMeta = {
-    M1: { day: 'Day 1', label: 'Thu Apr 30 — Indian Wells · 2-Man Better Net Ball' },
-    M2: { day: 'Day 2', label: 'Fri May 1 AM — Desert Willow · Wedghood Championship' },
-    M3: { day: 'Day 2', label: 'Fri May 1 PM — Desert Willow · Net Shamble Stableford' },
-    M4: { day: 'Day 3', label: 'Sat May 2 AM — Eagle Falls · 2-Man Low Net' },
-    M5: { day: 'Day 3', label: 'Sat May 2 PM — Silver Rock · Chapman Stableford' },
-    M6: { day: 'Day 4', label: 'Sun May 3 — Indian Canyon South · Individual Quota' },
-  };
+  const html = Object.keys(rounds).sort((a,b) => a-b).map(r => {
+    const rMatches = rounds[r];
+    const cards = rMatches.map(m => {
+      const hasResult = m.Winner && m.Winner !== '';
+      const isHalved = String(m.Winner).toLowerCase() === 'halved';
+      const p1won = hasResult && !isHalved && m.Winner === m.Players;
+      const p2won = hasResult && !isHalved && m.Winner === m.Player2;
 
-  const html = [...new Set(matchOrder)].map(matchKey => {
-    const rows = byMatch[matchKey];
-    const meta = dayMeta[matchKey] || { day: matchKey, label: '' };
-    const totalUnits = rows.reduce((sum, r) => sum + (parseFloat(r.Shells)||0), 0);
-
-    const tableRows = rows.map(r => {
-      const isHalved = r.Halved && r.Halved.toUpperCase() === 'YES';
-      return `<tr>
-        <td class="award-col">${r.Award || ''}</td>
-        <td class="winner-col">
-          ${isHalved
-            ? `<span class="halved">Halved — ${r.Shells} shells split</span>`
-            : r.Winner || '—'
-          }
-        </td>
-        <td class="units-col">${isHalved ? '' : (r.Shells ? r.Shells + ' sh' : '—')}</td>
-      </tr>`;
+      return `
+        <div style="background:var(--surface-3);border:1px solid rgba(255,255,255,0.07);padding:1rem;border-radius:6px;">
+          <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:0.6rem;">Match ${m.Match} &bull; ${m['9 Holes']}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">
+            <div style="flex:1;text-align:left;">
+              <div style="font-size:0.85rem;font-weight:${p1won?'700':'400'};color:${p1won?'var(--gold-bright)':isHalved?'rgba(255,255,255,0.7)':'rgba(255,255,255,0.6)'};">${m.Players}</div>
+              <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${m.Points !== '' ? m.Points + ' pts' : '—'}</div>
+            </div>
+            <div style="font-size:0.65rem;font-weight:600;color:${hasResult?(isHalved?'var(--sage)':'var(--gold-bright)'):'rgba(255,255,255,0.25)'};text-align:center;min-width:3rem;">
+              ${hasResult ? (isHalved ? 'HALVED' : m.Result || 'W') : 'vs'}
+            </div>
+            <div style="flex:1;text-align:right;">
+              <div style="font-size:0.85rem;font-weight:${p2won?'700':'400'};color:${p2won?'var(--gold-bright)':isHalved?'rgba(255,255,255,0.7)':'rgba(255,255,255,0.6)'};">${m.Player2||'—'}</div>
+              <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${m.Points2 !== undefined && m.Points2 !== '' ? m.Points2 + ' pts' : '—'}</div>
+            </div>
+          </div>
+        </div>`;
     }).join('');
 
     return `
-      <div class="results-day open" onclick="toggleResultsDay(this)">
-        <div class="results-day-header">
-          <span class="results-day-label">${meta.day}</span>
-          <span class="results-day-title">${meta.label || matchKey}</span>
-          <span class="results-day-units">${totalUnits} shells deployed</span>
-          <span class="results-day-chevron">▼</span>
-        </div>
-        <div class="results-body">
-          <table class="results-table">
-            <thead><tr>
-              <th>Award</th>
-              <th>Winner</th>
-              <th style="text-align:right;">Shells</th>
-            </tr></thead>
-            <tbody>${tableRows}</tbody>
-          </table>
-        </div>
+      <div style="margin-bottom:2rem;">
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:0.75rem;">${roundNames[r] || 'Round '+r}</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.75rem;">${cards}</div>
       </div>`;
   }).join('');
 
-  document.getElementById('results-content').innerHTML = html;
+  document.getElementById('matches-content').innerHTML = `<div class="lb-card">${html || '<div class="loading-state">No match results yet.</div>'}</div>`;
 }
 
-function toggleResultsDay(el) {
-  el.classList.toggle('open');
+/* ============================================================
+   RENDER: RESULTS (Side Games)
+   ============================================================ */
+function renderResults(data) {
+  // Group by course (rows where Award is blank are course headers)
+  const sections = [];
+  let current = null;
+  data.forEach(row => {
+    if (row.Match && row.Award === '') {
+      current = { course: row.Match, awards: [] };
+      sections.push(current);
+    } else if (current && row.Award) {
+      current.awards.push(row);
+    }
+  });
+
+  const html = sections.map(s => `
+    <div class="results-day${s.awards.some(a => a.Winner) ? ' open' : ''}" onclick="this.classList.toggle('open')">
+      <div class="results-day-header">
+        <div>
+          <div class="results-day-label">Course</div>
+          <div class="results-day-title">${s.course}</div>
+        </div>
+        <div class="results-day-chevron">▾</div>
+      </div>
+      <div class="results-body">
+        <table class="results-table">
+          <thead><tr><th>Award</th><th>Winner</th><th style="text-align:right;">Shells</th></tr></thead>
+          <tbody>
+            ${s.awards.map(a => `
+              <tr>
+                <td>${a.Award}</td>
+                <td style="color:${a.Winner ? 'var(--gold-bright)' : 'rgba(255,255,255,0.3)'};font-weight:${a.Winner?'600':'400'};">${a.Winner || '—'}</td>
+                <td style="text-align:right;color:var(--sage);">${a.Shells || '—'}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('results-content').innerHTML = html || '<div class="loading-state">No results yet.</div>';
 }
 
 /* ============================================================
    RENDER: BIRDIE DRAW
-   Reads BirdieTickets column from Scores CSV
    ============================================================ */
 function renderBirdieDraw(data) {
-  const hasBirdie = data.some(r => parseFloat(r.BirdieTickets) > 0);
-  if (!hasBirdie) {
-    document.getElementById('birdie-content').innerHTML = `
-      <div class="loading-state">No Birdie Draw tickets yet — they'll appear here once rounds begin.</div>`;
-    return;
-  }
-
-  // Check for a winner (any row with BirdieWinner populated)
-  const winnerRow = data.find(r => r.BirdieWinner && r.BirdieWinner.trim());
-  const winnerName = winnerRow ? winnerRow.BirdieWinner.trim() : null;
-
-  // Sort by tickets descending
-  const sorted = [...data].sort((a,b) => (parseFloat(b.BirdieTickets)||0) - (parseFloat(a.BirdieTickets)||0));
-  const totalTickets = sorted.reduce((s,r) => s + (parseFloat(r.BirdieTickets)||0), 0);
+  const rounds = ['R1\nThu','R2\nFri AM','R3\nFri PM','R4\nSat AM','R5\nSat PM','R6\nSun'];
+  const sorted = [...data].sort((a,b) => (parseFloat(b['Total TIckets'])||0) - (parseFloat(a['Total TIckets'])||0));
 
   const cards = sorted.map(row => {
-    const tickets = parseFloat(row.BirdieTickets) || 0;
-    const pct = totalTickets > 0 ? ((tickets / totalTickets) * 100).toFixed(0) : 0;
+    const total = parseInt(row['Total TIckets']) || 0;
+    const odds = row['% Odds'] ? Math.round(parseFloat(row['% Odds']) * 100) : 0;
+    const breakdown = rounds.map((r,i) => {
+      const v = parseInt(row[r]) || 0;
+      return v > 0 ? `<span style="color:var(--sage);">R${i+1}:${v}</span>` : '';
+    }).filter(Boolean).join(' ');
+
     return `
       <div class="birdie-card">
         <div class="birdie-name">${row.Player}</div>
-        <div class="birdie-tickets">${tickets}</div>
-        <div class="birdie-tickets-label">tickets</div>
-        <div class="birdie-breakdown"><span>${pct}%</span> of draw</div>
+        <div class="birdie-tickets">${total}</div>
+        <div class="birdie-tickets-label">ticket${total !== 1 ? 's' : ''}</div>
+        <div style="font-size:0.65rem;color:var(--gold-bright);margin-bottom:0.3rem;">${odds}% odds</div>
+        ${breakdown ? `<div class="birdie-breakdown">${breakdown}</div>` : ''}
       </div>`;
   }).join('');
 
-  const summary = `
-    <div style="margin-bottom:1rem;font-size:0.68rem;color:rgba(255,255,255,0.65);line-height:1.7;">
-      <strong style="color:var(--gold-bright);">${totalTickets} total tickets</strong> in the draw &mdash;
-      net birdie = 1 ticket &bull; net eagle = 3 tickets &bull;
-      winner drawn at end of trip &bull; prize: <strong style="color:var(--sage);">24 shells ($72)</strong>
+  document.getElementById('birdie-content').innerHTML = `
+    <div class="birdie-grid">${cards}</div>
+    <div class="birdie-wheel-link" onclick="document.getElementById('birdie-draw').scrollIntoView({behavior:'smooth'})">
+      🎰 Go to Birdie Draw Wheel ↓
     </div>`;
-
-  const winnerBanner = winnerName ? `
-    <div style="
-      background: linear-gradient(135deg, rgba(181,133,58,0.2), rgba(181,133,58,0.08));
-      border: 1px solid rgba(181,133,58,0.5);
-      border-radius: 2px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    ">
-      <div style="font-size:0.58rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;">🎟 Birdie Draw Winner</div>
-      <div style="font-family:var(--font-display);font-size:2rem;font-weight:400;font-style:italic;color:var(--gold-bright);letter-spacing:0.04em;">${winnerName}</div>
-      <div style="font-size:0.65rem;color:rgba(255,255,255,0.65);margin-top:0.3rem;">24 shells · $72</div>
-    </div>` : '';
-
-  const wheelLink = `
-    <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.07);text-align:center;">
-      <a href="/birdie-draw.html" class="birdie-wheel-link">
-        🎰 Launch Draw Wheel
-      </a>
-      <p style="font-size:0.6rem;color:rgba(255,255,255,0.55);margin-top:0.75rem;letter-spacing:0.06em;">Opens the animated spin wheel for the end-of-trip draw</p>
-    </div>`;
-
-  document.getElementById('birdie-content').innerHTML = winnerBanner + summary + `<div class="birdie-grid">${cards}</div>` + wheelLink;
 }
 
 // ---- ALERT BANNER ----
