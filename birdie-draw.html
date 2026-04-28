@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Birdie Draw — Wedghoods 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #0e0f12;
+  --bg2:      #161820;
+  --gold:     #C9A84C;
+  --gold-dim: #8a7030;
+  --white:    #F5F0E8;
+  --muted:    rgba(245,240,232,0.4);
+  --font-d:   'Cormorant Garamond', serif;
+  --font-m:   'Share Tech Mono', monospace;
+  --font-b:   'Bebas Neue', sans-serif;
+
+  --c0: #4B9CD3;
+  --c1: #C9A84C;
+  --c2: #5BAD72;
+  --c3: #D4614A;
+  --c4: #9B7FD4;
+  --c5: #D4955A;
+  --c6: #4ABBC4;
+  --c7: #C46FAA;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font-m);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 80% at 80% 80%, rgba(75,156,211,0.04) 0%, transparent 50%),
+    repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255,255,255,0.022) 31px, rgba(255,255,255,0.022) 32px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- HEADER ---- */
+.header {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 0;
+  position: relative;
+  z-index: 10;
+}
+.header-back {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.header-back:hover { color: var(--gold); }
+.header-title {
+  font-family: var(--font-d);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+}
+.header-sub {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---- MAIN ---- */
+.main {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1.25rem 3rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* ---- DEPARTURE BOARD ---- */
+.board-container {
+  width: 100%;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 6px;
+  padding: 1.5rem 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 40px rgba(0,0,0,0.5);
+}
+
+.board-eyebrow {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(201,168,76,0.5);
+  margin-bottom: 1.1rem;
+}
+
+.flaps-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.flap {
+  width: 70px;
+  height: 92px;
+  background: #0a0b0d;
+  border: 1px solid #222;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-m);
+  font-size: 52px;
+  color: #f0e68c;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    inset 0 -4px 12px rgba(0,0,0,0.7),
+    0 2px 8px rgba(0,0,0,0.5);
+}
+.flap::after {
+  content: '';
+  position: absolute;
+  left: 4px; right: 4px;
+  top: calc(50% - 0.5px);
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  z-index: 2;
+}
+/* top half gloss */
+.flap::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, transparent 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.flap-char {
+  display: block;
+  line-height: 1;
+  position: relative;
+  z-index: 3;
+  transition: none;
+}
+
+.flap.spinning .flap-char {
+  animation: flapFlip 0.07s steps(1) infinite;
+}
+
+@keyframes flapFlip {
+  0%   { transform: scaleY(1);   opacity: 1;   }
+  45%  { transform: scaleY(0.05); opacity: 0.3; }
+  55%  { transform: scaleY(0.05); opacity: 0.3; }
+  100% { transform: scaleY(1);   opacity: 1;   }
+}
+
+.flap-sep {
+  color: #2e2e2e;
+  font-size: 30px;
+  width: 12px;
+  text-align: center;
+  padding-bottom: 4px;
+  flex-shrink: 0;
+}
+
+/* ---- STATUS ---- */
+.status-bar {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.85rem;
+  text-align: center;
+  min-height: 16px;
+}
+.status-bar.ok  { color: var(--gold); }
+.status-bar.err { color: #e07070; }
+
+/* ---- LEGEND ---- */
+.legend-wrap { width: 100%; margin-top: 1.25rem; }
+.legend-header {
+  display: grid;
+  grid-template-columns: 10px 1fr auto auto;
+  gap: 10px;
+  padding: 0 11px 5px;
+}
+.legend-hcell {
+  font-size: 0.5rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.22);
+}
+.legend-hcell.right { text-align: right; }
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.legend-item {
+  display: grid;
+  grid-template-columns: 10px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 3px;
+  padding: 9px 11px;
+  transition: border-color 0.3s, background 0.3s;
+}
+.legend-item.winner {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.09);
+  animation: winnerPulse 1.1s ease-in-out infinite;
+}
+.legend-item.winner .legend-range { color: var(--gold); }
+@keyframes winnerPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.3); }
+  50%      { box-shadow: 0 0 0 5px rgba(201,168,76,0); }
+}
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend-name {
+  font-family: var(--font-d);
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--white);
+}
+.legend-range {
+  font-family: var(--font-m);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: rgba(245,240,232,0.38);
+  text-align: right;
+}
+.legend-count {
+  font-family: var(--font-d);
+  font-size: 1rem;
+  color: var(--gold);
+  min-width: 18px;
+  text-align: right;
+}
+.legend-total {
+  text-align: right;
+  padding: 5px 11px 0;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.22);
+}
+.legend-total span { color: var(--gold); }
+
+/* ---- DRAW BUTTON ---- */
+.draw-btn {
+  margin-top: 1.4rem;
+  width: 100%;
+  height: 58px;
+  background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+  border: none;
+  border-radius: 3px;
+  font-family: var(--font-b);
+  font-size: 18px;
+  letter-spacing: 0.22em;
+  color: var(--bg);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 20px rgba(201,168,76,0.28);
+}
+.draw-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.draw-btn:hover::before { opacity: 1; }
+.draw-btn:active { transform: scale(0.98); }
+.draw-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+/* ---- WINNER REVEAL ---- */
+.winner-reveal {
+  width: 100%;
+  margin-top: 1.1rem;
+  background: rgba(201,168,76,0.06);
+  border: 1px solid rgba(201,168,76,0.28);
+  border-radius: 3px;
+  padding: 1.4rem 1.25rem;
+  text-align: center;
+  display: none;
+}
+.winner-reveal.show {
+  display: block;
+  animation: revealFade 0.65s ease both;
+}
+@keyframes revealFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.winner-eyebrow {
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.65rem;
+}
+.winner-name {
+  font-family: var(--font-d);
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.winner-detail {
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.winner-prize {
+  font-family: var(--font-d);
+  font-size: 1.4rem;
+  color: var(--gold);
+  margin-top: 0.6rem;
+}
+
+/* ---- RESET / AGAIN ---- */
+.reset-btn {
+  margin-top: 0.75rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-m);
+  padding: 0.4rem 0;
+  display: none;
+  transition: color 0.2s;
+}
+.reset-btn.show { display: inline-block; }
+.reset-btn:hover { color: var(--gold); }
+
+/* ---- MANUAL ENTRY ---- */
+.manual-section { width: 100%; margin-top: 0.75rem; }
+.manual-toggle {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.28);
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem 0;
+  font-family: var(--font-m);
+  transition: color 0.2s;
+}
+.manual-toggle:hover { color: var(--gold); }
+.manual-panel {
+  display: none;
+  margin-top: 0.5rem;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 3px;
+  padding: 0.85rem;
+}
+.manual-panel.open { display: block; }
+.manual-row {
+  display: grid;
+  grid-template-columns: 1fr 72px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 7px;
+}
+.manual-row:last-child { margin-bottom: 0; }
+.manual-label {
+  font-family: var(--font-d);
+  font-size: 0.88rem;
+  color: rgba(245,240,232,0.65);
+}
+.manual-input {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 2px;
+  padding: 0.32rem 0.5rem;
+  font-family: var(--font-m);
+  font-size: 0.78rem;
+  color: var(--white);
+  text-align: center;
+  width: 100%;
+}
+.manual-input:focus { outline: none; border-color: var(--gold); }
+.manual-apply {
+  width: 100%;
+  margin-top: 0.65rem;
+  padding: 0.55rem;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.35);
+  border-radius: 2px;
+  font-family: var(--font-m);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.manual-apply:hover { background: rgba(201,168,76,0.22); }
+
+/* ---- TOTAL BADGE ---- */
+.total-badge {
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.4rem;
+  text-align: center;
+}
+.total-badge span { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="header-back" href="/wedghood2026.html">← Wedghoods</a>
+  <div class="header-title">Birdie Draw</div>
+  <div class="header-sub">2026</div>
+</div>
+
+<div class="main">
+
+  <!-- BOARD -->
+  <div class="board-container">
+    <div class="board-eyebrow">Ticket Draw</div>
+    <div class="flaps-row">
+      <div class="flap" id="f0"><span class="flap-char" id="c0">—</span></div>
+      <div class="flap" id="f1"><span class="flap-char" id="c1">—</span></div>
+      <div class="flap" id="f2"><span class="flap-char" id="c2">—</span></div>
+    </div>
+  </div>
+
+  <div class="total-badge" id="total-badge"></div>
+  <div class="status-bar" id="status-bar">Loading ticket data…</div>
+
+  <!-- LEGEND -->
+  <div class="legend-wrap">
+    <div class="legend-header">
+      <div></div>
+      <div class="legend-hcell">Player</div>
+      <div class="legend-hcell right">Tickets</div>
+      <div class="legend-hcell right">#</div>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="legend-total" id="legend-total"></div>
+  </div>
+
+  <!-- DRAW BUTTON -->
+  <button class="draw-btn" id="draw-btn" disabled onclick="runDraw()">Draw</button>
+
+  <!-- WINNER REVEAL -->
+  <div class="winner-reveal" id="winner-reveal">
+    <div class="winner-eyebrow">🎟 Birdie Draw Winner</div>
+    <div class="winner-name" id="winner-name"></div>
+    <div class="winner-detail" id="winner-detail"></div>
+    <div class="winner-prize">16 shells · $48</div>
+  </div>
+
+  <button class="reset-btn" id="reset-btn" onclick="resetDraw()">Draw Again</button>
+
+  <!-- MANUAL FALLBACK -->
+  <div class="manual-section">
+    <button class="manual-toggle" onclick="toggleManual()">Enter tickets manually</button>
+    <div class="manual-panel" id="manual-panel">
+      <div id="manual-rows"></div>
+      <button class="manual-apply" onclick="applyManual()">Apply & Draw</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtjUS0Y1uWFqSGIc53F_Od684F4wBrI4twT3yKiwnBZ8uIb6cOd4xXWo_LztMei_E2/exec';
+
+const PLAYERS = ['Cake','Wise','Langley','Murphy','Festor','Angell','Wohnoutka'];
+const COLORS  = ['#4B9CD3','#C9A84C','#5BAD72','#D4614A','#9B7FD4','#D4955A','#4ABBC4','#C46FAA'];
+const DIGITS  = '0123456789';
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let players   = []; // [{name, tickets, color, ticketStart, ticketEnd}]
+let isRunning = false;
+
+/* ============================================================
+   TICKET ASSIGNMENT — sequential, starting at 001
+   ============================================================ */
+function assignTickets(raw) {
+  let counter = 1;
+  return raw.map(p => {
+    const start = counter;
+    const end   = counter + p.tickets - 1;
+    counter    += p.tickets;
+    return { ...p, ticketStart: start, ticketEnd: end };
+  });
+}
+
+function fmtRange(p) {
+  if (p.tickets === 0) return '—';
+  const s = String(p.ticketStart).padStart(3, '0');
+  const e = String(p.ticketEnd).padStart(3, '0');
+  return p.ticketStart === p.ticketEnd ? '#' + s : '#' + s + ' – ' + e;
+}
+
+/* ============================================================
+   FLAP HELPERS
+   ============================================================ */
+function setFlap(i, ch, spin) {
+  const flap = document.getElementById('f' + i);
+  const char = document.getElementById('c' + i);
+  char.textContent = ch;
+  spin ? flap.classList.add('spinning') : flap.classList.remove('spinning');
+}
+function randDigit() { return DIGITS[Math.floor(Math.random() * 10)]; }
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+function setStatus(msg, type) {
+  const el = document.getElementById('status-bar');
+  el.textContent = msg;
+  el.className = 'status-bar' + (type ? ' ' + type : '');
+}
+
+/* ============================================================
+   LEGEND
+   ============================================================ */
+function buildLegend() {
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  const el    = document.getElementById('legend');
+  el.innerHTML = players.map((p, i) => `
+    <div class="legend-item" id="leg${i}">
+      <div class="legend-dot" style="background:${p.color}"></div>
+      <div class="legend-name">${p.name}</div>
+      <div class="legend-range">${fmtRange(p)}</div>
+      <div class="legend-count">${p.tickets}</div>
+    </div>`).join('');
+  document.getElementById('legend-total').innerHTML = total > 0
+    ? `<span>${total}</span> total tickets in the draw` : '';
+}
+
+/* ============================================================
+   MANUAL ENTRY
+   ============================================================ */
+function buildManualRows() {
+  const el = document.getElementById('manual-rows');
+  el.innerHTML = PLAYERS.map((name, i) => `
+    <div class="manual-row">
+      <div class="manual-label">${name}</div>
+      <input class="manual-input" type="number" min="0" max="99"
+             value="${players[i]?.tickets || 0}" id="mi-${i}">
+    </div>`).join('');
+}
+
+function toggleManual() {
+  document.getElementById('manual-panel').classList.toggle('open');
+}
+
+function applyManual() {
+  const raw = PLAYERS.map((name, i) => ({
+    name,
+    tickets: parseInt(document.getElementById('mi-' + i)?.value) || 0,
+    color: COLORS[i]
+  }));
+  players = assignTickets(raw);
+  buildLegend();
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  setStatus('Manual data applied · ' + total + ' tickets', 'ok');
+  document.getElementById('manual-panel').classList.remove('open');
+  document.getElementById('draw-btn').disabled = false;
+  resetDraw();
+}
+
+/* ============================================================
+   CSV LOAD
+   ============================================================ */
+async function loadCSV() {
+  try {
+    const res = await fetch(APPS_SCRIPT_URL + '?_=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    const birdieData = json.BirdieDraw || [];
+    if (!birdieData.length) throw new Error('No BirdieDraw data');
+
+    const ticketKey = 'Total TIckets'; // note: sheet has typo "TIckets"
+    const data = {};
+    birdieData.forEach(row => {
+      if (row.Player) data[row.Player] = parseInt(row[ticketKey]) || 0;
+    });
+
+    const raw = PLAYERS.map((name, i) => ({
+      name,
+      tickets: data[name] ?? 0,
+      color: COLORS[i]
+    }));
+    players = assignTickets(raw);
+
+    const total = players.reduce((s, p) => s + p.tickets, 0);
+    setStatus(total > 0
+      ? 'Live data loaded · ' + total + ' tickets in the draw'
+      : 'Data loaded — no tickets yet', total > 0 ? 'ok' : '');
+
+    ready();
+  } catch (e) {
+    setStatus('Could not load live data — enter tickets manually', 'err');
+    const raw = PLAYERS.map((name, i) => ({ name, tickets: 0, color: COLORS[i] }));
+    players   = assignTickets(raw);
+    ready(false);
+  }
+}
+
+function ready(enableDraw = true) {
+  buildLegend();
+  buildManualRows();
+  if (enableDraw) document.getElementById('draw-btn').disabled = false;
+}
+
+/* ============================================================
+   DRAW
+   ============================================================ */
+async function runDraw() {
+  if (isRunning) return;
+
+  const total = players.reduce((s, p) => s + p.tickets, 0);
+  if (total === 0) {
+    setStatus('No tickets — enter counts manually first', 'err');
+    return;
+  }
+
+  isRunning = true;
+  document.getElementById('draw-btn').disabled = true;
+  document.getElementById('reset-btn').classList.remove('show');
+  document.getElementById('winner-reveal').classList.remove('show');
+  document.querySelectorAll('.legend-item').forEach(e => e.classList.remove('winner'));
+
+  // Draw a random ticket number from 1..total
+  const drawnTicket = Math.floor(Math.random() * total) + 1;
+
+  // Find the owner
+  const winner    = players.find(p => p.tickets > 0 && drawnTicket >= p.ticketStart && drawnTicket <= p.ticketEnd);
+  const winnerIdx = players.indexOf(winner);
+
+  // 3-digit zero-padded target for the board
+  const target = String(drawnTicket).padStart(3, '0').split('');
+
+  // Reset flaps
+  for (let i = 0; i < 3; i++) setFlap(i, '—', false);
+
+  // Staggered spin
+  const TOTAL_DUR = 2900;
+  const STAGGER   = 210;
+  const INTERVAL  = 55;
+
+  const promises = [0,1,2].map(idx => new Promise(resolve => {
+    const startDelay = idx * STAGGER;
+    const spinDur    = TOTAL_DUR - startDelay;
+    let elapsed      = 0;
+
+    setTimeout(() => {
+      setFlap(idx, randDigit(), true);
+      const ticker = setInterval(() => {
+        elapsed += INTERVAL;
+        const remaining = spinDur - elapsed;
+        if (remaining <= 0) {
+          clearInterval(ticker);
+          setFlap(idx, target[idx], false);
+          resolve();
+        } else {
+          const slowFactor = remaining < 550 ? Math.floor((550 - remaining) / 90) : 0;
+          if (slowFactor === 0 || elapsed % (INTERVAL * (slowFactor + 1)) < INTERVAL) {
+            setFlap(idx, randDigit(), true);
+          }
+        }
+      }, INTERVAL);
+    }, startDelay);
+  }));
+
+  await Promise.all(promises);
+
+  // Reveal winner
+  setTimeout(() => {
+    const pct = ((winner.tickets / total) * 100).toFixed(0);
+    document.getElementById('winner-name').textContent = winner.name;
+    document.getElementById('winner-detail').textContent =
+      'Ticket #' + String(drawnTicket).padStart(3, '0') +
+      ' — ' + winner.name + ' holds #' + String(winner.ticketStart).padStart(3,'0') +
+      (winner.tickets > 1 ? ' – #' + String(winner.ticketEnd).padStart(3,'0') : '') +
+      ' (' + winner.tickets + ' ticket' + (winner.tickets !== 1 ? 's' : '') + ' · ' + pct + '% odds)';
+    document.getElementById('winner-reveal').classList.add('show');
+    document.getElementById('reset-btn').classList.add('show');
+    document.getElementById('leg' + winnerIdx).classList.add('winner');
+    isRunning = false;
+  }, 380);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+function resetDraw() {
+  document.getElementById('winner-reveal').classList.remove('show');
+  document.getElementById('reset-btn').classList.remove('show');
+  document.getElementById('draw-btn').disabled = false;
+  document.querySelectorAll('.legend-item').forEach(e => e.classList.remove('winner'));
+  for (let i = 0; i < 3; i++) setFlap(i, '—', false);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+loadCSV();
+</script>
+
+</body>
+</html>

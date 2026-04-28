@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --sand: #F5EFE0; --sand-dark: #E8DFC8; --clay: #C4793A; --clay-dark: #9B5A22;
+  --ink: #1C1410; --ink-light: #3D2B1F; --stone: #7A6A5A; --stone-light: #A89880;
+  --cream: #FAF6EE; --rule: #C4793A40;
+}
+body { background: var(--sand); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; font-size: 14px; line-height: 1.7; padding: 2rem 1rem 3rem; }
+.page { max-width: 740px; margin: 0 auto; background: var(--cream); border: 1px solid var(--sand-dark); box-shadow: 0 4px 32px rgba(28,20,16,0.12); padding: 3rem 3.5rem; position: relative; }
+.page::before { content: ''; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px; border: 0.5px solid var(--clay); opacity: 0.3; pointer-events: none; }
+.header { text-align: center; margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--rule); }
+.eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--clay); margin-bottom: 0.75rem; }
+.title { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; line-height: 1.1; color: var(--ink); margin-bottom: 0.4rem; }
+.subtitle { font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; color: var(--stone); margin-bottom: 1.25rem; }
+.meta { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone-light); }
+.divider-ornament { text-align: center; color: var(--clay); font-size: 18px; margin: 0.5rem 0; letter-spacing: 0.3em; opacity: 0.6; }
+.comp { margin-bottom: 2.25rem; padding-bottom: 2.25rem; border-bottom: 0.5px solid var(--rule); }
+.comp:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.comp-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.75rem; }
+.comp-number { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 400; color: var(--clay); opacity: 0.5; line-height: 1; flex-shrink: 0; width: 28px; }
+.comp-titles { flex: 1; }
+.comp-name { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.comp-tagline { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--clay); margin-top: 2px; }
+.comp-body { padding-left: 44px; }
+.comp-body p { margin-bottom: 0.6rem; color: var(--ink-light); font-size: 13.5px; }
+.comp-body p:last-child { margin-bottom: 0; }
+.rule-label { font-weight: 600; color: var(--ink); }
+.payout-row { display: flex; gap: 0.5rem; align-items: baseline; margin-bottom: 0.3rem; font-size: 13px; }
+.place { font-family: 'Playfair Display', serif; font-style: italic; color: var(--stone); width: 40px; flex-shrink: 0; }
+.points-table { margin: 0.75rem 0; }
+.pt-row { display: flex; align-items: center; gap: 0.75rem; font-size: 12.5px; color: var(--ink-light); margin-bottom: 0.25rem; }
+.pt-score { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--clay); width: 120px; flex-shrink: 0; }
+.section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--clay); margin: 1.25rem 0 0.75rem; }
+.round-block { margin-bottom: 0.75rem; border: 0.5px solid var(--sand-dark); border-radius: 6px; overflow: hidden; }
+.round-header { background: var(--sand-dark); padding: 5px 12px; display: flex; justify-content: space-between; align-items: baseline; }
+.round-num { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; color: var(--clay-dark); }
+.round-course { font-size: 11px; font-style: italic; color: var(--stone); }
+.round-body { padding: 8px 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.group-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); margin-bottom: 3px; }
+.group-players { font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+.match-line { font-size: 11.5px; color: var(--ink-light); margin-bottom: 1px; }
+.match-nine { color: var(--clay); font-weight: 600; margin-right: 5px; font-size: 10px; }
+.skins-line { font-size: 11px; color: var(--stone-light); font-style: italic; margin-bottom: 1px; }
+.player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 0.75rem; }
+.player-card { border: 0.5px solid var(--sand-dark); border-radius: 6px; overflow: hidden; }
+.player-card-header { background: var(--sand); padding: 5px 10px; display: flex; justify-content: space-between; align-items: baseline; }
+.player-name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: var(--ink); }
+.player-count { font-size: 11px; color: var(--stone); }
+.player-card-body { padding: 6px 10px; }
+.player-match { display: flex; align-items: baseline; gap: 5px; margin-bottom: 3px; font-size: 11.5px; }
+.pm-slot { color: var(--clay); font-weight: 600; font-size: 10px; width: 46px; flex-shrink: 0; }
+.pm-opp { font-weight: 500; color: var(--ink); flex-shrink: 0; }
+.pm-course { font-size: 10px; color: var(--stone-light); font-style: italic; }
+.footer { text-align: center; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+.footer-text { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone-light); }
+.footer-motto { font-family: 'Playfair Display', serif; font-style: italic; font-size: 15px; color: var(--clay); margin-top: 0.4rem; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <div class="eyebrow">Official Rules &amp; Competitions</div>
+  <div class="title">WEDGHOOD 2026</div>
+  <div class="subtitle">Palm Springs, California · April 30 – May 3</div>
+  <div class="divider-ornament">✦ ✦ ✦</div>
+  <div class="meta">Seven Players · Six Rounds · One Champion</div>
+</div>
+
+<div class="comp">
+  <div class="comp-header">
+    <div class="comp-number">I</div>
+    <div class="comp-titles">
+      <div class="comp-name">Race to Seattle</div>
+      <div class="comp-tagline">Individual Quota · All Six Rounds</div>
+    </div>
+  </div>
+  <div class="comp-body">
+    <p><span class="rule-label">Format:</span> Quota scoring across all six rounds. Each player's quota is 36 minus course handicap. Points earned on gross scores: Eagle = 4pts, Birdie = 3pts, Par = 2pts, Bogey = 1pt, Double bogey or worse = 0pts.</p>
+    <p><span class="rule-label">Scoring:</span> Each round, score = total points earned minus quota. Cumulative +/− against quota across all six rounds determines final standings. The player who most exceeds their quota over the trip wins.</p>
+    <p><span class="rule-label">Max score per hole:</span> Net double bogey or worse scores zero. No further damage.</p>
+    <p><span class="rule-label">Payout:</span></p>
+    <div class="payout-row"><span class="place">1st</span><span>50% of pot</span></div>
+    <div class="payout-row"><span class="place">2nd</span><span>30% of pot</span></div>
+    <div class="payout-row"><span class="place">3rd</span><span>20% of pot</span></div>
+  </div>
+</div>
+
+<div class="comp">
+  <div class="comp-header">
+    <div class="comp-number">II</div>
+    <div class="comp-titles">
+      <div class="comp-name">Wedghood Champion of the Year</div>
+      <div class="comp-tagline">Net Stroke Play · Round 2 · Desert Willow Firecliff</div>
+    </div>
+  </div>
+  <div class="comp-body">
+    <p><span class="rule-label">Format:</span> Individual net stroke play, Tuesday morning (Round 2), Desert Willow Firecliff. Gross score minus full course handicap. Lowest net score wins.</p>
+    <p><span class="rule-label">Max score per hole:</span> Net triple bogey. Score is capped; no further damage to the card.</p>
+    <p><span class="rule-label">Note:</span> The same round also contributes to Race to Seattle quota scoring. One scorecard, two competitions.</p>
+    <p><span class="rule-label">Payout:</span></p>
+    <div class="payout-row"><span class="place">1st</span><span>50% of pot</span></div>
+    <div class="payout-row"><span class="place">2nd</span><span>30% of pot</span></div>
+    <div class="payout-row"><span class="place">3rd</span><span>20% of pot</span></div>
+  </div>
+</div>
+
+<div class="comp">
+  <div class="comp-header">
+    <div class="comp-number">III</div>
+    <div class="comp-titles">
+      <div class="comp-name">The Canyon Cup</div>
+      <div class="comp-tagline">Net Match Play Round Robin · All Six Rounds</div>
+    </div>
+  </div>
+  <div class="comp-body">
+    <p><span class="rule-label">Format:</span> Net match play, 9-hole matches. Every player faces every other player exactly once across 21 scheduled matches. Groups stay together all 18 holes — matches happen within your group on the Front 9 or Back 9 as drawn. Some nines have no match and are played as skins/stableford.</p>
+    <p><span class="rule-label">Match points:</span></p>
+    <div class="points-table">
+      <div class="pt-row"><span class="pt-score">Win</span><span>2 points</span></div>
+      <div class="pt-row"><span class="pt-score">Halve</span><span>1 point</span></div>
+      <div class="pt-row"><span class="pt-score">Loss</span><span>0 points</span></div>
+    </div>
+    <p><span class="rule-label">Tiebreaker:</span> Head-to-head result, then most wins, then aggregate net score across all matches.</p>
+    <p><span class="rule-label">Payout:</span></p>
+    <div class="payout-row"><span class="place">1st</span><span>50% of pot</span></div>
+    <div class="payout-row"><span class="place">2nd</span><span>30% of pot</span></div>
+    <div class="payout-row"><span class="place">3rd</span><span>20% of pot</span></div>
+
+    <div class="section-label">Round Schedule</div>
+
+    <div class="round-block">
+      <div class="round-header"><span class="round-num">Round 1</span><span class="round-course">Indian Wells Celebrity</span></div>
+      <div class="round-body">
+        <div>
+          <div class="group-label">Foursome</div>
+          <div class="group-players">Cake · Wise · Angell · Wohnoutka</div>
+          <div class="match-line"><span class="match-nine">F9</span>Cake vs Wise</div>
+          <div class="match-line"><span class="match-nine">B9</span>Cake vs Angell</div>
+        </div>
+        <div>
+          <div class="group-label">Threesome</div>
+          <div class="group-players">Festor · Murphy · Langley</div>
+          <div class="match-line"><span class="match-nine">F9</span>Festor vs Murphy</div>
+          <div class="match-line"><span class="match-nine">B9</span>Festor vs Langley</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="round-block">
+      <div class="round-header"><span class="round-num">Round 2</span><span class="round-course">Desert Willow Firecliff</span></div>
+      <div class="round-body">
+        <div>
+          <div class="group-label">Foursome</div>
+          <div class="group-players">Cake · Wise · Murphy · Langley</div>
+          <div class="match-line"><span class="match-nine">F9</span>Wise vs Murphy</div>
+          <div class="match-line"><span class="match-nine">B9</span>Wise vs Langley</div>
+        </div>
+        <div>
+          <div class="group-label">Threesome</div>
+          <div class="group-players">Festor · Angell · Wohnoutka</div>
+          <div class="match-line"><span class="match-nine">F9</span>Angell vs Wohnoutka</div>
+          <div class="match-line"><span class="match-nine">B9</span>Festor vs Wohnoutka</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="round-block">
+      <div class="round-header"><span class="round-num">Round 3</span><span class="round-course">Desert Willow Mountain View</span></div>
+      <div class="round-body">
+        <div>
+          <div class="group-label">Foursome</div>
+          <div class="group-players">Cake · Festor · Angell · Murphy</div>
+          <div class="match-line"><span class="match-nine">F9</span>Cake vs Murphy</div>
+          <div class="match-line"><span class="match-nine">B9</span>Festor vs Angell</div>
+        </div>
+        <div>
+          <div class="group-label">Threesome</div>
+          <div class="group-players">Wise · Wohnoutka · Langley</div>
+          <div class="match-line"><span class="match-nine">F9</span>Wohnoutka vs Langley</div>
+          <div class="match-line"><span class="match-nine">B9</span>Wise vs Wohnoutka</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="round-block">
+      <div class="round-header"><span class="round-num">Round 4</span><span class="round-course">Eagle Falls</span></div>
+      <div class="round-body">
+        <div>
+          <div class="group-label">Foursome</div>
+          <div class="group-players">Wise · Festor · Wohnoutka · Murphy</div>
+          <div class="match-line"><span class="match-nine">F9</span>Wise vs Festor</div>
+          <div class="match-line"><span class="match-nine">B9</span>Wohnoutka vs Murphy</div>
+        </div>
+        <div>
+          <div class="group-label">Threesome</div>
+          <div class="group-players">Cake · Angell · Langley</div>
+          <div class="match-line"><span class="match-nine">F9</span>Cake vs Langley</div>
+          <div class="match-line"><span class="match-nine">B9</span>Angell vs Langley</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="round-block">
+      <div class="round-header"><span class="round-num">Round 5</span><span class="round-course">SilverRock</span></div>
+      <div class="round-body">
+        <div>
+          <div class="group-label">Foursome</div>
+          <div class="group-players">Cake · Festor · Wohnoutka · Langley</div>
+          <div class="match-line"><span class="match-nine">F9</span>Cake vs Festor</div>
+          <div class="match-line"><span class="match-nine">B9</span>Cake vs Wohnoutka</div>
+        </div>
+        <div>
+          <div class="group-label">Threesome</div>
+          <div class="group-players">Wise · Angell · Murphy</div>
+          <div class="match-line"><span class="match-nine">F9</span>Wise vs Angell</div>
+          <div class="match-line"><span class="match-nine">B9</span>Angell vs Murphy</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="round-block">
+      <div class="round-header"><span class="round-num">Round 6</span><span class="round-course">Indian Canyons South</span></div>
+      <div class="round-body">
+        <div>
+          <div class="group-label">Foursome</div>
+          <div class="group-players">Angell · Wohnoutka · Murphy · Langley</div>
+          <div class="match-line"><span class="match-nine">F9</span>Murphy vs Langley</div>
+          <div class="skins-line">B9 — skins / stableford</div>
+        </div>
+        <div>
+          <div class="group-label">Threesome</div>
+          <div class="group-players">Cake · Wise · Festor</div>
+          <div class="skins-line">F9 — skins / stableford</div>
+          <div class="skins-line">B9 — skins / stableford</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Per-Player Match Schedule</div>
+    <div class="player-grid">
+
+      <div class="player-card">
+        <div class="player-card-header"><span class="player-name">Cake</span><span class="player-count">6 matches</span></div>
+        <div class="player-card-body">
+          <div class="player-match"><span class="pm-slot">R1 F9</span><span class="pm-opp">vs Wise</span><span class="pm-course"> — Indian Wells</span></div>
+          <div class="player-match"><span class="pm-slot">R1 B9</span><span class="pm-opp">vs Angell</span><span class="pm-course"> — Indian Wells</span></div>
+          <div class="player-match"><span class="pm-slot">R3 F9</span><span class="pm-opp">vs Murphy</span><span class="pm-course"> — DW Mountain View</span></div>
+          <div class="player-match"><span class="pm-slot">R4 F9</span><span class="pm-opp">vs Langley</span><span class="pm-course"> — Eagle Falls</span></div>
+          <div class="player-match"><span class="pm-slot">R5 F9</span><span class="pm-opp">vs Festor</span><span class="pm-course"> — SilverRock</span></div>
+          <div class="player-match"><span class="pm-slot">R5 B9</span><span class="pm-opp">vs Wohnoutka</span><span class="pm-course"> — SilverRock</span></div>
+        </div>
+      </div>
+
+      <div class="player-card">
+        <div class="player-card-header"><span class="player-name">Wise</span><span class="player-count">6 matches</span></div>
+        <div class="player-card-body">
+          <div class="player-match"><span class="pm-slot">R1 F9</span><span class="pm-opp">vs Cake</span><span class="pm-course"> — Indian Wells</span></div>
+          <div class="player-match"><span class="pm-slot">R2 F9</span><span class="pm-opp">vs Murphy</span><span class="pm-course"> — DW Firecliff</span></div>
+          <div class="player-match"><span class="pm-slot">R2 B9</span><span class="pm-opp">vs Langley</span><span class="pm-course"> — DW Firecliff</span></div>
+          <div class="player-match"><span class="pm-slot">R3 B9</span><span class="pm-opp">vs Wohnoutka</span><span class="pm-course"> — DW Mountain View</span></div>
+          <div class="player-match"><span class="pm-slot">R4 F9</span><span class="pm-opp">vs Festor</span><span class="pm-course"> — Eagle Falls</span></div>
+          <div class="player-match"><span class="pm-slot">R5 F9</span><span class="pm-opp">vs Angell</span><span class="pm-course"> — SilverRock</span></div>
+        </div>
+      </div>
+
+      <div class="player-card">
+        <div class="player-card-header"><span class="player-name">Festor</span><span class="player-count">6 matches</span></div>
+        <div class="player-card-body">
+          <div class="player-match"><span class="pm-slot">R1 F9</span><span class="pm-opp">vs Murphy</span><span class="pm-course"> — Indian Wells</span></div>
+          <div class="player-match"><span class="pm-slot">R1 B9</span><span class="pm-opp">vs Langley</span><span class="pm-course"> — Indian Wells</span></div>
+          <div class="player-match"><span class="pm-slot">R2 B9</span><span class="pm-opp">vs Wohnoutka</span><span class="pm-course"> — DW Firecliff</span></div>
+          <div class="player-match"><span class="pm-slot">R3 B9</span><span class="pm-opp">vs Angell</span><span class="pm-course"> — DW Mountain View</span></div>
+          <div class="player-match"><span class="pm-slot">R4 F9</span><span class="pm-opp">vs Wise</span><span class="pm-course"> — Eagle Falls</span></div>
+          <div class="player-match"><span class="pm-slot">R5 F9</span><span class="pm-opp">vs Cake</span><span class="pm-course"> — SilverRock</span></div>
+        </div>
+      </div>
+
+      <div class="player-card">
+        <div class="player-card-header"><span class="player-name">Angell</span><span class="player-count">6 matches</span></div>
+        <div class="player-card-body">
+          <div class="player-match"><span class="pm-slot">R1 B9</span><span class="pm-opp">vs Cake</span><span class="pm-course"> — Indian Wells</span></div>
+          <div class="player-match"><span class="pm-slot">R2 F9</span><span class="pm-opp">vs Wohnoutka</span><span class="pm-course"> — DW Firecliff</span></div>
+          <div class="player-match"><span class="pm-slot">R3 B9</span><span class="pm-opp">vs Festor</span><span class="pm-course"> — DW Mountain View</span></div>
+          <div class="player-match"><span class="pm-slot">R4 B9</span><span class="pm-opp">vs Langley</span><span class="pm-course"> — Eagle Falls</span></div>
+          <div class="player-match"><span class="pm-slot">R5 F9</span><span class="pm-opp">vs Wise</span><span class="pm-course"> — SilverRock</span></div>
+          <div class="player-match"><span class="pm-slot">R5 B9</span><span class="pm-opp">vs Murphy</span><span class="pm-course"> — SilverRock</span></div>
+        </div>
+      </div>
+
+      <div class="player-card">
+        <div class="player-card-header"><span class="player-name">Wohnoutka</span><span class="player-count">6 matches</span></div>
+        <div class="player-card-body">
+          <div class="player-match"><span class="pm-slot">R2 F9</span><span class="pm-opp">vs Angell</span><span class="pm-course"> — DW Firecliff</span></div>
+          <div class="player-match"><span class="pm-slot">R2 B9</span><span class="pm-opp">vs Festor</span><span class="pm-course"> — DW Firecliff</span></div>
+          <div class="player-match"><span class="pm-slot">R3 F9</span><span class="pm-opp">vs Langley</span><span class="pm-course"> — DW Mountain View</span></div>
+          <div class="player-match"><span class="pm-slot">R3 B9</span><span class="pm-opp">vs Wise</span><span class="pm-course"> — DW Mountain View</span></div>
+          <div class="player-match"><span class="pm-slot">R4 B9</span><span class="pm-opp">vs Murphy</span><span class="pm-course"> — Eagle Falls</span></div>
+          <div class="player-match"><span class="pm-slot">R5 B9</span><span class="pm-opp">vs Cake</span><span class="pm-course"> — SilverRock</span></div>
+        </div>
+      </div>
+
+      <div class="player-card">
+        <div class="player-card-header"><span class="player-name">Murphy</span><span class="player-count">6 matches</span></div>
+        <div class="player-card-body">
+          <div class="player-match"><span class="pm-slot">R1 F9</span><span class="pm-opp">vs Festor</span><span class="pm-course"> — Indian Wells</span></div>
+          <div class="player-match"><span class="pm-slot">R2 F9</span><span class="pm-opp">vs Wise</span><span class="pm-course"> — DW Firecliff</span></div>
+          <div class="player-match"><span class="pm-slot">R3 F9</span><span class="pm-opp">vs Cake</span><span class="pm-course"> — DW Mountain View</span></div>
+          <div class="player-match"><span class="pm-slot">R4 B9</span><span class="pm-opp">vs Wohnoutka</span><span class="pm-course"> — Eagle Falls</span></div>
+          <div class="player-match"><span class="pm-slot">R5 B9</span><span class="pm-opp">vs Angell</span><span class="pm-course"> — SilverRock</span></div>
+          <div class="player-match"><span class="pm-slot">R6 F9</span><span class="pm-opp">vs Langley</span><span class="pm-course"> — Indian Canyons</span></div>
+        </div>
+      </div>
+
+      <div class="player-card">
+        <div class="player-card-header"><span class="player-name">Langley</span><span class="player-count">6 matches</span></div>
+        <div class="player-card-body">
+          <div class="player-match"><span class="pm-slot">R1 B9</span><span class="pm-opp">vs Festor</span><span class="pm-course"> — Indian Wells</span></div>
+          <div class="player-match"><span class="pm-slot">R2 B9</span><span class="pm-opp">vs Wise</span><span class="pm-course"> — DW Firecliff</span></div>
+          <div class="player-match"><span class="pm-slot">R3 F9</span><span class="pm-opp">vs Wohnoutka</span><span class="pm-course"> — DW Mountain View</span></div>
+          <div class="player-match"><span class="pm-slot">R4 F9</span><span class="pm-opp">vs Cake</span><span class="pm-course"> — Eagle Falls</span></div>
+          <div class="player-match"><span class="pm-slot">R4 B9</span><span class="pm-opp">vs Angell</span><span class="pm-course"> — Eagle Falls</span></div>
+          <div class="player-match"><span class="pm-slot">R6 F9</span><span class="pm-opp">vs Murphy</span><span class="pm-course"> — Indian Canyons</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="comp">
+  <div class="comp-header">
+    <div class="comp-number">IV</div>
+    <div class="comp-titles">
+      <div class="comp-name">The Birdie Draw</div>
+      <div class="comp-tagline">Raffle · Net Birdies &amp; Eagles · All Six Rounds</div>
+    </div>
+  </div>
+  <div class="comp-body">
+    <p><span class="rule-label">Format:</span> A raffle pool funded at the start of the trip. Every player receives one ticket simply for participating. Additional tickets are earned throughout all six rounds based on net scores.</p>
+    <div class="points-table">
+      <div class="pt-row"><span class="pt-score">Participation</span><span>1 ticket (everyone, automatic)</span></div>
+      <div class="pt-row"><span class="pt-score">Net Birdie</span><span>1 ticket each</span></div>
+      <div class="pt-row"><span class="pt-score">Net Eagle</span><span>3 tickets each</span></div>
+    </div>
+    <p><span class="rule-label">Draw:</span> At the closing dinner, tickets are drawn from the pool. Everyone has a chance. The more birdies and eagles you make, the better your odds. One winner takes the pot.</p>
+  </div>
+</div>
+
+<div class="comp">
+  <div class="comp-header">
+    <div class="comp-number">V</div>
+    <div class="comp-titles">
+      <div class="comp-name">Daily Group Winners</div>
+      <div class="comp-tagline">High Quota Within Group · Every Round</div>
+    </div>
+  </div>
+  <div class="comp-body">
+    <p><span class="rule-label">Format:</span> Each round, the player with the highest quota score within their group wins the daily prize. One winner per group, paid out at the end of each round.</p>
+    <div class="points-table">
+      <div class="pt-row"><span class="pt-score">Foursome win</span><span>8 shells ($24) — 1-in-4 odds</span></div>
+      <div class="pt-row"><span class="pt-score">Threesome win</span><span>6 shells ($18) — 1-in-3 odds</span></div>
+    </div>
+    <p><span class="rule-label">Tiebreaker:</span> Back nine quota score. If still tied, back six, then back three, then 18th hole.</p>
+  </div>
+</div>
+
+<div class="comp">
+  <div class="comp-header">
+    <div class="comp-number">VI</div>
+    <div class="comp-titles">
+      <div class="comp-name">Daily Skins</div>
+      <div class="comp-tagline">Net Skins · All Seven Players · Every Round</div>
+    </div>
+  </div>
+  <div class="comp-body">
+    <p><span class="rule-label">Format:</span> Net skins across all seven players each round. A skin is won when one player posts the lowest net score on a hole outright. Ties carry to the next hole.</p>
+    <p><span class="rule-label">Payout:</span> Fixed pot per round. At the end of each round: pot ÷ total skins won = value per skin.</p>
+    <p><span class="rule-label">No skins won:</span> In the unlikely event no skins are claimed, all seven players participate in a 90-foot putting contest on the 18th green. Closest to the hole wins the full pot.</p>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-text">Wedghood Golf Society · Established with Purpose, Disputed with Honor</div>
+  <div class="footer-motto">"Play it as it lies."</div>
+</div>
+
+</div>
+</body>
+</html>

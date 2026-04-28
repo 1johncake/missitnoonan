@@ -1,199 +1,2832 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wedghoods 2026 — Palm Springs</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg:       #1e1f24;
-      --bg-card:  #2e3038;
-      --carolina: #4B9CD3;
-      --gold:     #c9a84c;
-      --white:    #f4f8fc;
-      --muted:    #888fa0;
-      --rule:     rgba(75,156,211,0.2);
-    }
-    html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--white); overflow: hidden; }
-    .top-stripe {
-      position: fixed; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(to right, transparent, var(--carolina) 25%, #7dbfe8 50%, var(--carolina) 75%, transparent);
-      z-index: 20;
-    }
-    .back {
-      position: fixed; top: 1.4rem; left: 2rem;
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: rgba(75,156,211,0.5); text-decoration: none;
-      transition: color 0.2s ease;
-    }
-    .back:hover { color: var(--carolina); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedghoods Palm Springs 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   WEDGHOOD PALM SPRINGS 2026 — OFFICIAL TOURNAMENT SITE
+   Edit data in the DATA CONFIGURATION section below the CSS
+   ============================================================ */
 
-    .page {
-      height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 2rem; text-align: center;
-    }
+:root {
+  /* ── Brand palette (derived from logo) ── */
+  --navy:         #2E4A82;   /* logo navy — primary */
+  --navy-dark:    #1C2639;   /* midnight — nav bg, hero overlay */
+  --navy-deeper:  #141B2D;   /* deepest bg */
+  --navy-mid:     #4A6BAD;   /* links, hover states */
+  --navy-light:   #7A96C7;   /* light navy tint */
+  --navy-tint:    #D9E4F5;   /* faint navy for backgrounds */
 
-    .eyebrow {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
-      color: var(--carolina); margin-bottom: 0.9rem;
-      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.2s;
-    }
+  --gold:         #C98A2C;   /* logo gold — primary accent */
+  --gold-bright:  #E0A84A;   /* alert banners, highlights */
+  --gold-light:   #EEC97A;   /* warm gold for large text */
+  --gold-tint:    #FAF0D7;   /* gold tinted bg */
+  --gold-dark:    #A86C1A;   /* deep gold for dark-on-light */
 
-    .headline {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 7vw, 4.5rem); font-weight: 700;
-      color: var(--white); line-height: 1.05; letter-spacing: -0.02em;
-      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.35s;
-      margin-bottom: 0.3rem;
-    }
-    .headline em { font-style: italic; color: var(--carolina); }
+  --sage:         #7A9E82;   /* logo sage — palm tree */
+  --sage-deep:    #4A6E52;   /* deep sage */
+  --sage-forest:  #2D4A35;   /* darkest sage */
+  --sage-muted:   #C5D9C8;   /* muted sage — bumped for contrast */
+  --sage-tint:    #EBF3EC;   /* sage tint bg */
 
-    .subhead {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: clamp(1rem, 3vw, 1.5rem);
-      color: var(--gold); opacity: 0;
-      animation: fadeUp 0.7s ease forwards; animation-delay: 0.45s;
-      margin-bottom: 1.8rem;
-    }
+  --sand:         #DBBF95;   /* warm sand */
+  --sand-light:   #EDD9BA;   /* pale sand */
+  --cream:        #FAF4EA;   /* page cream bg */
+  --terracotta:   #B08050;   /* adobe warm */
 
-    .divider {
-      width: 40px; height: 1px;
-      background: linear-gradient(to right, transparent, var(--carolina), transparent);
-      margin: 0 auto 1.6rem;
-      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.55s;
-    }
+  --ink:          #1A1A2E;   /* deep navy-tinted ink */
+  --white:        #FFFFFF;
 
-    .details {
-      display: flex; align-items: center; gap: 1.5rem;
-      margin-bottom: 1.8rem;
-      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.65s;
-    }
-    .detail-item {
-      text-align: center;
-    }
-    .detail-label {
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
-      color: var(--muted); display: block; margin-bottom: 0.2rem;
-    }
-    .detail-val {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem; font-weight: 700; color: var(--white);
-    }
-    .detail-rule {
-      width: 1px; height: 30px; background: rgba(255,255,255,0.1);
-    }
+  /* ── Lifted dark surfaces ── */
+  --surface-1:    #141B2D;   /* deepest */
+  --surface-2:    #1C2639;   /* nav, hero */
+  --surface-3:    #253248;   /* card bg */
+  --surface-4:    #2E3D57;   /* lifted card */
+  --surface-5:    #3D4F6B;   /* highlight surface */
 
-    .desc {
-      font-size: 0.88rem; color: var(--muted); line-height: 1.7;
-      max-width: 380px; margin: 0 auto 2rem;
-      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.75s;
-    }
+  /* ── Semantic aliases ── */
+  --green:        var(--sage-deep);
+  --green-dark:   var(--surface-2);
+  --green-light:  var(--sage);
+  --mist:         var(--sage-muted);
 
-    /* Progress bar — 85% done */
-    .progress-wrap {
-      width: 280px; margin: 0 auto 0.6rem;
-      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.85s;
-    }
-    .progress-label {
-      display: flex; justify-content: space-between;
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--muted); margin-bottom: 0.5rem;
-    }
-    .progress-track {
-      width: 100%; height: 4px;
-      background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; width: 0;
-      background: linear-gradient(to right, var(--carolina-mid, #2b7ab8), var(--carolina));
-      border-radius: 2px;
-      animation: fillBar 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
-      animation-delay: 1s;
-    }
-    @keyframes fillBar { from{width:0} to{width:85%} }
+  /* ── Typography ── */
+  --font-display: 'Fraunces', serif;
+  --font-body:    'Plus Jakarta Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+}
 
-    .pill {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
-      background: rgba(75,156,211,0.08); border: 1px solid rgba(75,156,211,0.2);
-      color: var(--carolina); border-radius: 20px; padding: 0.4rem 1rem;
-      margin-top: 1.2rem;
-      opacity: 0; animation: fadeUp 0.7s ease forwards; animation-delay: 0.95s;
-    }
-    .pill-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--carolina); animation: pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+/* ── ALERT BANNER ── */
+#alert-banner {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: var(--gold);
+  color: var(--navy-deeper);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0.55rem 3rem;
+  text-align: center;
+  line-height: 1.4;
+  border-bottom: 2px solid var(--gold-dark);
+  animation: bannerSlide 0.4s ease both;
+}
+@keyframes bannerSlide {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+#alert-banner.banner-info   { background: var(--navy); color: var(--white); border-color: var(--navy-mid); }
+#alert-banner.banner-hype   { background: var(--sage-deep); color: var(--white); border-color: var(--sage); }
+#alert-banner.banner-alert  { background: #8B1A1A; color: var(--white); border-color: #C44; }
+#alert-banner.visible       { display: block; }
+#alert-banner .banner-close {
+  position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: inherit; opacity: 0.6; font-size: 1rem; line-height: 1;
+  padding: 0.25rem 0.5rem;
+}
+#alert-banner .banner-close:hover { opacity: 1; }
+body.has-banner nav { top: 34px; }
+body.has-banner #hero { padding-top: calc(76px + 34px); }
 
-    .footer-line {
-      position: fixed; bottom: 1.5rem; left: 0; right: 0;
-      text-align: center;
-      font-family: 'Courier Prime', monospace;
-      font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: rgba(255,255,255,0.12);
-      opacity: 0; animation: fadeIn 1s ease forwards; animation-delay: 1.2s;
-    }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    @media (max-width: 480px) { html, body { overflow: auto; } .details { flex-wrap: wrap; justify-content: center; } }
-  </style>
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ---- NAV ---- */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(28, 38, 57, 0.97);
+  backdrop-filter: blur(10px);
+  display: flex; flex-direction: column; align-items: center;
+  border-bottom: 1px solid rgba(201,138,44,0.25);
+}
+.nav-top {
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0.45rem 2rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 0.5rem;
+  text-decoration: none;
+  padding-bottom: 0.35rem;
+}
+.nav-logo img {
+  height: 28px;
+  width: auto;
+  display: block;
+  background: rgba(255,255,255,0.0);
+  border-radius: 3px;
+}
+.nav-logo-pill {
+  display: flex; align-items: center;
+  padding: 2px 0;
+}
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--gold-light);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.nav-links {
+  display: flex; list-style: none;
+  width: 100%; justify-content: center;
+  padding: 0 0.5rem;
+}
+.nav-links a {
+  display: block;
+  padding: 0 0.75rem;
+  line-height: 34px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--gold-bright); }
+@media (max-width: 400px) {
+  .nav-links a { padding: 0 0.5rem; font-size: 0.6rem; letter-spacing: 0.08em; }
+}
+
+/* ---- HERO ---- */
+#hero {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #C8A878 0%, #DBBF95 30%, #EDD9BA 60%, #FAF0D7 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 76px 2rem 4rem;
+}
+.hero-texture {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% 50%, rgba(201,138,44,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(122,158,130,0.08) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.hero-ornament {
+  position: absolute;
+  width: 600px; height: 600px;
+  border: 1px solid rgba(176,128,80,0.2);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.hero-ornament::before {
+  content: '';
+  position: absolute; inset: 40px;
+  border: 1px solid rgba(176,128,80,0.12);
+  border-radius: 50%;
+}
+.hero-content {
+  position: relative; text-align: center;
+  animation: fadeUp 1s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-logo-img {
+  width: min(420px, 80vw);
+  height: auto;
+  display: block;
+  margin: 0 auto 2rem;
+}
+.hero-eyebrow {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 1.2rem;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 14vw, 10rem);
+  font-weight: 300;
+  color: var(--navy-dark);
+  letter-spacing: 0.06em;
+  line-height: 0.9;
+  margin-bottom: 0.3rem;
+}
+.hero-year {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 300;
+  color: var(--gold-dark);
+  letter-spacing: 0.25em;
+  margin-bottom: 2rem;
+}
+.hero-divider {
+  width: 80px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+  margin: 0 auto 2rem;
+}
+.hero-meta {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--navy-dark);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+.hero-dates {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(28,38,57,0.5);
+}
+.hero-scroll {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: rgba(28,38,57,0.5);
+  font-family: var(--font-body);
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.9; } }
+.hero-scroll::after {
+  content: '';
+  width: 1px; height: 36px;
+  background: linear-gradient(to bottom, rgba(28,38,57,0.5), transparent);
+}
+
+/* ---- SECTIONS ---- */
+section {
+  padding: 5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+.section-title {
+  font-family: var(--font-body);
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: var(--navy-dark);
+  margin-bottom: 0.5rem;
+  line-height: 1.1;
+}
+.section-rule {
+  width: 48px; height: 2px;
+  background: var(--gold);
+  margin-bottom: 2.5rem;
+}
+
+/* ---- STANDINGS SECTION ---- */
+#standings-section {
+  background: var(--surface-2);
+  max-width: 100%;
+  padding: 5rem 2rem;
+}
+#standings-section .inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+#standings-section .section-title { color: var(--white); }
+#standings-section .section-label { color: var(--gold-bright); }
+#standings-section .section-rule { background: var(--gold-bright); }
+
+.standings-meta {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin-bottom: 2rem; flex-wrap: wrap;
+}
+.last-updated {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.75);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+.refresh-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: transparent;
+  border: 1px solid rgba(201,138,44,0.45);
+  color: var(--gold-bright);
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.refresh-btn:hover {
+  background: rgba(201,138,44,0.12);
+  border-color: var(--gold-bright);
+}
+.refresh-btn svg { transition: transform 0.4s; }
+.refresh-btn.spinning svg { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.csv-notice {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left: 3px solid var(--gold);
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  font-size: 0.7rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.5);
+}
+.csv-notice strong { color: var(--gold-bright); }
+.csv-notice code {
+  background: rgba(255,255,255,0.07);
+  padding: 0.15em 0.5em;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--sage);
+}
+
+/* Leaderboard tables */
+.leaderboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+@media (max-width: 700px) { .leaderboard-grid { grid-template-columns: 1fr; } }
+
+.lb-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.lb-table { min-width: 420px; }
+@media (max-width: 600px) {
+  .lb-table th, .lb-table td { padding: 0.45rem 0.5rem; font-size: 0.7rem; }
+  .lb-table .rank { width: 1.5rem; font-size: 0.9rem; }
+}
+.lb-card-header {
+  background: rgba(201,138,44,0.12);
+  border-bottom: 1px solid rgba(201,138,44,0.18);
+  padding: 0.75rem 1rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+.lb-table {
+  width: 100%; border-collapse: collapse;
+}
+.lb-table th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.lb-table th:first-child,
+.lb-table th:nth-child(2) { text-align: left; }
+.lb-table td {
+  padding: 0.7rem 0.75rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.92);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  text-align: center;
+}
+.lb-table td:first-child,
+.lb-table td:nth-child(2) { text-align: left; }
+.lb-table tr:last-child td { border-bottom: none; }
+.lb-table tr:hover td { background: rgba(255,255,255,0.03); }
+.lb-table .rank {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.7);
+  width: 2rem;
+}
+.lb-table .rank-1 { color: var(--gold-bright); }
+.lb-table .rank-2 { color: rgba(255,255,255,0.5); }
+.lb-table .rank-3 { color: var(--terracotta); }
+.lb-table .player-name { font-weight: 600; }
+.lb-table .units {
+  text-align: right;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--sage);
+}
+.lb-table .units-dim {
+  text-align: right;
+  font-family: var(--font-mono);
+  color: rgba(255,255,255,0.55);
+}
+.lb-table .units-pos {
+  text-align: center;
+  font-family: var(--font-mono);
+  color: var(--sage);
+  font-weight: 600;
+}
+.lb-table .units-neg {
+  text-align: center;
+  font-family: var(--font-mono);
+  color: #E07070;
+  font-weight: 600;
+}
+
+/* Day scores table */
+.day-scores-wrap { overflow-x: auto; margin-bottom: 1rem; }
+.day-scores {
+  width: 100%; border-collapse: collapse; min-width: 600px;
+}
+.day-scores th {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.02);
+}
+.day-scores th:first-child { text-align: left; }
+.day-scores td {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.82rem;
+  font-family: var(--font-mono);
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.day-scores td:first-child {
+  text-align: left;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--white);
+}
+.day-scores tr:hover td { background: rgba(255,255,255,0.03); }
+.score-win { color: var(--sage); font-weight: 700; }
+.score-empty { color: rgba(255,255,255,0.15); }
+
+.loading-state, .error-state {
+  padding: 3rem;
+  text-align: center;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  font-family: var(--font-mono);
+}
+.error-state { color: #e07070; }
+
+/* ---- TABS ---- */
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 2rem;
+  gap: 0;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255,255,255,0.6);
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: rgba(255,255,255,0.8); }
+.tab-btn.active {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold-bright);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ---- BIRDIE DRAW TRACKER ---- */
+.birdie-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 600px) { .birdie-grid { grid-template-columns: repeat(2,1fr); } }
+.birdie-card {
+  background: var(--surface-3);
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+.birdie-name {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 0.5rem;
+}
+.birdie-tickets {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 300;
+  color: var(--gold-bright);
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+.birdie-tickets-label {
+  font-size: 0.6rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.62);
+}
+.birdie-breakdown {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.62);
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+}
+.birdie-breakdown span { color: var(--sage); }
+
+/* Birdie wheel link */
+.birdie-wheel-link {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(201,138,44,0.12);
+  border: 1px solid rgba(201,138,44,0.35);
+  color: var(--gold-bright);
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.55rem 1.25rem;
+  text-decoration: none;
+  transition: all 0.2s;
+  margin-top: 1rem;
+}
+.birdie-wheel-link:hover {
+  background: rgba(201,138,44,0.2);
+  border-color: var(--gold-bright);
+  color: var(--white);
+}
+
+/* ---- RESULTS LEDGER ---- */
+.results-day {
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.results-day-header {
+  background: rgba(201,138,44,0.1);
+  border-bottom: 1px solid rgba(201,138,44,0.12);
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+.results-day-header:hover { background: rgba(201,138,44,0.16); }
+.results-day-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+}
+.results-day-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--white);
+  font-weight: 400;
+}
+.results-day-units {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--sage);
+}
+.results-day-chevron {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.25);
+  transition: transform 0.2s;
+}
+.results-day.open .results-day-chevron { transform: rotate(180deg); }
+.results-body {
+  display: none;
+}
+.results-day.open .results-body { display: block; }
+.results-table {
+  width: 100%; border-collapse: collapse;
+}
+.results-table th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.02);
+}
+.results-table td {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.9);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: middle;
+}
+.results-table tr:last-child td { border-bottom: none; }
+.results-table .award-col { color: rgba(255,255,255,0.65); font-size:0.7rem; }
+.results-table .winner-col { color: var(--white); font-weight: 600; }
+.results-table .units-col { color: var(--sage); font-weight: 700; font-family: var(--font-mono); text-align:right; white-space:nowrap; }
+.results-table .halved { color: rgba(255,255,255,0.55); font-style: italic; font-size: 0.68rem; }
+.results-table .match-label {
+  display: inline-block;
+  background: rgba(74,110,82,0.25);
+  color: var(--sage);
+  font-size: 0.52rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.5rem;
+  margin-right: 0.4rem;
+}
+
+/* ---- SCHEDULE SECTION ---- */
+#schedule {
+  border-top: 1px solid rgba(46,74,130,0.2);
+}
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(46,74,130,0.15);
+  border: 1px solid rgba(46,74,130,0.15);
+  margin-bottom: 2rem;
+}
+@media (max-width: 800px) {
+  .schedule-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .schedule-grid { grid-template-columns: 1fr; }
+}
+.day-card {
+  background: var(--cream);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.day-card:hover { background: var(--sand-light); }
+.day-card.active { background: var(--surface-2); }
+.day-num {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 0.3rem;
+  font-family: var(--font-mono);
+}
+.day-card.active .day-num { color: var(--gold-bright); }
+.day-date {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--navy-dark);
+  margin-bottom: 0.15rem;
+}
+.day-card.active .day-date { color: var(--white); }
+.day-course {
+  font-size: 0.63rem;
+  font-weight: 500;
+  color: var(--sage-deep);
+  margin-bottom: 1rem;
+}
+.day-card.active .day-course { color: rgba(255,255,255,0.7); }
+.day-matches {
+  display: flex; flex-direction: column; gap: 0.4rem;
+}
+.match-pill {
+  display: inline-block;
+  background: rgba(74,110,82,0.08);
+  border: 1px solid rgba(74,110,82,0.18);
+  color: var(--sage-deep);
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+}
+.day-card.active .match-pill {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.65);
+}
+
+/* Match detail panel */
+.match-detail-panel {
+  background: var(--surface-2);
+  color: var(--white);
+  padding: 2.5rem;
+  display: none;
+  margin-bottom: 1rem;
+  animation: slideDown 0.3s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.match-detail-panel.visible { display: block; }
+.match-panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 700px) { .match-panel-grid { grid-template-columns: 1fr; } }
+.match-panel-col h4 {
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(201,138,44,0.18);
+}
+.match-panel-col p {
+  font-size: 0.75rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 0.4rem;
+}
+.match-panel-col strong { color: var(--white); }
+.pairing-row {
+  display: flex; gap: 0.5rem; align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+.pairing-label {
+  font-size: 0.52rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.25);
+  min-width: 2.5rem; font-family: var(--font-mono);
+}
+.pairing-team {
+  font-size: 0.75rem;
+  color: var(--white);
+  font-weight: 500;
+}
+.payout-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.72rem;
+}
+.payout-row:last-child { border-bottom: none; }
+.payout-desc { color: rgba(255,255,255,0.85); }
+.payout-amt { color: var(--sage); font-weight: 600; font-family: var(--font-mono); }
+
+/* ---- RULES SECTION ---- */
+#rules { background: var(--sand-light); max-width: 100%; padding: 5rem 2rem; }
+#rules .inner { max-width: 1100px; margin: 0 auto; }
+#rules .section-title { color: var(--navy-dark); }
+#rules .section-label { color: var(--gold-dark); }
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+@media (max-width: 700px) { .rules-grid { grid-template-columns: 1fr; } }
+.rule-card {
+  background: var(--white);
+  border-top: 3px solid var(--navy);
+  padding: 1.75rem;
+}
+.rule-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--navy-dark);
+  margin-bottom: 1rem;
+}
+.rule-card ul {
+  list-style: none; padding: 0;
+}
+.rule-card li {
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: #2a2a3a;
+  padding: 0.3rem 0 0.3rem 1.1rem;
+  position: relative;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.rule-card li:last-child { border-bottom: none; }
+.rule-card li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.72rem;
+  width: 5px; height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+/* ---- PAIRINGS MATRIX ---- */
+.matrix-wrap { overflow-x: auto; }
+.matrix-table {
+  width: 100%; border-collapse: collapse; min-width: 700px;
+}
+.matrix-table th, .matrix-table td {
+  padding: 0.6rem 0.5rem;
+  text-align: center;
+  font-size: 0.68rem;
+  border: 1px solid rgba(46,74,130,0.1);
+}
+.matrix-table th {
+  background: var(--surface-2);
+  color: var(--white);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.matrix-table th:first-child { width: 90px; text-align: left; padding-left: 0.75rem; }
+.matrix-table td:first-child {
+  background: var(--surface-2);
+  color: var(--white);
+  font-weight: 600;
+  text-align: left;
+  padding-left: 0.75rem;
+}
+.matrix-table td { background: var(--cream); color: var(--ink); vertical-align: middle; }
+.cell-partner {
+  background: #D5E8D4 !important;
+  color: var(--sage-forest) !important;
+  font-weight: 700;
+}
+.cell-group {
+  background: #D9E4F5 !important;
+  color: var(--navy-dark) !important;
+}
+.cell-self { background: var(--sand) !important; }
+.matrix-legend {
+  display: flex; gap: 2rem; margin-top: 1rem; flex-wrap: wrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.65rem; font-weight: 500; color: var(--sage-muted);
+}
+.legend-swatch {
+  width: 14px; height: 14px; border-radius: 2px;
+}
+
+/* ---- PRIZE POOL SECTION ---- */
+#prizes { background: var(--cream); }
+.prize-strip {
+  background: var(--surface-2);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 2.5rem;
+}
+@media (max-width: 600px) { .prize-strip { grid-template-columns: 1fr; } }
+.prize-block {
+  padding: 2rem 1.5rem;
+  border-right: 1px solid rgba(255,255,255,0.05);
+  text-align: center;
+}
+.prize-block:last-child { border-right: none; }
+.prize-num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--gold-bright);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.prize-label {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  color: rgba(255,255,255,0.7);
+}
+.games-list { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+@media (max-width: 600px) { .games-list { grid-template-columns: 1fr; } }
+.game-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline;
+  padding: 0.6rem 0.75rem;
+  background: var(--sand-light);
+  font-size: 0.72rem;
+}
+.game-row-name { color: var(--ink); font-weight: 600; }
+.game-row-units { color: var(--sage-deep); font-weight: 700; font-family: var(--font-mono); }
+
+/* ---- FOOTER ---- */
+footer {
+  background: var(--surface-1);
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(201,138,44,0.15);
+}
+.footer-logo {
+  margin-bottom: 1rem;
+}
+.footer-logo {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+.footer-logo img {
+  height: 96px;
+  width: auto;
+  display: block;
+}
+footer p {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.18);
+  font-family: var(--font-mono);
+}
+
+/* ---- UTILS ---- */
+.mt-1 { margin-top: 1rem; }
+.text-muted { color: var(--sage-muted); font-size: 0.7rem; }
+
+.results-day-title {
+  color: var(--white);
+  font-weight: 400;
+}
+.results-day-units {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--green-light);
+}
+.results-day-chevron {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.55);
+  transition: transform 0.2s;
+}
+.results-day.open .results-day-chevron { transform: rotate(180deg); }
+.results-body {
+  display: none;
+}
+.results-day.open .results-body { display: block; }
+.results-table {
+  width: 100%; border-collapse: collapse;
+}
+.results-table th {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+}
+.results-table td {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.92);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: middle;
+}
+.results-table tr:last-child td { border-bottom: none; }
+.results-table .award-col { color: rgba(255,255,255,0.75); font-size:0.7rem; }
+.results-table .winner-col { color: var(--white); font-weight: 600; }
+.results-table .units-col { color: var(--green-light); font-weight: 700; text-align:right; white-space:nowrap; }
+.results-table .halved { color: rgba(255,255,255,0.65); font-style: italic; font-size: 0.68rem; }
+.results-table .match-label {
+  display: inline-block;
+  background: rgba(45,106,79,0.3);
+  color: var(--green-light);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.5rem;
+  margin-right: 0.4rem;
+}
+
+/* ---- SCHEDULE SECTION ---- */
+#schedule {
+  border-top: 1px solid rgba(45,106,79,0.15);
+}
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(45,106,79,0.15);
+  border: 1px solid rgba(45,106,79,0.15);
+  margin-bottom: 2rem;
+}
+@media (max-width: 800px) {
+  .schedule-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .schedule-grid { grid-template-columns: 1fr; }
+}
+.day-card {
+  background: var(--cream);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.day-card:hover { background: var(--sand); }
+.day-card.active { background: var(--green-dark); }
+.day-num {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+}
+.day-card.active .day-num { color: var(--gold-light); }
+.day-date {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--green-dark);
+  margin-bottom: 0.15rem;
+}
+.day-card.active .day-date { color: var(--white); }
+.day-course {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--mist);
+  margin-bottom: 1rem;
+}
+.day-card.active .day-course { color: rgba(255,255,255,0.55); }
+.day-matches {
+  display: flex; flex-direction: column; gap: 0.4rem;
+}
+.match-pill {
+  display: inline-block;
+  background: rgba(45,106,79,0.08);
+  border: 1px solid rgba(45,106,79,0.15);
+  color: var(--green);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+}
+.day-card.active .match-pill {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+}
+
+/* Match detail panel */
+.match-detail-panel {
+  background: var(--green-dark);
+  color: var(--white);
+  padding: 2.5rem;
+  display: none;
+  margin-bottom: 1rem;
+  animation: slideDown 0.3s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.match-detail-panel.visible { display: block; }
+.match-panel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 700px) { .match-panel-grid { grid-template-columns: 1fr; } }
+.match-panel-col h4 {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(181,133,58,0.2);
+}
+.match-panel-col p {
+  font-size: 0.75rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.88);
+  margin-bottom: 0.4rem;
+}
+.match-panel-col strong { color: var(--white); }
+.pairing-row {
+  display: flex; gap: 0.5rem; align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+.pairing-label {
+  font-size: 0.55rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.55);
+  min-width: 2.5rem;
+}
+.pairing-team {
+  font-size: 0.75rem;
+  color: var(--white);
+  font-weight: 500;
+}
+.payout-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.72rem;
+}
+.payout-row:last-child { border-bottom: none; }
+.payout-desc { color: rgba(255,255,255,0.88); }
+.payout-amt { color: var(--green-light); font-weight: 600; }
+
+/* ---- RULES SECTION ---- */
+#rules { background: var(--sand); max-width: 100%; padding: 5rem 2rem; }
+#rules .inner { max-width: 1100px; margin: 0 auto; }
+.rules-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+@media (max-width: 700px) { .rules-grid { grid-template-columns: 1fr; } }
+.rule-card {
+  background: var(--white);
+  border-top: 3px solid var(--green);
+  padding: 1.75rem;
+}
+.rule-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--green-dark);
+  margin-bottom: 1rem;
+}
+.rule-card ul {
+  list-style: none; padding: 0;
+}
+.rule-card li {
+  font-size: 0.75rem;
+  line-height: 1.75;
+  color: #222;
+  padding: 0.3rem 0 0.3rem 1.1rem;
+  position: relative;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.rules-subsection-label {
+  font-family: 'Fraunces', serif;
+  font-size: 1.15rem;
+  color: var(--gold-dark);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  margin-top: 0.25rem;
+}
+.rule-card li:last-child { border-bottom: none; }
+.rule-card li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.7rem;
+  width: 5px; height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+/* ---- PAIRINGS MATRIX ---- */
+.matrix-wrap { overflow-x: auto; }
+.matrix-table {
+  width: 100%; border-collapse: collapse; min-width: 700px;
+}
+.matrix-table th, .matrix-table td {
+  padding: 0.6rem 0.5rem;
+  text-align: center;
+  font-size: 0.68rem;
+  border: 1px solid rgba(45,106,79,0.1);
+}
+.matrix-table th {
+  background: var(--green-dark);
+  color: var(--white);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.matrix-table th:first-child { width: 90px; text-align: left; padding-left: 0.75rem; }
+.matrix-table td:first-child {
+  background: var(--green-dark);
+  color: var(--white);
+  font-weight: 600;
+  text-align: left;
+  padding-left: 0.75rem;
+}
+.matrix-table td { background: var(--cream); color: var(--ink); vertical-align: middle; }
+.cell-partner {
+  background: #D5E8D4 !important;
+  color: var(--green-dark) !important;
+  font-weight: 700;
+}
+.cell-group {
+  background: #DDEAF5 !important;
+  color: #1A3A5C !important;
+}
+.cell-self { background: var(--sand) !important; }
+.matrix-legend {
+  display: flex; gap: 2rem; margin-top: 1rem; flex-wrap: wrap;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.65rem; font-weight: 500; color: var(--sage-deep);
+}
+.legend-swatch {
+  width: 14px; height: 14px; border-radius: 2px;
+}
+
+/* ---- PRIZE POOL SECTION ---- */
+#prizes { background: var(--cream); }
+.prize-strip {
+  background: var(--green-dark);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 2.5rem;
+}
+@media (max-width: 600px) { .prize-strip { grid-template-columns: 1fr; } }
+.prize-block {
+  padding: 2rem 1.5rem;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+.prize-block:last-child { border-right: none; }
+.prize-num {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--gold-light);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.prize-label {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.games-list { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
+@media (max-width: 600px) { .games-list { grid-template-columns: 1fr; } }
+.game-row {
+  display: flex; justify-content: space-between;
+  align-items: baseline;
+  padding: 0.6rem 0.75rem;
+  background: var(--sand);
+  font-size: 0.72rem;
+}
+.game-row-name { color: var(--ink); font-weight: 600; }
+.game-row-units { color: var(--green); font-weight: 700; }
+
+/* ---- FOOTER ---- */
+footer {
+  background: var(--green-dark);
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(181,133,58,0.2);
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.15em;
+  margin-bottom: 0.5rem;
+}
+footer p {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+}
+
+/* ---- MESSAGE BOARD SECTION ---- */
+#board-section {
+  background: var(--cream);
+  max-width: 100%;
+  padding: 5rem 2rem;
+  border-top: 1px solid rgba(45,74,130,0.1);
+}
+#board-section .inner { max-width: 1100px; margin: 0 auto; }
+
+.board-headline {
+  background: var(--surface-2);
+  border: 1px solid rgba(201,138,44,0.2);
+  border-left: 4px solid var(--gold);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.4s ease both;
+}
+.board-headline-kicker {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  margin-bottom: 0.4rem;
+}
+.board-headline-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.board-headline-body {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.82);
+  white-space: pre-wrap;
+}
+.board-headline-date {
+  font-size: 0.62rem;
+  font-family: var(--font-mono);
+  color: rgba(255,255,255,0.4);
+  margin-top: 0.6rem;
+  letter-spacing: 0.06em;
+}
+
+.board-list { display: flex; flex-direction: column; gap: 1px; }
+
+.board-post {
+  background: var(--white);
+  border: 1px solid rgba(45,74,130,0.1);
+  padding: 1.25rem 1.5rem;
+  transition: background 0.15s;
+}
+.board-post:hover { background: var(--gold-tint); }
+
+.board-post-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.board-post-badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  background: rgba(201,138,44,0.12);
+  color: var(--gold-dark);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1px solid rgba(201,138,44,0.25);
+}
+.board-post-date {
+  font-size: 0.6rem;
+  font-family: var(--font-mono);
+  color: var(--navy-mid);
+  letter-spacing: 0.04em;
+}
+.board-post-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--navy-dark);
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
+}
+.board-post-body {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: #333;
+  white-space: pre-wrap;
+}
+
+.board-empty {
+  padding: 3rem;
+  text-align: center;
+  color: var(--mist);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  border: 1px solid rgba(45,74,130,0.1);
+  background: var(--white);
+}
+
+/* ---- UTILS ---- */
+.mt-1 { margin-top: 1rem; }
+.text-muted { color: var(--mist); font-size: 0.7rem; }
+
+/* ── HAMBURGER BUTTON ── */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  flex-direction: column;
+  gap: 5px;
+  position: absolute;
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.hamburger span {
+  display: block;
+  width: 22px; height: 2px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 2px;
+  transition: all 0.25s ease;
+  transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── MOBILE NAV DRAWER ── */
+.nav-drawer {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 68px;
+  left: 0; right: 0;
+  z-index: 99;
+  background: var(--surface-1);
+  border-bottom: 1px solid rgba(201,138,44,0.2);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  padding: 0.5rem 0 0.75rem;
+  animation: drawerSlide 0.2s ease both;
+}
+@keyframes drawerSlide {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.nav-drawer.open { display: flex; }
+body.has-banner .nav-drawer { top: 102px; }
+.nav-drawer a {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+.nav-drawer a:hover {
+  color: var(--gold-bright);
+  border-left-color: var(--gold-bright);
+  background: rgba(201,138,44,0.06);
+}
+
+@media (max-width: 720px) {
+  .hamburger { display: flex; }
+  .nav-links  { display: none; }
+  .nav-top    { position: relative; justify-content: center; padding: 0.45rem 3rem; }
+}
+
+/* ── MATCH MODAL OVERLAY ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(10,14,25,0.75);
+  backdrop-filter: blur(4px);
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+.modal-overlay.open { display: flex; animation: overlayFadeIn 0.2s ease; }
+@keyframes overlayFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal-sheet {
+  background: var(--surface-2);
+  width: 100%;
+  max-width: 820px;
+  max-height: 88vh;
+  border-radius: 16px 16px 0 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  animation: sheetSlideUp 0.32s cubic-bezier(0.32, 0.72, 0, 1) both;
+  padding: 0 0 2rem;
+}
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); opacity: 0.8; }
+  to   { transform: translateY(0);    opacity: 1;   }
+}
+
+.modal-handle {
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem 0 0.25rem;
+  cursor: pointer;
+}
+.modal-handle::before {
+  content: '';
+  width: 36px; height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+}
+.modal-close {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 1.25rem 0.25rem;
+  background: var(--surface-2);
+  z-index: 10;
+}
+.modal-close button {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.9rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s;
+  font-family: var(--font-body);
+}
+.modal-close button:hover { background: rgba(255,255,255,0.14); color: white; }
+.modal-body { padding: 0 1.75rem 1rem; }
+
+/* On desktop keep inline panel, hide modal trigger */
+@media (min-width: 721px) {
+  .match-detail-panel { display: none !important; }
+  .match-detail-panel.visible { display: block !important; }
+}
+@media (max-width: 720px) {
+  .match-detail-panel { display: none !important; }
+}
+
+</style>
 </head>
 <body>
-  <div class="top-stripe"></div>
-  <a href="/" class="back">← missitnoonan.com</a>
 
-  <div class="page">
-    <span class="eyebrow">Wedghoods 2026 · Palm Springs</span>
-    <h1 class="headline">Almost <em>there.</em></h1>
-    <p class="subhead">Apr 30 – May 3, 2026</p>
-    <div class="divider"></div>
+<!-- ============================================================
+  ALERT BANNER (Google Sheet driven)
+============================================================ -->
+<div id="alert-banner">
+  <span id="alert-text"></span>
+  <button class="banner-close" onclick="dismissBanner()" aria-label="Dismiss">✕</button>
+</div>
 
-    <div class="details">
-      <div class="detail-item">
-        <span class="detail-label">Players</span>
-        <span class="detail-val">8</span>
+<!-- ============================================================
+  NAV
+============================================================ -->
+<nav>
+  <div class="nav-top">
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-pill">
+        <img src="/WedghoodsPS-light.png" alt="Wedghoods Palm Springs" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span class="nav-logo-text" style="display:none;">Wedghoods — Palm Springs</span>
       </div>
-      <div class="detail-rule"></div>
-      <div class="detail-item">
-        <span class="detail-label">Destination</span>
-        <span class="detail-val">Palm Springs</span>
-      </div>
-      <div class="detail-rule"></div>
-      <div class="detail-item">
-        <span class="detail-label">Days</span>
-        <span class="detail-val">4</span>
-      </div>
-    </div>
-
-    <p class="desc">The hub is being finalized. Pairings, formats, standings, and the full Wedghoods experience incoming. Check back shortly.</p>
-
-    <div class="progress-wrap">
-      <div class="progress-label">
-        <span>Page progress</span>
-        <span>85%</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill"></div>
-      </div>
-    </div>
-
-    <span class="pill"><div class="pill-dot"></div> Finishing up</span>
+    </a>
   </div>
+  <ul class="nav-links">
+    <li><a href="/palm-springs-itinerary.html">Itinerary</a></li>
+    <li><a href="#board-section">📋 Messages</a></li>
+    <li><a href="#standings-section">Standings</a></li>
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#rules">Rules</a></li>
+    <li><a href="/birdie-draw.html">🎰 Birdie Draw</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleHamburger()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="nav-drawer">
+  <a href="/palm-springs-itinerary.html" onclick="closeHamburger()">Itinerary</a>
+  <a href="#board-section" onclick="closeHamburger()">📋 Messages</a>
+  <a href="#standings-section" onclick="closeHamburger()">Standings</a>
+  <a href="#schedule" onclick="closeHamburger()">Schedule</a>
+  <a href="#rules" onclick="closeHamburger()">Rules</a>
+  <a href="/birdie-draw.html" onclick="closeHamburger()">🎰 Birdie Draw</a>
+</div>
 
-  <div class="footer-line">© 2026 missitnoonan.com</div>
+<!-- ============================================================
+  HERO
+============================================================ -->
+<section id="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-ornament"></div>
+  <div class="hero-content">
+    <img
+      src="/Wedhgoods-palmsprings-logo.png"
+      alt="Wedghoods Palm Springs"
+      class="hero-logo-img"
+      onerror="this.style.display='none';document.getElementById('hero-fallback').style.display='block'">
+    <div id="hero-fallback" style="display:none;">
+      <div class="hero-title">Welcome to the</div>
+      <div class="hero-year">Spring 2026 Outing</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">Palm Springs, California</div>
+    <div class="hero-dates">April 30 &ndash; May 3, 2026</div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ============================================================
+  STANDINGS / RESULTS / BIRDIE DRAW
+  ↓ CONNECT YOUR GOOGLE SHEET CSV URLS IN THE SCRIPT BELOW
+============================================================ -->
+<div id="standings-section">
+  <div class="inner">
+    <div class="section-label">Live Tournament</div>
+    <div class="section-title">Standings &amp; Results</div>
+    <div class="section-rule"></div>
+
+    <div class="standings-meta">
+      <span class="last-updated" id="last-updated-label">Not yet loaded</span>
+      <button class="refresh-btn" id="refresh-btn" onclick="loadAll()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M23 4v6h-6M1 20v-6h6"/>
+          <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+        </svg>
+        Refresh
+      </button>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('rts')">Race to Seattle</button>
+      <button class="tab-btn" onclick="switchTab('canyon')">Canyon Cup</button>
+      <button class="tab-btn" onclick="switchTab('matches')">Matches</button>
+      <button class="tab-btn" onclick="switchTab('results')">Results</button>
+      <button class="tab-btn" onclick="switchTab('birdie')">🎟 Birdie Draw</button>
+    </div>
+
+    <div id="tab-rts" class="tab-panel active">
+      <div id="rts-content"><div class="loading-state">Loading…</div></div>
+    </div>
+    <div id="tab-canyon" class="tab-panel">
+      <div id="canyon-content"><div class="loading-state">Loading…</div></div>
+    </div>
+    <div id="tab-matches" class="tab-panel">
+      <div id="matches-content"><div class="loading-state">Loading…</div></div>
+    </div>
+    <div id="tab-results" class="tab-panel">
+      <div id="results-content"><div class="loading-state">Loading…</div></div>
+    </div>
+    <div id="tab-birdie" class="tab-panel">
+      <div id="birdie-content"><div class="loading-state">Loading…</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+  SCHEDULE
+============================================================ -->
+<section id="schedule">
+  <div class="section-label">Tournament</div>
+  <div class="section-title">Schedule &amp; Formats</div>
+  <div class="section-rule"></div>
+
+  <p style="font-size:0.68rem;color:var(--navy-mid);font-weight:500;letter-spacing:0.08em;margin-bottom:1rem;">↓ Tap a day to see match details</p>
+  <div class="schedule-grid" id="schedule-grid"></div>
+  <div class="match-detail-panel" id="match-detail-panel">
+    <div id="match-detail-content"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+  RULES
+============================================================ -->
+<div id="rules">
+  <div class="inner">
+    <div class="section-label">Games &amp; Governing Play</div>
+    <div class="section-title">Games and Governing Rules of Play</div>
+    <div class="section-rule"></div>
+    <div class="rules-subsection-label">Games</div>
+    <div id="game-rules-grid"></div>
+    <div class="rules-subsection-label" style="margin-top:2.5rem;">Rules Governing Play</div>
+    <div class="rules-grid" id="rules-grid"></div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- ============================================================
+  MESSAGE BOARD
+============================================================ -->
+<div id="board-section">
+  <div class="inner">
+    <div class="section-label">Commissioner Updates</div>
+    <div class="section-title">Message Board</div>
+    <div class="section-rule"></div>
+    <div id="board-content">
+      <div class="board-empty">Loading updates…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+  FOOTER
+============================================================ -->
+<footer>
+  <div class="footer-logo">
+    <img src="/WedghoodsPS-light.png" alt="Wedghoods Palm Springs" onerror="this.outerHTML='<div style=\'font-family:var(--font-display);font-size:1.8rem;font-weight:300;font-style:italic;color:rgba(255,255,255,0.5);letter-spacing:0.12em;\'>Wedghoods — Palm Springs</div>'">
+  </div>
+  <p>Palm Springs &bull; April 30 &ndash; May 3, 2026 &bull; Official Tournament Site</p>
+</footer>
+
+
+<script>
+/* ============================================================
+   DATA CONFIGURATION
+   Edit everything in this block. Layout code is below.
+   ============================================================ */
+
+// ---- CSV URLS ----
+// Paste your Google Sheets "Publish to web" CSV URLs here.
+// Leave as empty string '' until you have them.
+//
+// SCORES tab structure:
+//   Player,M1,M2,M3,M4,M5,M6,Total,BirdieTickets
+//   Cake,10,0,5,0,0,0,15,4
+//   (BirdieTickets = running total of draw tickets earned)
+//
+// RESULTS tab structure:
+//   Match,Award,Winner,Shells,Halved
+//   M1,Front 9 — Group 1,Cake / Langley,8,
+//   M1,Back 9 — Group 1,Wise / Macias,8,
+//   M1,Total — Group 1,Halved,,8,YES
+//   M1,Low Net — Group 1,Cake,10,
+//   (Halved column: put YES if the game was halved, leave blank if there was a winner)
+
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtjUS0Y1uWFqSGIc53F_Od684F4wBrI4twT3yKiwnBZ8uIb6cOd4xXWo_LztMei_E2/exec';
+
+// ---- PLAYERS ----
+const PLAYERS = ['Cake','Wise','Langley','Murphy','Festor','Angell','Wohnoutka'];
+const HANDICAPS = { Cake:1, Wise:6, Langley:12, Murphy:12, Festor:21, Angell:26, Wohnoutka:25 };
+
+// ---- MATCHES ----
+const MATCHES = [
+  {
+    id: 1,
+    day: 'Day 1', dayLabel: 'Thursday', date: 'April 30',
+    course: 'Indian Wells Celebrity', tees: 'White · 6,012 yds · Rating 69.8 · Slope 123',
+    time: '1:30 & 1:40 PM',
+    format: '2-Man Net Better Ball',
+    type: 'Match Play + Individual Net Stroke Play',
+    description: 'Full handicaps, no adjustments. Team: low net score wins hole, no tiebreaks, no carryovers — separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split shells. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake · Wise · Angell · Wohnoutka', 'Canyon Cup — F9: Cake vs Wise · B9: Cake vs Angell'] },
+      { group: 2, teams: ['Festor · Murphy · Langley', 'Canyon Cup — F9: Festor vs Murphy · B9: Festor vs Langley'] },
+    ],
+    payouts: [
+      { desc: 'Front Winning Team (within foursome)', amt: '8 shells (4/team · 2/player)' },
+      { desc: 'Back Winning Team (within foursome)', amt: '8 shells (4/team · 2/player)' },
+      { desc: 'Total Winning Team (within foursome)', amt: '14 shells (7/team · 3.5/player)' },
+      { desc: 'Low Net 18 (within foursome)', amt: '10 shells (5/winner)' },
+    ],
+    tiebreak: 'Individual low net: matched scorecards from Hole 3'
+  },
+  {
+    id: 2,
+    day: 'Day 2', dayLabel: 'Friday', date: 'May 1 AM',
+    course: 'Desert Willow — Firecliff', tees: 'White · 6,147 yds · Rating 69.9 · Slope 128',
+    time: 'Morning',
+    format: 'Wedghood Championship',
+    type: 'Individual Net Stroke Play',
+    description: 'Full handicaps, no adjustments. All putts must be holed — no gimmes. Maximum score: Net Double Bogey. Winner retains the trophy for one year. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake · Wise · Murphy · Langley', 'Canyon Cup — F9: Wise vs Murphy · B9: Wise vs Langley'] },
+      { group: 2, teams: ['Festor · Angell · Wohnoutka', 'Canyon Cup — F9: Angell vs Wohnoutka · B9: Festor vs Wohnoutka'] },
+    ],
+    payouts: [
+      { desc: '1st Place', amt: '20 shells' },
+      { desc: '2nd Place', amt: '12 shells' },
+      { desc: '3rd Place', amt: '8 shells' },
+    ],
+    tiebreak: '1st: on-course playoff if possible, else matched scorecards from Hole 17 · 2nd/3rd tied: split · 3+ tied for 2nd: match from Hole 2, final two split'
+  },
+  {
+    id: 3,
+    day: 'Day 2', dayLabel: 'Friday', date: 'May 1 PM',
+    course: 'Desert Willow — Mountain View', tees: 'Purple/White · 6,316 yds · Rating 70.3 · Slope 126',
+    time: 'Afternoon',
+    format: '2-Man Net Shamble',
+    type: 'Modified Stableford + Poison Holes',
+    description: 'Playing HCP: 80% of course handicap. Shamble: both tee off, team selects best drive, each plays own ball in — team scores better net ball and applies Stableford points. Poison holes (6 & 15): team must take the HIGH net score. Drive quota: 3 per player. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 3 · Eagle = 5 · Albatross = 8. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake · Festor · Angell · Murphy', 'Canyon Cup — F9: Cake vs Murphy · B9: Festor vs Angell'] },
+      { group: 2, teams: ['Wise · Wohnoutka · Langley', 'Canyon Cup — F9: Wohnoutka vs Langley · B9: Wise vs Wohnoutka'] },
+    ],
+    payouts: [
+      { desc: 'Front Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
+      { desc: 'Back Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
+      { desc: 'Total Winning Team — most points (all teams)', amt: '20 shells (10/player)' },
+    ],
+    tiebreak: 'Front: Hole 6 · Back: Hole 14 · Total: Hole 18'
+  },
+  {
+    id: 4,
+    day: 'Day 3', dayLabel: 'Saturday', date: 'May 2 AM',
+    course: 'Eagle Falls', tees: 'Hawk · 6,140 yds · Rating 70.0 · Slope 128',
+    time: 'Morning',
+    format: '2-Man Best Ball with High Tiebreakers',
+    type: 'w/ High-Ball Tiebreak · Match Play',
+    description: 'Full handicaps, no adjustments. Team: low net score wins hole — if tied, high score is the tiebreak. No carryovers. Separate matches for Front, Back, and 18-hole Total; teams may halve any bet and split shells. Individual: low net 18 runs concurrently. Maximum score: Net Double Bogey. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Wise · Festor · Wohnoutka · Murphy', 'Canyon Cup — F9: Wise vs Festor · B9: Wohnoutka vs Murphy'] },
+      { group: 2, teams: ['Cake · Angell · Langley', 'Canyon Cup — F9: Cake vs Langley · B9: Angell vs Langley'] },
+    ],
+    payouts: [
+      { desc: 'Front Winning Team (within foursome)', amt: '4 shells (2/player)' },
+      { desc: 'Back Winning Team (within foursome)', amt: '4 shells (2/player)' },
+      { desc: 'Total Winning Team (within foursome)', amt: '7 shells (3.5/player)' },
+      { desc: 'Low Net 18 Side (within foursome)', amt: '10 shells (5/winner)' },
+    ],
+    tiebreak: 'Individual low net: matched scorecards from Hole 13'
+  },
+  {
+    id: 5,
+    day: 'Day 3', dayLabel: 'Saturday', date: 'May 2 PM',
+    course: 'SilverRock', tees: 'Blue · 6,313 yds · Rating 70.6 · Slope 129',
+    time: 'Afternoon',
+    format: '2-Man Chapman',
+    type: 'Net Stableford',
+    description: 'Team HCP = 60% of low + 40% of high handicap. Both players hit drives, switch balls for 2nd shots, then pick best ball and play alternate shot to hole. Par 3s: potentially two putts for birdie. One gross/net team score per hole. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 3 · Eagle = 5 · Albatross = 8. No halves.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Cake · Festor · Wohnoutka · Langley', 'Canyon Cup — F9: Cake vs Festor · B9: Cake vs Wohnoutka'] },
+      { group: 2, teams: ['Wise · Angell · Murphy', 'Canyon Cup — F9: Wise vs Angell · B9: Angell vs Murphy'] },
+    ],
+    payouts: [
+      { desc: 'Front Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
+      { desc: 'Back Winning Team — most points (all teams)', amt: '10 shells (5/player)' },
+      { desc: 'Total Winning Team — most points (all teams)', amt: '20 shells (10/player)' },
+    ],
+    tiebreak: 'Front: Hole 5 · Back: Hole 15 · Total: Hole 11'
+  },
+  {
+    id: 6,
+    day: 'Day 4', dayLabel: 'Sunday', date: 'May 3',
+    course: 'Indian Canyon South', tees: 'Teal · 6,281 yds · Par 72 · Rating 69.7 · Slope 120',
+    time: 'Morning',
+    format: 'Individual Quota',
+    type: 'vs. Foursome',
+    description: 'Individual stroke play scored on Modified Stableford. Each player\'s quota = 36 minus handicap. Winner = highest points-minus-quota score. Scoring: Net double bogey = 0 · Bogey = 1 · Par = 2 · Birdie = 4 · Eagle = 8 · Albatross = 10. Birdie Draw tickets earned on individual net score.',
+    units: 40,
+    pairings: [
+      { group: 1, teams: ['Angell · Wohnoutka · Murphy · Langley', 'Canyon Cup — F9: Murphy vs Langley'] },
+      { group: 2, teams: ['Cake · Wise · Festor', ''] },
+    ],
+    payouts: [
+      { desc: 'Low Score of Foursome (within foursome)', amt: '28 shells (14/winner)' },
+      { desc: 'Wild Cards — 3rd & 4th best score across all foursomes', amt: '12 shells (6/wild card)' },
+    ],
+    tiebreak: 'TBD — matched scorecards'
+  }
+];
+
+// ---- WEEK GAMES ----
+const WEEK_GAMES = [
+  { name: 'Race to Seattle', desc: 'Cumulative shells over the week. Pays 1st, 2nd, 3rd.', units: 56 },
+  { name: 'Birdie Draw', desc: 'Net birdies = 1 ticket · Net eagles = 3 tickets · Random draw winner.', units: 24 },
+];
+
+// ---- GAME RULES ----
+const GAME_RULES = [
+  {
+    id: 'race',
+    title: 'Race to Seattle',
+    tagline: 'Individual Quota · All Six Rounds',
+    items: [
+      '<strong>Format:</strong> Quota scoring across all six rounds. Each player\'s quota is 36 minus course handicap. Points earned on gross scores: Double bogey or worse = 0pts, Bogey = 1pt, Par = 2pts, Birdie = 4pts, Eagle = 8pts, Albatross = 12pts.',
+      '<strong>Scoring:</strong> Each round, score = total points earned minus quota. Cumulative +/− against quota across all six rounds determines final standings. The player who most exceeds their quota over the trip wins.',
+      '<strong>Max score per hole:</strong> Net double bogey or worse scores zero. No further damage.',
+      '<strong>Payout (58 shells):</strong> 1st — 30 shells &nbsp;·&nbsp; 2nd — 17 shells &nbsp;·&nbsp; 3rd — 11 shells'
+    ]
+  },
+  {
+    id: 'championship',
+    title: 'Wedghood Championship',
+    tagline: 'Net Stroke Play · Round 2 · Desert Willow Firecliff',
+    items: [
+      '<strong>Format:</strong> Individual net stroke play, Friday morning (Round 2), Desert Willow Firecliff. Gross score minus full course handicap. Lowest net score wins.',
+      '<strong>Max score per hole:</strong> Net triple bogey. Score is capped; no further damage to the card.',
+      '<strong>Note:</strong> The same round also contributes to Race to Seattle quota scoring. One scorecard, two competitions.',
+      '<strong>Payout (24 shells):</strong> 1st — 12 shells &nbsp;·&nbsp; 2nd — 7 shells &nbsp;·&nbsp; 3rd — 5 shells'
+    ]
+  },
+  {
+    id: 'canyon',
+    title: 'The Canyon Cup',
+    tagline: 'Net Match Play Round Robin · All Six Rounds',
+    canyonCup: true,
+    items: [
+      '<strong>Format:</strong> Net match play, 9-hole matches. Every player faces every other player exactly once across 21 scheduled matches. Groups stay together all 18 holes — matches happen within your group on the Front 9 or Back 9 as drawn. Some nines have no match and are played as skins/stableford.',
+      '<strong>Match points:</strong> Win = 2pts &nbsp;·&nbsp; Halve = 1pt &nbsp;·&nbsp; Loss = 0pts',
+      '<strong>Tiebreaker:</strong> Head-to-head result, then most wins, then aggregate net score across all matches.',
+      '<strong>Payout (58 shells):</strong> 1st — 30 shells &nbsp;·&nbsp; 2nd — 17 shells &nbsp;·&nbsp; 3rd — 11 shells'
+    ]
+  },
+  {
+    id: 'birdie',
+    title: 'The Birdie Draw',
+    tagline: 'Raffle · Net Birdies &amp; Eagles · All Six Rounds',
+    items: [
+      '<strong>Format:</strong> A raffle pool funded at the start of the trip. Every player receives one ticket simply for participating. Additional tickets are earned throughout all six rounds based on net scores.',
+      '<strong>Tickets:</strong> Participation — 1 ticket (automatic) &nbsp;·&nbsp; Net Birdie — 1 ticket &nbsp;·&nbsp; Net Eagle — 3 tickets',
+      '<strong>Draw:</strong> At the closing dinner, tickets are drawn from the pool. Everyone has a chance. The more birdies and eagles you make, the better your odds. One winner takes the pot.',
+      '<strong>Payout: 16 shells</strong>'
+    ]
+  },
+  {
+    id: 'daily',
+    title: 'Daily Group Winners',
+    tagline: 'High Quota Within Group · Every Round',
+    items: [
+      '<strong>Format:</strong> Each round, the player with the highest quota score within their group wins the daily prize. One winner per group, paid out at the end of each round.',
+      '<strong>Foursome win:</strong> 8 shells — 1-in-4 odds (5 rounds)',
+      '<strong>Threesome win:</strong> 6 shells — 1-in-3 odds (5 rounds)',
+      '<strong>Tiebreaker:</strong> Back nine quota score. If still tied, back six, then back three, then 18th hole.'
+    ]
+  },
+  {
+    id: 'skins',
+    title: 'Daily Skins',
+    tagline: 'Net Skins · All Seven Players · Every Round',
+    items: [
+      '<strong>Format:</strong> Net skins across all seven players each round. A skin is won when one player posts the lowest net score on a hole outright. Ties carry to the next hole.',
+      '<strong>Payout:</strong> 9 shells per round. At the end of each round: pot ÷ total skins won = value per skin.',
+      '<strong>No skins won:</strong> In the unlikely event no skins are claimed, all seven players participate in a 90-foot putting contest on the 18th green. Closest to the hole wins the full pot.'
+    ]
+  },
+  {
+    id: 'prize',
+    title: 'Prize Pool',
+    tagline: 'Total Pot · Distribution',
+    items: [
+      'Each player will contribute $120 to the prize pool for a total pool of $840.',
+      'The prize pool will be divided into 280 shells ($3.00/shell) awarded across all matches and week-long games.',
+      '<strong>Race to Seattle</strong> — Cumulative Quota — 58 shells: 1st 30 · 2nd 17 · 3rd 11<br><strong>The Canyon Cup</strong> — Round Robin Match Play — 58 shells: 1st 30 · 2nd 17 · 3rd 11<br><strong>Wedghood Championship</strong> — 24 shells: 1st 12 · 2nd 7 · 3rd 5<br><strong>Daily Low — Foursome</strong> — 8 shells (5 rounds)<br><strong>Daily Low — Threesome</strong> — 6 shells (5 rounds)<br><strong>Daily Skins Pool</strong> — 9 shells per round<br><strong>Birdie Draw</strong> — 16 shells'
+    ]
+  }
+];
+
+// ---- LOCAL RULES ----
+const RULES = [
+  {
+    title: 'Preferred Lies',
+    items: [
+      'Balls in the fairway or first cut (including fringe or tee) may be moved 1 scorecard length, no nearer the hole.',
+      'Balls in the rough are played as they lie.',
+      'Consult playing competitors on any fairway/rough boundary questions.'
+    ]
+  },
+  {
+    title: 'Penalties — All 1-Stroke Hazards/OB Stroke and Distance',
+    items: [
+      'Standard penalty areas: one-stroke penalty per USGA rules.',
+      'To support pace of play, all balls lost in woods/desert will be played as a red penalty area, with one stroke penalty.',
+      'Balls dropped in fairway receive preferred lies; balls in rough played as they lie.',
+      'OB as designated by white stakes or other boundary are stroke and distance or drop parallel in fairway with 2 stroke penalty.'
+    ]
+  },
+  {
+    title: 'Maximum Scores',
+    items: [
+      'Max score varies by format — see each match section.',
+      'In Quota formats, pick up once no additional points can be earned.',
+      'Play ready golf. Pick up promptly when out of the hole.'
+    ]
+  },
+  {
+    title: 'Pace of Play',
+    items: [
+      'Target: rounds completed in 4 hours 30 minutes or less, especially on 36-hole days.',
+      'Violations subject to public shaming.',
+      'Play ready golf at all times.'
+    ]
+  },
+  {
+    title: 'Scorecards',
+    items: [
+      'Use provided pre-dotted scorecards for each round.',
+      'During rounds, record each player\'s individual gross and net score (e.g., 5/4) on every hole.',
+      'Turn all cards in to Cake at end of round. Scores entered into leaderboard after each round.'
+    ]
+  },
+  {
+    title: 'Ties',
+    items: [
+      'Canyon Cup matches may end in a halve — points split (1pt each).',
+      'Individual side games: tied by matching scorecards starting at designated tiebreak hole.',
+      'Championship ties for 1st: on-course playoff if practical; otherwise scorecard tiebreak.'
+    ]
+  }
+];
+
+// ---- PAIRING MATRIX DATA ----
+// Format: 'PARTNER-M#' or 'GROUP-M#,M#' or 'SELF'
+const MATRIX = {
+  Cake:      { Cake:'SELF',          Wise:'GROUP-M1,M2,M6',   Langley:'GROUP-M2,M4,M6', Murphy:'GROUP-M3,M4,M5',   Festor:'GROUP-M3,M5,M6',   Angell:'GROUP-M1,M4,M5',   Wohnoutka:'GROUP-M1,M3,M5' },
+  Wise:      { Cake:'GROUP-M1,M2,M6', Wise:'SELF',            Langley:'GROUP-M2,M3,M6', Murphy:'GROUP-M2,M3,M5',   Festor:'GROUP-M4,M5,M6',   Angell:'GROUP-M1,M4,M5',   Wohnoutka:'GROUP-M3,M4,M6' },
+  Langley:   { Cake:'GROUP-M2,M4,M6', Wise:'GROUP-M2,M3,M6', Langley:'SELF',            Murphy:'GROUP-M1,M4,M6',   Festor:'GROUP-M5,M6',      Angell:'GROUP-M3,M4,M6',   Wohnoutka:'GROUP-M3,M5,M6' },
+  Murphy:    { Cake:'GROUP-M3,M4,M5', Wise:'GROUP-M2,M3,M5', Langley:'GROUP-M1,M4,M6', Murphy:'SELF',              Festor:'GROUP-M1,M4,M6',   Angell:'GROUP-M1,M5,M6',   Wohnoutka:'GROUP-M4,M5,M6' },
+  Festor:    { Cake:'GROUP-M3,M5,M6', Wise:'GROUP-M4,M5,M6', Langley:'GROUP-M5,M6',    Murphy:'GROUP-M1,M4,M6',   Festor:'SELF',              Angell:'GROUP-M3,M4,M6',   Wohnoutka:'GROUP-M2,M3,M5' },
+  Angell:    { Cake:'GROUP-M1,M4,M5', Wise:'GROUP-M1,M4,M5', Langley:'GROUP-M3,M4,M6', Murphy:'GROUP-M1,M5,M6',   Festor:'GROUP-M3,M4,M6',   Angell:'SELF',              Wohnoutka:'GROUP-M2,M5,M6' },
+  Wohnoutka: { Cake:'GROUP-M1,M3,M5', Wise:'GROUP-M3,M4,M6', Langley:'GROUP-M3,M5,M6', Murphy:'GROUP-M4,M5,M6',   Festor:'GROUP-M2,M3,M5',   Angell:'GROUP-M2,M5,M6',   Wohnoutka:'SELF' },
+};
+
+// ---- PLAYER SCHEDULE ----
+const PLAYER_SCHEDULE = {
+  Cake:      { M1:'G1 (vs Wise F9, vs Angell B9)',       M2:'G1',                                   M3:'G1 (vs Murphy F9)',          M4:'G2 (vs Langley F9)',         M5:'G1 (vs Festor F9, vs Wohnoutka B9)', M6:'G2' },
+  Wise:      { M1:'G1 (vs Cake F9)',                     M2:'G1 (vs Murphy F9, vs Langley B9)',     M3:'G2 (vs Wohnoutka B9)',       M4:'G1 (vs Festor F9)',          M5:'G2 (vs Angell F9)',                  M6:'G2' },
+  Langley:   { M1:'G2',                                  M2:'G1 (vs Wise B9)',                      M3:'G2 (vs Wohnoutka F9)',       M4:'G2 (vs Cake F9, vs Angell B9)', M5:'G1',                              M6:'G1 (vs Murphy F9)' },
+  Murphy:    { M1:'G2 (vs Festor F9)',                   M2:'G1 (vs Wise F9)',                      M3:'G1 (vs Cake F9)',            M4:'G1 (vs Wohnoutka B9)',       M5:'G2 (vs Angell B9)',                  M6:'G1 (vs Langley F9)' },
+  Festor:    { M1:'G2 (vs Murphy F9, vs Langley B9)',    M2:'G2 (vs Wohnoutka B9)',                 M3:'G1 (vs Angell B9)',          M4:'G1 (vs Wise F9)',            M5:'G1 (vs Cake F9)',                    M6:'G2' },
+  Angell:    { M1:'G1 (vs Cake B9)',                     M2:'G2 (vs Wohnoutka F9)',                 M3:'G1 (vs Festor B9)',          M4:'G2 (vs Langley B9)',         M5:'G2 (vs Wise F9, vs Murphy B9)',      M6:'G1' },
+  Wohnoutka: { M1:'G1',                                  M2:'G2 (vs Angell F9, vs Festor B9)',      M3:'G2 (vs Langley F9, vs Wise B9)', M4:'G1 (vs Murphy B9)',      M5:'G1 (vs Cake B9)',                    M6:'G1' },
+};
+
+
+/* ============================================================
+   RENDER FUNCTIONS — layout code below, no need to edit
+   ============================================================ */
+
+// ---- SCHEDULE ----
+function renderSchedule() {
+  const grid = document.getElementById('schedule-grid');
+  const days = [
+    { label: 'Day 1', date: 'Thursday Apr 30', courses: ['Indian Wells Celebrity'], championship: false },
+    { label: 'Day 2', date: 'Friday May 1',    courses: ['Desert Willow Firecliff (AM)', 'Desert Willow Mountain View (PM)'], championship: true },
+    { label: 'Day 3', date: 'Saturday May 2',  courses: ['Eagle Falls (AM)', 'SilverRock (PM)'], championship: false },
+    { label: 'Day 4', date: 'Sunday May 3',    courses: ['Indian Canyon South'], championship: false },
+  ];
+  grid.innerHTML = days.map((d, i) => `
+    <div class="day-card" data-day="${i}" onclick="toggleDay(${i})">
+      <div class="day-num">${d.label}</div>
+      <div class="day-date">${d.date}</div>
+      <div class="day-matches">
+        ${d.courses.map((c, ci) => `
+          <div class="match-pill">${c}</div>
+          ${d.championship && ci === 0 ? `<div style="font-size:0.58rem;font-weight:600;letter-spacing:0.1em;color:var(--gold-dark);padding-left:0.1rem;margin-top:-0.1rem;margin-bottom:0.25rem;">Wedghood Championship</div>` : ''}
+        `).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function buildMatchHTML(matches) {
+  return matches.map(m => {
+    // Split pairings: group members (first team line) vs canyon cup lines (second team line)
+    const groupPairings = m.pairings.map(pg => ({
+      group: pg.group,
+      members: pg.teams[0],
+      canyon: pg.teams[1] || null
+    }));
+
+    return `
+    <div style="margin-bottom:${matches.length > 1 ? '2.5rem' : '0'};">
+      <div style="margin-bottom:1.2rem;">
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:0.3rem;">Round ${m.id}</div>
+        <div style="font-family:var(--font-display);font-size:2.2rem;font-weight:300;color:white;line-height:1;">${m.course}</div>
+        <div style="font-size:0.68rem;color:rgba(255,255,255,0.5);margin-top:0.4rem;letter-spacing:0.06em;">${m.tees} &bull; ${m.time}</div>
+      </div>
+      <div class="match-panel-grid">
+
+        <div class="match-panel-col">
+          <h4>Pairings</h4>
+          ${groupPairings.map(pg => `
+            <div style="margin-bottom:0.8rem;">
+              <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:0.4rem;">Group ${pg.group}</div>
+              <div class="pairing-team">${pg.members}</div>
+            </div>`).join('')}
+        </div>
+
+        ${m.id === 2 ? `
+        <div class="match-panel-col" style="grid-column: 1 / -1; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 1.5rem; margin-bottom: 0.5rem;">
+          <h4>Wedghood Championship</h4>
+          <ul style="list-style:none;padding:0;margin:0;">
+            <li style="font-size:0.75rem;color:rgba(255,255,255,0.82);line-height:1.75;padding:0.25rem 0 0.25rem 1rem;position:relative;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="position:absolute;left:0;top:0.6rem;width:5px;height:5px;background:var(--gold);border-radius:50%;display:inline-block;"></span>Individual stroke play, net. No handicap adjustments — everyone plays with their full strokes.</li>
+            <li style="font-size:0.75rem;color:rgba(255,255,255,0.82);line-height:1.75;padding:0.25rem 0 0.25rem 1rem;position:relative;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="position:absolute;left:0;top:0.6rem;width:5px;height:5px;background:var(--gold);border-radius:50%;display:inline-block;"></span>All putts must be holed. No gimmes.</li>
+            <li style="font-size:0.75rem;color:rgba(255,255,255,0.82);line-height:1.75;padding:0.25rem 0 0.25rem 1rem;position:relative;border-bottom:1px solid rgba(255,255,255,0.05);"><span style="position:absolute;left:0;top:0.6rem;width:5px;height:5px;background:var(--gold);border-radius:50%;display:inline-block;"></span>Maximum score: triple bogey gross.</li>
+            <li style="font-size:0.75rem;color:rgba(255,255,255,0.82);line-height:1.75;padding:0.25rem 0 0.25rem 1rem;position:relative;"><span style="position:absolute;left:0;top:0.6rem;width:5px;height:5px;background:var(--gold);border-radius:50%;display:inline-block;"></span>Tiebreaker — 1st place: playoff if possible; otherwise matched scorecards from hole 17. 2nd &amp; 3rd tied: split the prize. 3+ tied for 2nd: match scorecards from hole 2 until two remain, then split 2nd and 3rd between them.</li>
+          </ul>
+        </div>` : ''}
+
+        <div class="match-panel-col">
+          <h4>Canyon Cup</h4>
+          ${groupPairings.map(pg => `
+            <div style="margin-bottom:0.8rem;">
+              <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:0.4rem;">Group ${pg.group}</div>
+              ${pg.canyon
+                ? pg.canyon.replace('Canyon Cup — ','').split(' · ').map(match =>
+                    `<div class="pairing-team" style="margin-bottom:0.3rem;">&#x2022; ${match}</div>`
+                  ).join('')
+                : '<div style="font-size:0.7rem;color:rgba(255,255,255,0.35);font-style:italic;">No match this round</div>'
+              }
+            </div>`).join('')}
+          <div style="margin-top:0.5rem;font-size:0.65rem;color:rgba(255,255,255,0.4);font-style:italic;border-top:1px solid rgba(255,255,255,0.07);padding-top:0.6rem;">Win 2pts &bull; Half 1pt &bull; Loss 0pts</div>
+        </div>
+
+        <div class="match-panel-col">
+          <h4>Side Games</h4>
+          <div class="payout-row">
+            <span class="payout-desc">Individual Low — Foursome</span>
+            <span class="payout-amt">8 shells</span>
+          </div>
+          <div class="payout-row">
+            <span class="payout-desc">Individual Low — Threesome</span>
+            <span class="payout-amt">6 shells</span>
+          </div>
+          <div style="margin-top:0.75rem;font-size:0.68rem;color:rgba(255,255,255,0.5);">Skins Game eligible</div>
+          <div style="margin-top:0.3rem;font-size:0.68rem;color:rgba(255,255,255,0.5);">Birdie Draw tickets eligible</div>
+        </div>
+
+      </div>
+    </div>`;
+  }).join('<hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:0 0 2rem;">');
+}
+
+function toggleDay(dayIdx) {
+  const cards = document.querySelectorAll('.day-card');
+  const dayMatches = [
+    [MATCHES[0]],
+    [MATCHES[1], MATCHES[2]],
+    [MATCHES[3], MATCHES[4]],
+    [MATCHES[5]]
+  ];
+  const isActive = cards[dayIdx].classList.contains('active');
+  cards.forEach(c => c.classList.remove('active'));
+
+  const isMobile = window.innerWidth <= 720;
+
+  if (isActive) {
+    if (!isMobile) {
+      const panel = document.getElementById('match-detail-panel');
+      panel.classList.remove('visible');
+    }
+    return;
+  }
+
+  cards[dayIdx].classList.add('active');
+  const matches = dayMatches[dayIdx];
+  const html = buildMatchHTML(matches);
+
+  if (isMobile) {
+    // Open modal drawer
+    document.getElementById('modal-body').innerHTML = html;
+    document.getElementById('match-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  } else {
+    // Inline panel on desktop
+    const panel = document.getElementById('match-detail-panel');
+    const content = document.getElementById('match-detail-content');
+    content.innerHTML = html;
+    panel.classList.add('visible');
+    setTimeout(() => { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+  }
+}
+
+function closeModal() {
+  document.getElementById('match-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  document.querySelectorAll('.day-card').forEach(c => c.classList.remove('active'));
+}
+
+function handleModalClick(e) {
+  if (e.target === document.getElementById('match-modal')) closeModal();
+}
+
+// ---- RULES ----
+function renderRules() {
+  document.getElementById('rules-grid').innerHTML = RULES.map(r => `
+    <div class="rule-card">
+      <h3>${r.title}</h3>
+      <ul>${r.items.map(i => `<li>${i}</li>`).join('')}</ul>
+    </div>`).join('');
+}
+
+function renderGameRules() {
+  const canyonSchedule = [
+    { round: 'Round 1', course: 'Indian Wells Celebrity',     matches: ['F9: Cake vs Wise', 'B9: Cake vs Angell', 'F9: Festor vs Murphy', 'B9: Festor vs Langley'] },
+    { round: 'Round 2', course: 'Desert Willow Firecliff',    matches: ['F9: Wise vs Murphy', 'B9: Wise vs Langley', 'F9: Angell vs Wohnoutka', 'B9: Festor vs Wohnoutka'] },
+    { round: 'Round 3', course: 'Desert Willow Mountain View',matches: ['F9: Cake vs Murphy', 'B9: Festor vs Angell', 'F9: Wohnoutka vs Langley', 'B9: Wise vs Wohnoutka'] },
+    { round: 'Round 4', course: 'Eagle Falls',                matches: ['F9: Wise vs Festor', 'B9: Wohnoutka vs Murphy', 'F9: Cake vs Langley', 'B9: Angell vs Langley'] },
+    { round: 'Round 5', course: 'SilverRock',                 matches: ['F9: Cake vs Festor', 'B9: Cake vs Wohnoutka', 'F9: Wise vs Angell', 'B9: Angell vs Murphy'] },
+    { round: 'Round 6', course: 'Indian Canyon South',        matches: ['F9: Murphy vs Langley', 'B9: skins / stableford', 'F9: skins / stableford', 'B9: skins / stableford'] },
+  ];
+
+  const canyonDropdown = `
+    <div style="margin-top:1rem;">
+      <button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block';this.querySelector('.cc-chevron').style.transform=this.nextElementSibling.style.display==='block'?'rotate(180deg)':'rotate(0deg)';"
+        style="width:100%;background:rgba(201,138,44,0.1);border:1px solid rgba(201,138,44,0.25);color:var(--gold-bright);font-family:var(--font-body);font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:0.55rem 0.9rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+        Full Match Schedule
+        <span class="cc-chevron" style="transition:transform 0.2s;font-size:0.7rem;">▾</span>
+      </button>
+      <div style="display:none;border:1px solid rgba(255,255,255,0.07);border-top:none;">
+        ${canyonSchedule.map(r => `
+          <div style="padding:0.6rem 0.9rem;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:0.3rem;">${r.round} — ${r.course}</div>
+            ${r.matches.map(m => `<div style="font-size:0.72rem;color:rgba(255,255,255,0.75);line-height:1.7;">&#x2022; ${m}</div>`).join('')}
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  document.getElementById('game-rules-grid').innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">` +
+    GAME_RULES.map(r => `
+      <div class="rule-card" ${r.id === 'prize' ? 'style="grid-column:1/-1;"' : ''}>
+        <h3>${r.title}</h3>
+        <div style="font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:0.9rem;">${r.tagline}</div>
+        <ul>${r.items.map(i => `<li>${i}</li>`).join('')}</ul>
+        ${r.canyonCup ? '' : ''}
+      </div>`).join('') +
+    `</div>`;
+}
+
+// ---- MATRIX ----
+function renderMatrix() {
+  const t = document.getElementById('matrix-table');
+  if (!t) return;
+  const header = `<thead><tr><th></th>${PLAYERS.map(p => `<th>${p}<br><span style="font-weight:300;font-size:0.55rem;opacity:0.6;">(${HANDICAPS[p]})</span></th>`).join('')}</tr></thead>`;
+  const rows = PLAYERS.map(p1 => {
+    const cells = PLAYERS.map(p2 => {
+      const val = MATRIX[p1][p2];
+      if (val === 'SELF') return `<td class="cell-self">&mdash;</td>`;
+      if (val.startsWith('PARTNER')) {
+        const matches = val.replace('PARTNER-','');
+        return `<td class="cell-partner">Partner<br><span style="font-size:0.6rem;opacity:0.7;">${matches}</span></td>`;
+      }
+      const matches = val.replace('GROUP-','');
+      return `<td class="cell-group">Group<br><span style="font-size:0.6rem;opacity:0.7;">${matches}</span></td>`;
+    }).join('');
+    return `<tr><td>${p1} (${HANDICAPS[p1]})</td>${cells}</tr>`;
+  }).join('');
+  t.innerHTML = header + `<tbody>${rows}</tbody>`;
+
+  // Player schedule table
+  const st = document.getElementById('player-schedule-table');
+  const matchCols = ['M1 Thu','M2 Fri AM','M3 Fri PM','M4 Sat AM','M5 Sat PM','M6 Sun'];
+  const mKeys = ['M1','M2','M3','M4','M5','M6'];
+  const sh = `<thead><tr>
+    <th style="text-align:left;background:var(--surface-2);color:white;padding:0.6rem 0.75rem;font-size:0.58rem;letter-spacing:0.1em;">Player</th>
+    <th style="background:var(--surface-2);color:white;padding:0.6rem 0.5rem;font-size:0.58rem;letter-spacing:0.1em;">HCP</th>
+    ${matchCols.map(m => `<th style="background:var(--surface-2);color:white;padding:0.6rem 0.5rem;font-size:0.58rem;letter-spacing:0.08em;">${m}</th>`).join('')}
+  </tr></thead>`;
+  const sbody = PLAYERS.map((p, ri) => {
+    const cells = mKeys.map(mk => {
+      const v = PLAYER_SCHEDULE[p][mk];
+      const isPartner = v.startsWith('+');
+      return `<td style="text-align:center;font-size:0.7rem;padding:0.5rem;${isPartner ? 'background:#D5E8D4;color:var(--navy-dark);font-weight:600;' : ''}border:1px solid rgba(46,74,130,0.1);">${v}</td>`;
+    }).join('');
+    return `<tr>
+      <td style="font-weight:600;font-size:0.75rem;padding:0.5rem 0.75rem;background:${ri%2===0?'#f5ecd7':'white'};border:1px solid rgba(46,74,130,0.1);">${p}</td>
+      <td style="text-align:center;font-size:0.72rem;padding:0.5rem;background:${ri%2===0?'#f5ecd7':'white'};border:1px solid rgba(46,74,130,0.1);">${HANDICAPS[p]}</td>
+      ${cells}
+    </tr>`;
+  }).join('');
+  st.innerHTML = sh + `<tbody>${sbody}</tbody>`;
+}
+
+// ---- PRIZES ----
+function renderPrizes() {
+  if (!document.getElementById('games-list')) return;
+  const matchPrizes = MATCHES.map(m => ({ name: `Match ${m.id} — ${m.format}`, units: m.units }));
+  const all = [...matchPrizes, ...WEEK_GAMES];
+  document.getElementById('games-list').innerHTML = all.map(g => `
+    <div class="game-row">
+      <div>
+        <div class="game-row-name">${g.name}</div>
+        ${g.desc ? `<div style="font-size:0.62rem;color:var(--mist);margin-top:0.2rem;">${g.desc}</div>` : ''}
+      </div>
+      <div class="game-row-units">${g.units} shells</div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   TAB SWITCHER
+   ============================================================ */
+function switchTab(name) {
+  const tabs = ['rts','canyon','matches','results','birdie'];
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', tabs[i] === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+}
+
+/* ============================================================
+   APPS SCRIPT DATA LOADER
+   ============================================================ */
+async function loadAll() {
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+
+  try {
+    const url = APPS_SCRIPT_URL + '?_=' + Date.now();
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    renderRaceToSeattle(data.RaceToSeattle || []);
+    renderCanyonCupStandings(data.CanyonCupStandings || []);
+    renderMatches(data.Matches || []);
+    renderResults(data.Results || []);
+    renderBirdieDraw(data.BirdieDraw || []);
+
+    document.getElementById('last-updated-label').textContent =
+      `Last updated: ${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}`;
+  } catch(e) {
+    document.getElementById('last-updated-label').textContent = `Error: ${e.message}`;
+    ['rts','canyon','matches','results','birdie'].forEach(id => {
+      const el = document.getElementById(`${id}-content`);
+      if (el && el.innerHTML.includes('Loading')) el.innerHTML = `<div class="error-state">Failed to load: ${e.message}</div>`;
+    });
+  }
+
+  btn.classList.remove('spinning');
+}
+
+/* ============================================================
+   RENDER: RACE TO SEATTLE
+   ============================================================ */
+function renderRaceToSeattle(data) {
+  const rounds = ['R1\nThu','R2\nFri AM','R3\nFri PM','R4\nSat AM','R5\nSat PM','R6\nSun'];
+  const labels = ['R1<br><span>Thu</span>','R2<br><span>Fri AM</span>','R3<br><span>Fri PM</span>','R4<br><span>Sat AM</span>','R5<br><span>Sat PM</span>','R6<br><span>Sun</span>'];
+
+  const sorted = [...data].sort((a,b) => (parseFloat(b['Total vs. Quota'])||0) - (parseFloat(a['Total vs. Quota'])||0));
+
+  document.getElementById('rts-content').innerHTML = `
+    <div class="lb-card">
+      <div class="lb-card-header">🏆 Race to Seattle — Cumulative Quota</div>
+      <table class="lb-table">
+        <thead><tr>
+          <th></th><th>Player</th>
+          ${labels.map(l => `<th style="font-size:0.6rem;">${l}</th>`).join('')}
+          <th style="text-align:right;">Total</th>
+          <th style="text-align:center;">Place</th>
+        </tr></thead>
+        <tbody>
+          ${sorted.map((row, i) => {
+            const place = row['Place'] || (i+1);
+            const rankClass = place == 1 ? 'rank-1' : place == 2 ? 'rank-2' : place == 3 ? 'rank-3' : '';
+            return `<tr>
+              <td class="rank ${rankClass}">${place}</td>
+              <td class="player-name">${row.Player}</td>
+              ${rounds.map(r => {
+                const v = row[r];
+                const empty = v === '' || v === 0 || v === '-';
+                const num = parseFloat(v);
+                const cls = empty ? 'units-dim' : num > 0 ? 'units-pos' : num < 0 ? 'units-neg' : 'units-dim';
+                const display = empty ? '—' : (num > 0 ? '+'+num : num);
+                return `<td class="${cls}">${display}</td>`;
+              }).join('')}
+              <td class="units" style="text-align:right;font-size:0.9rem;">${row['Total vs. Quota'] !== '' && row['Total vs. Quota'] !== 0 ? (row['Total vs. Quota'] > 0 ? '+'+row['Total vs. Quota'] : row['Total vs. Quota']) : '—'}</td>
+              <td class="units" style="text-align:center;">${place}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: CANYON CUP STANDINGS
+   ============================================================ */
+function renderCanyonCupStandings(data) {
+  const rounds = ['R1\nThu','R2\nFri AM','R3\nFri PM','R4\nSat AM','R5\nSat PM','R6\nSun'];
+  const labels = ['R1<br><span>Thu</span>','R2<br><span>Fri AM</span>','R3<br><span>Fri PM</span>','R4<br><span>Sat AM</span>','R5<br><span>Sat PM</span>','R6<br><span>Sun</span>'];
+
+  const sorted = [...data].sort((a,b) => (parseFloat(b.Points)||0) - (parseFloat(a.Points)||0));
+
+  document.getElementById('canyon-content').innerHTML = `
+    <div class="lb-card">
+      <div class="lb-card-header">🏔 The Canyon Cup — Round Robin Standings</div>
+      <table class="lb-table">
+        <thead><tr>
+          <th></th><th>Player</th>
+          ${labels.map(l => `<th style="font-size:0.6rem;">${l}</th>`).join('')}
+          <th style="text-align:right;">Pts</th>
+          <th style="text-align:center;">Place</th>
+        </tr></thead>
+        <tbody>
+          ${sorted.map((row, i) => {
+            const place = row['Place'] || (i+1);
+            const rankClass = place == 1 ? 'rank-1' : place == 2 ? 'rank-2' : place == 3 ? 'rank-3' : '';
+            return `<tr>
+              <td class="rank ${rankClass}">${place}</td>
+              <td class="player-name">${row.Player}</td>
+              ${rounds.map(r => {
+                const v = row[r];
+                const isBye = String(v).toUpperCase() === 'BYE';
+                const empty = v === '' || v === '-';
+                const cls = isBye ? 'units-dim' : v === 2 ? 'units-pos' : v === 1 ? 'units' : empty ? 'units-dim' : 'units-neg';
+                return `<td class="${cls}" style="${isBye?'font-style:italic;font-size:0.6rem;':''}">${isBye ? 'BYE' : empty ? '—' : v}</td>`;
+              }).join('')}
+              <td class="units" style="text-align:right;font-size:0.9rem;font-weight:600;">${row.Points !== '' ? row.Points : '—'}</td>
+              <td class="units" style="text-align:center;">${place}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+      <div style="font-size:0.62rem;color:rgba(255,255,255,0.4);margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.07);">Win 2pts &bull; Half 1pt &bull; Loss 0pts &bull; BYE = no match this round</div>
+    </div>`;
+}
+
+/* ============================================================
+   RENDER: CANYON CUP MATCHES
+   ============================================================ */
+function renderMatches(data) {
+  // Pair up two-row matches
+  const matches = [];
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].Match !== '') {
+      const m = { ...data[i] };
+      if (data[i+1] && data[i+1].Match === '') {
+        m.Player2 = data[i+1].Players;
+        m.Points2 = data[i+1].Points;
+        i++;
+      }
+      matches.push(m);
+    }
+  }
+
+  // Group by round
+  const rounds = {};
+  const roundNames = { 1:'Round 1 — Indian Wells', 2:'Round 2 — Desert Willow Firecliff', 3:'Round 3 — Desert Willow Mountain View', 4:'Round 4 — Eagle Falls', 5:'Round 5 — SilverRock', 6:'Round 6 — Indian Canyon South' };
+  matches.forEach(m => {
+    const r = m.Round;
+    if (!rounds[r]) rounds[r] = [];
+    rounds[r].push(m);
+  });
+
+  const html = Object.keys(rounds).sort((a,b) => a-b).map(r => {
+    const rMatches = rounds[r];
+    const cards = rMatches.map(m => {
+      const hasResult = m.Winner && m.Winner !== '';
+      const isHalved = String(m.Winner).toLowerCase() === 'halved';
+      const p1won = hasResult && !isHalved && m.Winner === m.Players;
+      const p2won = hasResult && !isHalved && m.Winner === m.Player2;
+
+      return `
+        <div style="background:var(--surface-3);border:1px solid rgba(255,255,255,0.07);padding:1rem;border-radius:6px;">
+          <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:0.6rem;">Match ${m.Match} &bull; ${m['9 Holes']}</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;">
+            <div style="flex:1;text-align:left;">
+              <div style="font-size:0.85rem;font-weight:${p1won?'700':'400'};color:${p1won?'var(--gold-bright)':isHalved?'rgba(255,255,255,0.7)':'rgba(255,255,255,0.6)'};">${m.Players}</div>
+              <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${m.Points !== '' ? m.Points + ' pts' : '—'}</div>
+            </div>
+            <div style="font-size:0.65rem;font-weight:600;color:${hasResult?(isHalved?'var(--sage)':'var(--gold-bright)'):'rgba(255,255,255,0.25)'};text-align:center;min-width:3rem;">
+              ${hasResult ? (isHalved ? 'HALVED' : m.Result || 'W') : 'vs'}
+            </div>
+            <div style="flex:1;text-align:right;">
+              <div style="font-size:0.85rem;font-weight:${p2won?'700':'400'};color:${p2won?'var(--gold-bright)':isHalved?'rgba(255,255,255,0.7)':'rgba(255,255,255,0.6)'};">${m.Player2||'—'}</div>
+              <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${m.Points2 !== undefined && m.Points2 !== '' ? m.Points2 + ' pts' : '—'}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div style="margin-bottom:2rem;">
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:0.75rem;">${roundNames[r] || 'Round '+r}</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.75rem;">${cards}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('matches-content').innerHTML = `<div class="lb-card">${html || '<div class="loading-state">No match results yet.</div>'}</div>`;
+}
+
+/* ============================================================
+   RENDER: RESULTS (Side Games)
+   ============================================================ */
+function renderResults(data) {
+  // Group by course (rows where Award is blank are course headers)
+  const sections = [];
+  let current = null;
+  data.forEach(row => {
+    if (row.Match && row.Award === '') {
+      current = { course: row.Match, awards: [] };
+      sections.push(current);
+    } else if (current && row.Award) {
+      current.awards.push(row);
+    }
+  });
+
+  const html = sections.map(s => `
+    <div class="results-day${s.awards.some(a => a.Winner) ? ' open' : ''}" onclick="this.classList.toggle('open')">
+      <div class="results-day-header">
+        <div>
+          <div class="results-day-label">Course</div>
+          <div class="results-day-title">${s.course}</div>
+        </div>
+        <div class="results-day-chevron">▾</div>
+      </div>
+      <div class="results-body">
+        <table class="results-table">
+          <thead><tr><th>Award</th><th>Winner</th><th style="text-align:right;">Shells</th></tr></thead>
+          <tbody>
+            ${s.awards.map(a => `
+              <tr>
+                <td>${a.Award}</td>
+                <td style="color:${a.Winner ? 'var(--gold-bright)' : 'rgba(255,255,255,0.3)'};font-weight:${a.Winner?'600':'400'};">${a.Winner || '—'}</td>
+                <td style="text-align:right;color:var(--sage);">${a.Shells || '—'}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('results-content').innerHTML = html || '<div class="loading-state">No results yet.</div>';
+}
+
+/* ============================================================
+   RENDER: BIRDIE DRAW
+   ============================================================ */
+function renderBirdieDraw(data) {
+  const rounds = ['R1\nThu','R2\nFri AM','R3\nFri PM','R4\nSat AM','R5\nSat PM','R6\nSun'];
+  const sorted = [...data].sort((a,b) => (parseFloat(b['Total TIckets'])||0) - (parseFloat(a['Total TIckets'])||0));
+
+  const cards = sorted.map(row => {
+    const total = parseInt(row['Total TIckets']) || 0;
+    const odds = row['% Odds'] ? Math.round(parseFloat(row['% Odds']) * 100) : 0;
+    const breakdown = rounds.map((r,i) => {
+      const v = parseInt(row[r]) || 0;
+      return v > 0 ? `<span style="color:var(--sage);">R${i+1}:${v}</span>` : '';
+    }).filter(Boolean).join(' ');
+
+    return `
+      <div class="birdie-card">
+        <div class="birdie-name">${row.Player}</div>
+        <div class="birdie-tickets">${total}</div>
+        <div class="birdie-tickets-label">ticket${total !== 1 ? 's' : ''}</div>
+        <div style="font-size:0.65rem;color:var(--gold-bright);margin-bottom:0.3rem;">${odds}% odds</div>
+        ${breakdown ? `<div class="birdie-breakdown">${breakdown}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  document.getElementById('birdie-content').innerHTML = `
+    <div class="birdie-grid">${cards}</div>
+    <div class="birdie-wheel-link" onclick="document.getElementById('birdie-draw').scrollIntoView({behavior:'smooth'})">
+      🎟 Go to Birdie Draw Tote Board ↓
+    </div>`;
+}
+
+// ---- ALERT BANNER ----
+// Google Sheet tab: "Banner"
+// Columns: Active (TRUE/FALSE) | Message (text) | Type (gold/info/hype/alert)
+const CSV_URL_BANNER = '';  // ← paste your Banner tab CSV URL here
+
+async function loadBanner() {
+  if (!CSV_URL_BANNER) return;
+  try {
+    const res = await fetch(CSV_URL_BANNER + '&_=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) return;
+    const text = await res.text();
+    const lines = text.trim().split('\n').filter(l => l.trim());
+    // Find first row after header where Active = TRUE
+    for (let i = 1; i < lines.length; i++) {
+      const cols = lines[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
+      const active  = cols[0] || '';
+      const message = cols[1] || '';
+      const type    = (cols[2] || 'gold').toLowerCase();
+      if (active.toUpperCase() === 'TRUE' && message) {
+        const banner = document.getElementById('alert-banner');
+        const textEl = document.getElementById('alert-text');
+        textEl.textContent = message;
+        banner.className = '';
+        if (type === 'info')  banner.classList.add('banner-info');
+        if (type === 'hype')  banner.classList.add('banner-hype');
+        if (type === 'alert') banner.classList.add('banner-alert');
+        banner.classList.add('visible');
+        document.body.classList.add('has-banner');
+        break;
+      }
+    }
+  } catch(e) {}
+}
+
+function dismissBanner() {
+  const banner = document.getElementById('alert-banner');
+  banner.style.transition = 'opacity 0.3s';
+  banner.style.opacity = '0';
+  setTimeout(() => {
+    banner.classList.remove('visible');
+    document.body.classList.remove('has-banner');
+    banner.style.opacity = '';
+  }, 300);
+}
+
+// ---- MESSAGE BOARD ----
+const SCRIPT_URL_BOARD = 'https://script.google.com/macros/s/AKfycbwdxc7RSlKTfEuNuADB1Wu7rNklcU1VhsbKU2Bek4O-x4gO7cKBeRcoGFG1_ALVGgQi/exec';
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fmtBoardDate(val) {
+  if (!val) return '';
+  const s = String(val).trim();
+  // ISO timestamp from Apps Script
+  const d = new Date(s);
+  if (!isNaN(d)) {
+    return d.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  }
+  return s;
+}
+
+async function loadBoard() {
+  const root = document.getElementById('board-content');
+  try {
+    const res  = await fetch(SCRIPT_URL_BOARD + '?sheet=Messages&_=' + Date.now());
+    const raw  = await res.json();
+    buildBoard(raw, root);
+  } catch(e) {
+    root.innerHTML = '<div class="board-empty">Could not load message board.</div>';
+  }
+}
+
+function buildBoard(raw, root) {
+  if (!Array.isArray(raw) || !raw.length) {
+    root.innerHTML = '<div class="board-empty">No posts yet — check back once the trip begins.</div>';
+    return;
+  }
+
+  const rows = raw.map(r => Array.isArray(r) ? r.map(v => String(v ?? '').trim()) : []);
+  const isLabel = s => /^(short headline|full recap|date\s*\/\s*time|update\s*\/\s*recap|y\s*=\s*show|alt\+enter|goes here|for this post)/i.test(s.trim());
+
+  // ── Section 1: Headline
+  // Find the row that contains the headline data — it's the first data row
+  // under "SECTION 1 · HEADLINE MESSAGE". Scan rows 0–6 for a non-header data row
+  // by looking for the first row that has a non-empty cell that isn't a label/header.
+  let headline = null;
+  for (let i = 0; i < Math.min(7, rows.length); i++) {
+    const r = rows[i];
+    // Find cols by scanning for date-like or meaningful content
+    // The headline row has: DATE/TIME | TYPE | TITLE | MESSAGE BODY in adjacent cols
+    const nonEmpty = r.map((v, idx) => ({ v, idx })).filter(x => x.v && !isLabel(x.v));
+    if (nonEmpty.length >= 2) {
+      // Likely a data row — pick up to 4 meaningful values as date, type, title, body
+      const vals = nonEmpty.map(x => x.v);
+      // Heuristic: if any cell looks like a date/timestamp, treat as headline row
+      const hasDate = nonEmpty.some(x => /\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}|\d{1,2}:\d{2}/.test(x.v));
+      if (hasDate || vals.length >= 2) {
+        headline = {
+          date:  vals[0] || '',
+          type:  vals[1] || '',
+          title: vals[2] || '',
+          body:  vals[3] || vals[2] || ''
+        };
+        // If only 2 values, treat as type + body
+        if (vals.length === 2) { headline = { date:'', type: vals[0], title:'', body: vals[1] }; }
+        if (vals.length === 3) { headline = { date: vals[0], type: vals[1], title:'', body: vals[2] }; }
+        break;
+      }
+    }
+  }
+  const hasHeadline = headline && headline.body && !isLabel(headline.body);
+
+  // ── Section 2: Archive messages
+  // Find the archive header row — it contains "SHOW?" (not "Y = Show")
+  let archiveHeaderIdx = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const hasShowHeader = rows[i].some(v => v.toUpperCase() === 'SHOW?');
+    if (hasShowHeader) { archiveHeaderIdx = i; break; }
+  }
+
+  const messages = [];
+  if (archiveHeaderIdx !== -1) {
+    // Confirmed layout from sheet: col 1=SHOW?, 3=DATE/TIME, 5=TYPE, 7=TITLE, 9=MESSAGE BODY
+    for (let i = archiveHeaderIdx + 2; i < rows.length; i++) { // +2 to skip instruction row
+      const r = rows[i];
+      if (!r.some(Boolean)) continue;
+
+      const show  = (r[1] || '').toUpperCase();
+      const date  = r[3] || '';
+      const type  = r[5] || '';
+      const title = r[7] || '';
+      const body  = r[9] || '';
+
+      if (show !== 'Y' && show !== 'YES') continue;
+      if (!body || isLabel(body)) continue;
+
+      messages.push({ date, type, title, body });
+    }
+  }
+
+  // ── Build HTML — sheet order = newest at top, so show as-is (no reverse)
+  let html = '';
+
+  if (hasHeadline) {
+    html += `
+      <div class="board-headline">
+        <div class="board-headline-kicker">${escHtml(headline.type) || 'Commissioner Note'}</div>
+        ${headline.title && !isLabel(headline.title) ? `<div class="board-headline-title">${escHtml(headline.title)}</div>` : ''}
+        <div class="board-headline-body">${escHtml(headline.body)}</div>
+        ${headline.date ? `<div class="board-headline-date">${escHtml(fmtBoardDate(headline.date))}</div>` : ''}
+      </div>`;
+  }
+
+  if (messages.length) {
+    html += '<div class="board-list">';
+    html += messages.map(post => {
+      const badge = post.type ? `<span class="board-post-badge">${escHtml(post.type)}</span>` : '';
+      const date  = post.date ? `<span class="board-post-date">${escHtml(fmtBoardDate(post.date))}</span>` : '';
+      const title = post.title && !isLabel(post.title)
+        ? `<div class="board-post-title">${escHtml(post.title)}</div>` : '';
+      return `
+        <div class="board-post">
+          <div class="board-post-head">
+            <div>${badge}</div>
+            ${date}
+          </div>
+          ${title}
+          <div class="board-post-body">${escHtml(post.body)}</div>
+        </div>`;
+    }).join('');
+    html += '</div>';
+  } else if (!hasHeadline) {
+    html = '<div class="board-empty">No posts yet — check back once the trip begins.</div>';
+  }
+
+  root.innerHTML = html;
+}
+
+// ---- INIT ----
+renderSchedule();
+renderRules();
+renderGameRules();
+renderPrizes();
+loadBanner();
+loadBoard();
+
+// ── HAMBURGER ──
+function toggleHamburger() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('nav-drawer').classList.toggle('open');
+}
+function closeHamburger() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('nav-drawer').classList.remove('open');
+}
+// Close drawer on scroll
+window.addEventListener('scroll', () => {
+  if (document.getElementById('nav-drawer').classList.contains('open')) closeHamburger();
+}, { passive: true });
+
+</script>
+
+<!-- ============================================================
+  MATCH DETAIL MODAL
+============================================================ -->
+<div class="modal-overlay" id="match-modal" onclick="handleModalClick(event)">
+  <div class="modal-sheet" id="modal-sheet">
+    <div class="modal-handle" onclick="closeModal()"></div>
+    <div class="modal-close"><button onclick="closeModal()">✕ Close</button></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
 </body>
 </html>
