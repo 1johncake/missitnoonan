@@ -1694,6 +1694,7 @@ body.has-banner .nav-drawer { top: 102px; }
       <button class="tab-btn" onclick="switchTab('canyon')">Canyon Cup</button>
       <button class="tab-btn" onclick="switchTab('matches')">Matches</button>
       <button class="tab-btn" onclick="switchTab('results')">Results</button>
+      <button class="tab-btn" onclick="switchTab('payouts')">Payouts</button>
       <button class="tab-btn" onclick="switchTab('birdie')">🎟 Birdie Draw</button>
     </div>
 
@@ -1708,6 +1709,9 @@ body.has-banner .nav-drawer { top: 102px; }
     </div>
     <div id="tab-results" class="tab-panel">
       <div id="results-content"><div class="loading-state">Loading…</div></div>
+    </div>
+    <div id="tab-payouts" class="tab-panel">
+      <div id="payouts-content"><div class="loading-state">Loading…</div></div>
     </div>
     <div id="tab-birdie" class="tab-panel">
       <div id="birdie-content"><div class="loading-state">Loading…</div></div>
@@ -2350,7 +2354,7 @@ function renderPrizes() {
    TAB SWITCHER
    ============================================================ */
 function switchTab(name) {
-  const tabs = ['rts','canyon','matches','results','birdie'];
+  const tabs = ['rts','canyon','matches','results','payouts','birdie'];
   document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', tabs[i] === name));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   document.getElementById(`tab-${name}`).classList.add('active');
@@ -2373,6 +2377,7 @@ async function loadAll() {
     renderCanyonCupStandings(data.CanyonCupStandings || []);
     renderMatches(data.Matches || []);
     renderResults(data.Results || []);
+    renderPayouts(data.TotalPayouts || []);
     renderBirdieDraw(data.BirdieDraw || []);
 
     document.getElementById('last-updated-label').textContent =
@@ -2460,9 +2465,10 @@ function renderCanyonCupStandings(data) {
               ${rounds.map(r => {
                 const v = row[r];
                 const isBye = String(v).toUpperCase() === 'BYE';
-                const empty = v === '' || v === '-';
-                const cls = isBye ? 'units-dim' : v === 2 ? 'units-pos' : v === 1 ? 'units' : empty ? 'units-dim' : 'units-neg';
-                return `<td class="${cls}" style="${isBye?'font-style:italic;font-size:0.6rem;':''}">${isBye ? 'BYE' : empty ? '—' : v}</td>`;
+                const num = parseFloat(v);
+                const isReal = !isBye && (num === 1 || num === 2);
+                const cls = isBye ? 'units-dim' : isReal && num === 2 ? 'units-pos' : isReal && num === 1 ? 'units' : 'units-dim';
+                return `<td class="${cls}" style="text-align:center;${isBye?'font-style:italic;font-size:0.6rem;':''}">${isBye ? 'BYE' : isReal ? v : '—'}</td>`;
               }).join('')}
               <td class="units" style="text-align:right;font-size:0.9rem;font-weight:600;">${row.Points !== '' ? row.Points : '—'}</td>
               <td class="units" style="text-align:center;">${place}</td>
@@ -2579,6 +2585,43 @@ function renderResults(data) {
     </div>`).join('');
 
   document.getElementById('results-content').innerHTML = html || '<div class="loading-state">No results yet.</div>';
+}
+
+/* ============================================================
+   RENDER: TOTAL PAYOUTS
+   ============================================================ */
+function renderPayouts(data) {
+  const rounds = ['R1\nThu','R2\nFri AM','R3\nFri PM','R4\nSat AM','R5\nSat PM','R6\nSun'];
+  const labels = ['R1<br><span>Thu</span>','R2<br><span>Fri AM</span>','R3<br><span>Fri PM</span>','R4<br><span>Sat AM</span>','R5<br><span>Sat PM</span>','R6<br><span>Sun</span>'];
+
+  const sorted = [...data].sort((a,b) => (parseFloat(b['Total Shells'])||0) - (parseFloat(a['Total Shells'])||0));
+
+  document.getElementById('payouts-content').innerHTML = `
+    <div class="lb-card">
+      <div class="lb-card-header">💰 Total Payouts — Shells Earned</div>
+      <table class="lb-table">
+        <thead><tr>
+          <th></th><th>Player</th>
+          ${labels.map(l => `<th style="font-size:0.6rem;">${l}</th>`).join('')}
+          <th style="text-align:right;">Total</th>
+        </tr></thead>
+        <tbody>
+          ${sorted.map((row, i) => {
+            return `<tr>
+              <td class="rank ${i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : ''}">${i+1}</td>
+              <td class="player-name">${row.Player}</td>
+              ${rounds.map(r => {
+                const v = row[r];
+                const num = parseFloat(v);
+                const hasValue = v !== '' && v !== '-' && !isNaN(num) && num > 0;
+                return `<td class="${hasValue ? 'units-pos' : 'units-dim'}" style="text-align:center;">${hasValue ? num : '—'}</td>`;
+              }).join('')}
+              <td class="units" style="text-align:right;font-size:0.9rem;font-weight:600;color:var(--gold-bright);">${row['Total Shells'] || '—'}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
 }
 
 /* ============================================================
