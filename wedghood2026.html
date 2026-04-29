@@ -1995,7 +1995,7 @@ const GAME_RULES = [
       '<strong>Format:</strong> Each round, the player with the highest quota score within their group wins the daily prize. One winner per group, paid out at the end of each round.',
       '<strong>Foursome win:</strong> 8 shells — 1-in-4 odds (5 rounds)',
       '<strong>Threesome win:</strong> 6 shells — 1-in-3 odds (5 rounds)',
-      '<strong>Tiebreaker:</strong> Back nine quota score. If still tied, back six, then back three, then 18th hole.'
+      '<strong>Tiebreaker:</strong> Based on matched scorecards from the starting hole chosen for that round.'
     ]
   },
   {
@@ -2006,6 +2006,15 @@ const GAME_RULES = [
       '<strong>Format:</strong> Net skins across all seven players each round. A skin is won when one player posts the lowest net score on a hole outright. Ties carry to the next hole.',
       '<strong>Payout:</strong> 9 shells per round. At the end of each round: pot ÷ total skins won = value per skin.',
       '<strong>No skins won:</strong> In the unlikely event no skins are claimed, all seven players participate in a 90-foot putting contest on the 18th green. Closest to the hole wins the full pot.'
+    ]
+  },
+  {
+    id: 'sacko',
+    title: 'The Sacko',
+    tagline: 'Daily Shame · Every Round',
+    items: [
+      'The player with the worst quota score of the day wins the Sacko.',
+      '<strong>Penalty:</strong> The Sacko buys the first round at dinner that night. No exceptions. No excuses.'
     ]
   },
   {
@@ -2188,6 +2197,7 @@ function buildMatchHTML(matches) {
           </div>
           <div style="margin-top:0.75rem;font-size:0.68rem;color:rgba(255,255,255,0.5);">Skins Game eligible</div>
           <div style="margin-top:0.3rem;font-size:0.68rem;color:rgba(255,255,255,0.5);">Birdie Draw tickets eligible</div>
+          ${m.id !== 2 ? `<div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.07);font-size:0.68rem;color:rgba(255,255,255,0.5);">Tiebreaker Match Card Hole: <span style="color:var(--gold-bright);font-weight:600;">${{1:7,3:12,4:4,5:15,6:9}[m.id]}</span></div>` : ''}
         </div>
 
       </div>
@@ -2280,7 +2290,7 @@ function renderGameRules() {
       </div>
     </div>`;
 
-  document.getElementById('game-rules-grid').innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">` +
+  document.getElementById('game-rules-grid').innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,480px),1fr));gap:1.5rem;">` +
     GAME_RULES.map(r => `
       <div class="rule-card" ${r.id === 'prize' ? 'style="grid-column:1/-1;"' : ''}>
         <h3>${r.title}</h3>
@@ -2651,7 +2661,7 @@ function renderBirdieDraw(data) {
 
   document.getElementById('birdie-content').innerHTML = `
     <div class="birdie-grid">${cards}</div>
-    <div class="birdie-wheel-link" onclick="document.getElementById('birdie-draw').scrollIntoView({behavior:'smooth'})">
+    <div class="birdie-wheel-link" onclick="window.location.href='/birdie-draw.html'">
       🎟 Go to Birdie Draw Tote Board ↓
     </div>`;
 }
