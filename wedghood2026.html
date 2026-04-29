@@ -1803,7 +1803,7 @@ body.has-banner .nav-drawer { top: 102px; }
 //   M1,Low Net — Group 1,Cake,10,
 //   (Halved column: put YES if the game was halved, leave blank if there was a winner)
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwtjUS0Y1uWFqSGIc53F_Od684F4wBrI4twT3yKiwnBZ8uIb6cOd4xXWo_LztMei_E2/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKWtdKuyK7mlLv8xfWYbaAnSoVGjDMVlUIencaweSgREbqbZ7lOna9VzWP5BQ6f-blAA/exec';
 
 // ---- PLAYERS ----
 const PLAYERS = ['Cake','Wise','Langley','Murphy','Festor','Angell','Wohnoutka'];
@@ -2606,6 +2606,12 @@ function renderPayouts(data) {
 
   const sorted = [...data].sort((a,b) => (parseFloat(b['Total Shells'])||0) - (parseFloat(a['Total Shells'])||0));
 
+  const fmtVal = v => {
+    const num = parseFloat(v);
+    if (v === '' || v === '-' || isNaN(num) || num === 0) return null;
+    return Number.isInteger(num) ? String(num) : num.toFixed(1);
+  };
+
   document.getElementById('payouts-content').innerHTML = `
     <div class="lb-card">
       <div class="lb-card-header">💰 Total Payouts — Shells Earned</div>
@@ -2613,21 +2619,24 @@ function renderPayouts(data) {
         <thead><tr>
           <th></th><th>Player</th>
           ${labels.map(l => `<th style="font-size:0.6rem;">${l}</th>`).join('')}
+          <th style="font-size:0.6rem;color:var(--gold-bright);">Race</th>
+          <th style="font-size:0.6rem;color:var(--gold-bright);">Cup</th>
           <th style="text-align:right;">Total</th>
         </tr></thead>
         <tbody>
           ${sorted.map((row, i) => {
+            const total = parseFloat(row['Total Shells']);
+            const totalDisplay = !isNaN(total) && total > 0 ? (Number.isInteger(total) ? total : total.toFixed(1)) : '—';
             return `<tr>
               <td class="rank ${i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : ''}">${i+1}</td>
               <td class="player-name">${row.Player}</td>
               ${rounds.map(r => {
-                const v = row[r];
-                const num = parseFloat(v);
-                const hasValue = v !== '' && v !== '-' && !isNaN(num) && num > 0;
-                const display = hasValue ? (Number.isInteger(num) ? num : num.toFixed(1)) : '—';
-                return `<td class="${hasValue ? 'units-pos' : 'units-dim'}" style="text-align:center;">${display}</td>`;
+                const d = fmtVal(row[r]);
+                return `<td class="${d ? 'units-pos' : 'units-dim'}" style="text-align:center;">${d || '—'}</td>`;
               }).join('')}
-              <td class="units" style="text-align:right;font-size:0.9rem;font-weight:600;color:var(--gold-bright);">${row['Total Shells'] !== '' && row['Total Shells'] !== undefined ? (Number.isInteger(parseFloat(row['Total Shells'])) ? parseFloat(row['Total Shells']) : parseFloat(row['Total Shells']).toFixed(1)) : '—'}</td>
+              <td class="${fmtVal(row['RACE']) ? 'units-pos' : 'units-dim'}" style="text-align:center;">${fmtVal(row['RACE']) || '—'}</td>
+              <td class="${fmtVal(row['CUP']) ? 'units-pos' : 'units-dim'}" style="text-align:center;">${fmtVal(row['CUP']) || '—'}</td>
+              <td class="units" style="text-align:right;font-size:0.9rem;font-weight:600;color:var(--gold-bright);">${totalDisplay}</td>
             </tr>`;
           }).join('')}
         </tbody>
