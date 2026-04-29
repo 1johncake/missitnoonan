@@ -1972,7 +1972,7 @@ const GAME_RULES = [
     items: [
       '<strong>Format:</strong> Net match play, 9-hole matches. Every player faces every other player exactly once across 21 scheduled matches. Groups stay together all 18 holes — matches happen within your group on the Front 9 or Back 9 as drawn. Some nines have no match and are played as skins/stableford.',
       '<strong>Match points:</strong> Win = 2pts &nbsp;·&nbsp; Halve = 1pt &nbsp;·&nbsp; Loss = 0pts',
-      '<strong>Tiebreaker:</strong> Head-to-head result, then most wins, then aggregate net score across all matches.',
+      '<strong>Tiebreaker:</strong> If possible, players tied for 1st will play off in a 9-hole match (this may not be possible depending on the status of remaining games). Second tiebreaker: head-to-head result between tied players, then most wins, then aggregate net score across all matches. If 2 players are tied for 2nd, they split 2nd &amp; 3rd. If more than 2 players are tied for 2nd, use the same tiebreaker methodology to eliminate players until 2 remain, then split 2nd and 3rd between them.',
       '<strong>Payout (58 shells):</strong> 1st — 30 shells &nbsp;·&nbsp; 2nd — 17 shells &nbsp;·&nbsp; 3rd — 11 shells'
     ]
   },
@@ -2624,9 +2624,10 @@ function renderPayouts(data) {
                 const v = row[r];
                 const num = parseFloat(v);
                 const hasValue = v !== '' && v !== '-' && !isNaN(num) && num > 0;
-                return `<td class="${hasValue ? 'units-pos' : 'units-dim'}" style="text-align:center;">${hasValue ? num : '—'}</td>`;
+                const display = hasValue ? (Number.isInteger(num) ? num : num.toFixed(1)) : '—';
+                return `<td class="${hasValue ? 'units-pos' : 'units-dim'}" style="text-align:center;">${display}</td>`;
               }).join('')}
-              <td class="units" style="text-align:right;font-size:0.9rem;font-weight:600;color:var(--gold-bright);">${row['Total Shells'] || '—'}</td>
+              <td class="units" style="text-align:right;font-size:0.9rem;font-weight:600;color:var(--gold-bright);">${row['Total Shells'] !== '' && row['Total Shells'] !== undefined ? (Number.isInteger(parseFloat(row['Total Shells'])) ? parseFloat(row['Total Shells']) : parseFloat(row['Total Shells']).toFixed(1)) : '—'}</td>
             </tr>`;
           }).join('')}
         </tbody>
