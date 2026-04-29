@@ -210,7 +210,7 @@ nav {
   to   { opacity: 1; transform: translateY(0); }
 }
 .hero-logo-img {
-  width: min(420px, 80vw);
+  width: min(860px, 90vw);
   height: auto;
   display: block;
   margin: 0 auto 2rem;
@@ -2733,7 +2733,7 @@ function buildBoard(raw, root) {
 
   // ── Render archive messages — show all with a date or body, sorted newest first
   const shown = messages
-    .filter(p => p.show.toUpperCase() === 'Y' || p.body || p.title)
+    .filter(p => p.show.toUpperCase() === 'Y')
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const listHtml = shown.length ? `
