@@ -1629,7 +1629,8 @@ body.has-banner .nav-drawer { top: 102px; }
     <li><a href="#standings-section">Standings</a></li>
     <li><a href="#schedule">Schedule</a></li>
     <li><a href="#rules">Rules</a></li>
-    <li><a href="/birdie-draw.html">🎰 Birdie Draw</a></li>
+    <li><a href="/photos.html">📸 Photos</a></li>
+    <li><a href="/birdie-draw.html">🎟 Birdie Draw</a></li>
   </ul>
   <button class="hamburger" id="hamburger" onclick="toggleHamburger()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -1641,7 +1642,8 @@ body.has-banner .nav-drawer { top: 102px; }
   <a href="#standings-section" onclick="closeHamburger()">Standings</a>
   <a href="#schedule" onclick="closeHamburger()">Schedule</a>
   <a href="#rules" onclick="closeHamburger()">Rules</a>
-  <a href="/birdie-draw.html" onclick="closeHamburger()">🎰 Birdie Draw</a>
+  <a href="/photos.html" onclick="closeHamburger()">📸 Photos</a>
+  <a href="/birdie-draw.html" onclick="closeHamburger()">🎟 Birdie Draw</a>
 </div>
 
 <!-- ============================================================
@@ -2187,6 +2189,7 @@ function buildMatchHTML(matches) {
 
         <div class="match-panel-col">
           <h4>Side Games</h4>
+          ${m.id !== 2 ? `
           <div class="payout-row">
             <span class="payout-desc">Individual Low — Foursome</span>
             <span class="payout-amt">8 shells</span>
@@ -2194,7 +2197,7 @@ function buildMatchHTML(matches) {
           <div class="payout-row">
             <span class="payout-desc">Individual Low — Threesome</span>
             <span class="payout-amt">6 shells</span>
-          </div>
+          </div>` : ''}
           <div style="margin-top:0.75rem;font-size:0.68rem;color:rgba(255,255,255,0.5);">Skins Game eligible</div>
           <div style="margin-top:0.3rem;font-size:0.68rem;color:rgba(255,255,255,0.5);">Birdie Draw tickets eligible</div>
           ${m.id !== 2 ? `<div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.07);font-size:0.68rem;color:rgba(255,255,255,0.5);">Tiebreaker Match Card Hole: <span style="color:var(--gold-bright);font-weight:600;">${{1:7,3:12,4:4,5:15,6:9}[m.id]}</span></div>` : ''}
